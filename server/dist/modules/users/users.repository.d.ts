@@ -10,7 +10,6 @@ export declare class UsersRepository {
         UserName: string;
         Password: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;
@@ -24,7 +23,6 @@ export declare class UsersRepository {
         UserName: string;
         Password: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;

@@ -35,10 +35,6 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "Email", void 0);
 __decorate([
-    (0, graphql_1.Field)(() => String),
-    __metadata("design:type", Object)
-], User.prototype, "Role", void 0);
-__decorate([
     (0, graphql_1.Field)(() => Boolean),
     __metadata("design:type", Object)
 ], User.prototype, "IsUserActive", void 0);

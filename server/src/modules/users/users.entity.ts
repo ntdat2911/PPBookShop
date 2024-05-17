@@ -18,9 +18,6 @@ export class User {
   @Field(() => String)
   Email: UserDB[`Email`];
 
-  @Field(() => String)
-  Role: UserDB[`Role`];
-
   @Field(() => Boolean)
   IsUserActive: UserDB[`IsUserActive`];
 

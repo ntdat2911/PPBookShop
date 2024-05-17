@@ -9,7 +9,6 @@ export declare class UsersResolver {
         UserName: string;
         Password: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;
@@ -19,7 +18,6 @@ export declare class UsersResolver {
         ImageURL: string;
         UserName: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;

@@ -10,7 +10,6 @@ export declare class UsersService {
         UserName: string;
         Password: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;
@@ -23,7 +22,6 @@ export declare class UsersService {
         ImageURL: string;
         UserName: string;
         Email: string;
-        Role: string;
         IsUserActive: boolean;
         CreatedAt: Date;
         UpdatedAt: Date;

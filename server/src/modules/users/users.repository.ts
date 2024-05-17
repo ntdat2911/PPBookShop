@@ -12,7 +12,6 @@ export class UsersRepository {
       UserName: data.UserName,
       Password: data.Password,
       Email: data.Email,
-      Role: 'Customer',
       IsUserActive: true,
     };
 

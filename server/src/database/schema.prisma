@@ -13,13 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  AdminID   Int      @id @default(autoincrement())
+  AdminName String
+  Password  String
+  Email     String
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+}
+
 model User {
   UserID       Int      @id @default(autoincrement())
   ImageURL     String?
   UserName     String
   Password     String
   Email        String
-  Role         String
   IsUserActive Boolean
   CreatedAt    DateTime @default(now())
   UpdatedAt    DateTime @updatedAt

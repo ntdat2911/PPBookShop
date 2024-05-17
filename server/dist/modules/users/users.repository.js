@@ -21,7 +21,6 @@ let UsersRepository = class UsersRepository {
             UserName: data.UserName,
             Password: data.Password,
             Email: data.Email,
-            Role: 'Customer',
             IsUserActive: true,
         };
         return await this.prisma.user.create({ data: user });
