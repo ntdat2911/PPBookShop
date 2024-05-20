@@ -6,6 +6,7 @@ export interface IUser {
   Password: string;
   Email: string;
   IsUserActive: boolean;
+  IsEmailConfirmed: boolean;
   CreatedAt: Date;
   UpdatedAt: Date;
 }

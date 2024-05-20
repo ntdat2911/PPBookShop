@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { config } from './config';
 import { CommonModule } from './modules/common/common.module';
 import { JwtModule } from './modules/jwt/jwt.module';
+import { MailerModule } from './modules/mailer/mailer.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { JwtModule } from './modules/jwt/jwt.module';
     AuthModule,
     CommonModule,
     JwtModule,
+    MailerModule,
   ],
   controllers: [],
   providers: [],

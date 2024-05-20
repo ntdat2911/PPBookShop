@@ -55,6 +55,10 @@ export class UserEntity implements IUser {
   @IsBoolean()
   public IsUserActive: UserDB[`IsUserActive`];
 
+  @Field(() => Boolean)
+  @IsBoolean()
+  public IsEmailConfirmed: UserDB[`IsEmailConfirmed`];
+
   @Field(() => GraphQLISODateTime)
   public CreatedAt: UserDB[`CreatedAt`];
 
