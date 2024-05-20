@@ -62,6 +62,7 @@ model User {
   UserID       String    @id @default(uuid())
   ImageURL     String?
   UserName     String
+  Name         String
   Password     String
   Email        String
   IsUserActive Boolean
