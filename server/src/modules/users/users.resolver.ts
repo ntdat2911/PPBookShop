@@ -9,4 +9,8 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   // Add more queries and mutations related to users here
+  @Query(() => String)
+  async user() {
+    return 'this.usersService.getUserById(id)';
+  }
 }

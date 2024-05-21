@@ -32,7 +32,14 @@ export class MailerService {
     templateName: string,
   ): Handlebars.TemplateDelegate<ITemplatedData> {
     const templateText = readFileSync(
-      join(__dirname, 'templates', templateName),
+      join(
+        process.cwd(),
+        'src',
+        'modules',
+        'mailer',
+        'templates',
+        templateName,
+      ),
       'utf-8',
     );
     return Handlebars.compile<ITemplatedData>(templateText, { strict: true });
@@ -60,7 +67,7 @@ export class MailerService {
     const subject = 'Confirm your email';
     const html = this.templates.confirmation({
       name: Name,
-      link: `https://${this.domain}/auth/confirm/${token}`,
+      link: `${this.domain}/auth/confirm/${token}`,
     });
     this.sendEmail(Email, subject, html, 'A new confirmation email was sent.');
   }

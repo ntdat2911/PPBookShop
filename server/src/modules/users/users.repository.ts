@@ -36,6 +36,7 @@ export class UsersRepository {
       Email: email,
       Password: password,
       IsUserActive: true,
+      IsEmailConfirmed: false,
     };
 
     return await this.prisma.user.create({ data: user });
