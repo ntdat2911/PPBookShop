@@ -4,11 +4,12 @@ import { UsersService } from './users.service';
 import { RegisterRequestDto } from './dtos/users.dto';
 import { UserEntity } from './entities/user.entity';
 import { User } from '@prisma/client';
+import { Public } from '../auth/decorators/public.decorator';
 @Resolver(() => UserEntity)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  // Add more queries and mutations related to users here
+  @Public()
   @Query(() => String)
   async user() {
     return 'this.usersService.getUserById(id)';
