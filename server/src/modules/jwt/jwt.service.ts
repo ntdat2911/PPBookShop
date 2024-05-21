@@ -78,7 +78,6 @@ export class JwtService {
       audience: domain ?? this.domain,
       algorithm: 'HS256', // only needs a secret
     };
-
     switch (tokenType) {
       case TokenTypeEnum.ACCESS:
         const { privateKey, time: accessTime } = this.jwtConfig.access;

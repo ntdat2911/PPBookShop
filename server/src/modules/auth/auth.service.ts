@@ -22,6 +22,7 @@ import { isNull, isUndefined } from '../common/consts/validation.util';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { IEmailToken } from '../jwt/interfaces/email-token.interface';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ConfirmEmailDto } from './dtos/confirm-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -53,7 +54,26 @@ export class AuthService {
     ]);
   }
 
-  public async singIn(dto: SignInDto, domain?: string): Promise<IAuthResult> {
+  public async confirmEmail(
+    dto: ConfirmEmailDto,
+    domain?: string,
+  ): Promise<IAuthResult> {
+    const { confirmationToken } = dto;
+    const { id, version } = await this.jwtService.verifyToken<IEmailToken>(
+      confirmationToken,
+      TokenTypeEnum.CONFIRMATION,
+    );
+
+    const user = await this.usersService.confirmEmail(id);
+
+    const [accessToken, refreshToken] = await this.generateAuthTokens(
+      user,
+      domain,
+    );
+    return { user, accessToken, refreshToken };
+  }
+
+  public async signIn(dto: SignInDto, domain?: string): Promise<IAuthResult> {
     const { emailOrUsername, password } = dto;
     const user = await this.userByEmailOrUsername(emailOrUsername);
 
@@ -121,7 +141,7 @@ export class AuthService {
   public async signUp(dto: SignUpDto, domain?: string): Promise<IMessage> {
     const { name, email, password1, password2 } = dto;
     this.comparePasswords(password1, password2);
-    const user = await this.usersService.create(email, name, password1);
+    const user = await this.usersService.create(name, email, password1);
     const confirmationToken = await this.jwtService.generateToken(
       user,
       TokenTypeEnum.CONFIRMATION,
@@ -180,6 +200,25 @@ export class AuthService {
       password1,
     );
     const [accessToken, refreshToken] = await this.generateAuthTokens(user);
+    return { user, accessToken, refreshToken };
+  }
+
+  public async updatePassword(
+    userId: string,
+    dto: ChangePasswordDto,
+    domain?: string,
+  ): Promise<IAuthResult> {
+    const { password1, password2, password } = dto;
+    this.comparePasswords(password1, password2);
+    const user = await this.usersService.updatePassword(
+      userId,
+      password,
+      password1,
+    );
+    const [accessToken, refreshToken] = await this.generateAuthTokens(
+      user,
+      domain,
+    );
     return { user, accessToken, refreshToken };
   }
 
