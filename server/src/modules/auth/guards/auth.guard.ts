@@ -12,6 +12,7 @@ import { TokenTypeEnum } from '../../jwt/enums/token-type.enum';
 import { JwtService } from '../../jwt/jwt.service';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { isNull, isUndefined } from 'src/modules/common/consts/validation.util';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,10 +26,16 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    const activate = await this.setHttpHeader(
-      context.switchToHttp().getRequest(),
-      isPublic,
-    );
+
+    const type = context.getType();
+    let req;
+    if (type === 'http') {
+      req = context.switchToHttp().getRequest();
+    } else {
+      req = GqlExecutionContext.create(context).getContext().req;
+    }
+
+    const activate = await this.setHttpHeader(req, isPublic);
 
     if (!activate) {
       throw new UnauthorizedException();
