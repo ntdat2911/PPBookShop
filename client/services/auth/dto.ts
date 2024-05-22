@@ -17,9 +17,5 @@ export interface UserDto {
   email: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface AuthTokenResponse {
-  user: UserDto;
   accessToken: string;
 }
