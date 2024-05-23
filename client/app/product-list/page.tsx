@@ -1,20 +1,11 @@
-import React from "react";
-import { useQuery } from "@apollo/client";
-import { gql } from "@/codegen/__generated__";
+"use client";
+import { AxiosInstance } from "@/lib/AxiosInstance";
+import { useSession } from "next-auth/react";
 
-const GetUser = gql(/* GraphQL */ `
-  query GetUser() {
-    user{
-      Email
-      Password
-      UserName
-    }
-  }
-`);
-
-export default function Page() {
-  // our query's result, data, is typed!
-  const { loading, data } = useQuery(GetUser);
-  console.log(data);
-  return <div>SOS</div>;
+export default function ProductList() {
+  return (
+    <>
+      <div className="">PAL</div>
+    </>
+  );
 }
