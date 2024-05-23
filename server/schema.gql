@@ -2,6 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
-  user: String!
+  user: UserEntity!
+}
+
+type UserEntity {
+  CreatedAt: DateTime!
+  Email: String!
+  ImageURL: String!
+  IsEmailConfirmed: Boolean!
+  IsUserActive: Boolean!
+  Name: String!
+  Password: String!
+  UpdatedAt: DateTime!
+  UserID: String!
+  UserName: String!
 }

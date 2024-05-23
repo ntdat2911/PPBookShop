@@ -10,8 +10,20 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Public()
-  @Query(() => String)
+  @Query(() => UserEntity)
   async user() {
-    return 'this.usersService.getUserById(id)';
+    const result: UserEntity = {
+      UserID: '123',
+      Email: 'ava',
+      Password: 'av',
+      UserName: 'av',
+      CreatedAt: new Date(),
+      UpdatedAt: new Date(),
+      ImageURL: 'av',
+      Name: 'abva',
+      IsUserActive: true,
+      IsEmailConfirmed: true,
+    };
+    return result;
   }
 }

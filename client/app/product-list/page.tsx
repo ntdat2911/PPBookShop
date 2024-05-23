@@ -1,30 +1,20 @@
-"use client";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { gql } from "@/codegen/__generated__";
 
-export default function ProductList() {
-  const { data: session } = useSession();
-  useEffect(() => {
-    async function fetchData() {
-      console.log(process.env.SERVER_BASE_URL);
-      const reqOptions = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.user.accessToken}`,
-        },
-      };
-      const req = await axios.get(
-        process.env.SERVER_BASE_URL + "/api/auth/me",
-        reqOptions
-      );
-      console.log(req);
+const GetUser = gql(/* GraphQL */ `
+  query GetUser() {
+    user{
+      Email
+      Password
+      UserName
     }
-    if (session?.user.accessToken) fetchData();
-  }, [session]);
-  return (
-    <>
-      <div className="">PAL</div>
-    </>
-  );
+  }
+`);
+
+export default function Page() {
+  // our query's result, data, is typed!
+  const { loading, data } = useQuery(GetUser);
+  console.log(data);
+  return <div>SOS</div>;
 }

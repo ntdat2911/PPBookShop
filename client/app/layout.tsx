@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "./AuthProvider";
 import { ApolloWrapper } from "./ApolloWrapper";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
