@@ -15,6 +15,9 @@ import { PrismaService } from 'src/database/prisma.service';
 import { isNull, isUndefined } from '../common/consts/validation.util';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { ChangeEmailDto } from './dtos/change-email.dto';
+import { PasswordDto } from './dtos/password.dto';
+import { isString } from 'class-validator';
+import { SLUG_REGEX } from '../common/consts/regex.const';
 
 @Injectable()
 export class UsersService {
@@ -51,6 +54,24 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  public async findOneByIdOrUsername(
+    idOrUsername: string,
+  ): Promise<UserEntity> {
+    if (idOrUsername && isString(idOrUsername)) {
+      return this.findOneById(idOrUsername);
+    }
+
+    if (
+      idOrUsername.length < 3 ||
+      idOrUsername.length > 106 ||
+      !SLUG_REGEX.test(idOrUsername)
+    ) {
+      throw new BadRequestException('Invalid username');
+    }
+
+    return this.findOneByUsername(idOrUsername);
   }
 
   public async findOneByEmail(email: string): Promise<UserEntity> {
@@ -121,6 +142,17 @@ export class UsersService {
     return user;
   }
 
+  public async delete(userId: string, dto: PasswordDto): Promise<UserEntity> {
+    const user = await this.findOneById(userId);
+
+    if (!(await compare(dto.password, user.Password))) {
+      throw new BadRequestException('Wrong password');
+    }
+
+    await this.deactivate(userId);
+    return user;
+  }
+
   public async updateEmail(
     userId: string,
     dto: ChangeEmailDto,
@@ -187,6 +219,21 @@ export class UsersService {
     await this.prismaService.user.update({
       where: { UserID: userId },
       data: { IsUserActive: false },
+    });
+    return user;
+  }
+
+  public async confirmEmail(userId: string): Promise<UserEntity> {
+    const user = await this.findOneById(userId);
+
+    if (user.IsEmailConfirmed) {
+      throw new BadRequestException('Email already confirmed');
+    }
+
+    user.IsEmailConfirmed = true;
+    await this.usersRepository.update({
+      where: { UserID: userId },
+      data: user,
     });
     return user;
   }

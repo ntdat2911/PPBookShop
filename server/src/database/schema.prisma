@@ -59,18 +59,19 @@ model Book {
 }
 
 model User {
-  UserID       String    @id @default(uuid())
-  ImageURL     String?
-  UserName     String
-  Name         String
-  Password     String
-  Email        String
-  IsUserActive Boolean
-  CreatedAt    DateTime  @default(now())
-  UpdatedAt    DateTime  @updatedAt
-  Reviews      Review[]
-  Orders       Order[]
-  Addresses    Address[]
+  UserID           String    @id @default(uuid())
+  ImageURL         String?
+  UserName         String
+  Name             String
+  Password         String
+  Email            String
+  IsUserActive     Boolean
+  IsEmailConfirmed Boolean
+  CreatedAt        DateTime  @default(now())
+  UpdatedAt        DateTime  @updatedAt
+  Reviews          Review[]
+  Orders           Order[]
+  Addresses        Address[]
 }
 
 model Review {

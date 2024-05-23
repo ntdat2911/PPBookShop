@@ -72,3 +72,4 @@ lerna-debug.log*
 
 # Environment variables
 .env
+*.key

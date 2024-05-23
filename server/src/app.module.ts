@@ -8,24 +8,36 @@ import { ConfigModule } from '@nestjs/config';
 import { config } from './config';
 import { CommonModule } from './modules/common/common.module';
 import { JwtModule } from './modules/jwt/jwt.module';
+import { MailerModule } from './modules/mailer/mailer.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/auth/guards/auth.guard';
+import { GraphQLConfig } from './config/graphql.config';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],
     }),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      driver: ApolloDriver,
+      useClass: GraphQLConfig,
+    }),
+
     PrismaModule,
     UsersModule,
     AuthModule,
     CommonModule,
     JwtModule,
+    MailerModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

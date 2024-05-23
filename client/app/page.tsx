@@ -1,6 +1,12 @@
+"use client";
 import Image from "next/image";
+import { useQuery } from "@apollo/client";
+import { gql } from "@/codegen/__generated__";
+import { GET_USER } from "@/services/users/service";
 
 export default function Home() {
+  const { data } = useQuery(GET_USER);
+  console.log("SODKOPASDOPAS", data);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">

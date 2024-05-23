@@ -1,10 +1,7 @@
-import { IsEmail, IsString, Length, MinLength } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
+import { PasswordDto } from './password.dto';
 
-export abstract class ChangeEmailDto {
-  @IsString()
-  @MinLength(1)
-  public password!: string;
-
+export abstract class ChangeEmailDto extends PasswordDto {
   @IsString()
   @IsEmail()
   @Length(5, 255)
