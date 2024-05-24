@@ -30,36 +30,13 @@ export function Header() {
           <>
             <nav className="flex items-center gap-6">
               <Button asChild variant="link">
-                <Link href="/search" replace className={underlineAnimation()}>
-                  All jobs
+                <Link href="/shop" replace className={underlineAnimation()}>
+                  Shop
                 </Link>
               </Button>
               <Button asChild variant="link">
                 <Link href="/about-us" replace className={underlineAnimation()}>
                   About us
-                </Link>
-              </Button>
-              <Button asChild variant="link">
-                <Link href="/editor" replace className={underlineAnimation()}>
-                  Resume Editor
-                </Link>
-              </Button>
-              <Button asChild variant="link">
-                <Link
-                  href="/candidate/2"
-                  replace
-                  className={underlineAnimation()}
-                >
-                  Candidate
-                </Link>
-              </Button>
-              <Button asChild variant="link">
-                <Link
-                  href="/recruiter/management"
-                  replace
-                  className={underlineAnimation()}
-                >
-                  Recruiter
                 </Link>
               </Button>
             </nav>

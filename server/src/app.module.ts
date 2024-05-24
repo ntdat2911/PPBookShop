@@ -12,6 +12,7 @@ import { MailerModule } from './modules/mailer/mailer.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { GraphQLConfig } from './config/graphql.config';
+import { BooksModule } from './modules/books/books.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GraphQLConfig } from './config/graphql.config';
     CommonModule,
     JwtModule,
     MailerModule,
+    BooksModule,
   ],
   controllers: [],
   providers: [

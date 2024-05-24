@@ -2,12 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type BookEntity {
+  AuthorBy: String!
+  BookDescription: String!
+  BookID: String!
+  BookPrice: Float!
+  BookTitle: String!
+  CategoryID: String!
+  CreatedAt: DateTime!
+  ImageURL: String!
+  IsBookActive: Boolean!
+  IsOutOfStock: Boolean!
+  PublishDate: DateTime!
+  Rating: Float!
+  UpdatedAt: DateTime!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+type GPaginatedBookResponse {
+  count: Int!
+  page: Int!
+  records: [BookEntity!]!
+  size: Int!
+}
+
+input GPaginationRequest {
+  input: String
+  page: Int!
+  size: Int!
+}
+
 type Query {
+  getBooks(params: GPaginationRequest!): GPaginatedBookResponse!
   user: UserEntity!
 }
 
