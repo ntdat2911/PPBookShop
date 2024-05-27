@@ -1,0 +1,34 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/database/prisma.service';
+
+@Injectable()
+export class AuthorsRepository {
+  constructor(private prisma: PrismaService) {}
+
+  async createAuthor(data: { AuthorName: string; Bio: string }) {
+    return this.prisma.author.create({
+      data,
+    });
+  }
+
+  async getAuthors() {
+    return this.prisma.author.findMany();
+  }
+
+  async getAuthorById(id: string) {
+    return this.prisma.author.findUnique({
+      where: {
+        AuthorID: id,
+      },
+    });
+  }
+
+  async updateAuthor(id: string, data: { AuthorName: string; Bio: string }) {
+    return this.prisma.author.update({
+      where: {
+        AuthorID: id,
+      },
+      data,
+    });
+  }
+}

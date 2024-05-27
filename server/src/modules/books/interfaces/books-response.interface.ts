@@ -10,5 +10,23 @@ export class GPaginatedBookResponse {
   @Field(() => Int)
   count: number;
   @Field(() => [BookEntity])
-  records: BookEntity[];
+  records: OverviewDetailBook[];
+}
+
+@ObjectType()
+export class OverviewDetailBook {
+  @Field(() => String)
+  public BookID: string;
+
+  @Field(() => String)
+  public BookTitle: string;
+
+  @Field(() => String)
+  public ImageURL: string;
+
+  @Field(() => Number)
+  public BookPrice: number;
+
+  @Field(() => String)
+  public AuthorBy: string;
 }
