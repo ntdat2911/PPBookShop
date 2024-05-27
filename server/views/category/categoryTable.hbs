@@ -1,0 +1,78 @@
+<div class='container px-8 mt-10'>
+  <div class='flex justify-between items-center mb-6'>
+    <h1 class='text-2xl font-bold'>Category Inventory</h1>
+    <button class='bg-blue-500 text-white px-4 py-2 rounded'>Create</button>
+  </div>
+  <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+    <table class='min-w-full bg-white'>
+      <thead class='bg-gray-100'>
+        <tr>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Book Title</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Book Price</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Author Name</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Is Active</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Action</th>
+        </tr>
+      </thead>
+      <tbody class='text-gray-700'>
+        <tr class='border-t text-center'>
+          <td class='py-3 px-4'>The Great Gatsby</td>
+          <td class='py-3 px-4'>$10.99</td>
+          <td class='py-3 px-4'>F. Scott Fitzgerald</td>
+          <td class='py-3 px-4'><span
+              class='text-green-500 font-semibold'
+            >Active</span></td>
+          <td class='py-3 px-4 flex justify-center'>
+            <button
+              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
+            >Edit</button>
+            <button
+              class='bg-red-500 text-white px-3 py-1 rounded'
+            >Delete</button>
+          </td>
+        </tr>
+        <tr class='border-t text-center'>
+          <td class='py-3 px-4'>1984</td>
+          <td class='py-3 px-4'>$8.99</td>
+          <td class='py-3 px-4'>George Orwell</td>
+          <td class='py-3 px-4'><span
+              class='text-red-500 font-semibold'
+            >Inactive</span></td>
+          <td class='py-3 px-4 flex justify-center'>
+            <button
+              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
+            >Edit</button>
+            <button
+              class='bg-red-500 text-white px-3 py-1 rounded'
+            >Delete</button>
+          </td>
+        </tr>
+        <!-- Add more rows as needed -->
+      </tbody>
+    </table>
+  </div>
+  <div class='flex justify-between items-center py-3'>
+    <div>
+      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Previous</button>
+    </div>
+    <div class='flex space-x-2'>
+      <button class='bg-blue-500 text-white px-3 py-1 rounded'>1</button>
+      <button class='bg-white text-gray-800 px-3 py-1 rounded'>2</button>
+      <button class='bg-white text-gray-800 px-3 py-1 rounded'>3</button>
+      <!-- Add more page numbers as needed -->
+    </div>
+    <div>
+      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Next</button>
+    </div>
+  </div>
+</div>

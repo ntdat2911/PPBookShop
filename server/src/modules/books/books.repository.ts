@@ -41,4 +41,15 @@ export class BooksRepository {
     });
     return result;
   }
+
+  async findAll(page: number, size: number): Promise<BookEntity[]> {
+    return this.prisma.book.findMany({
+      skip: (page - 1) * size,
+      take: size,
+      //sort by CreatedAt
+      orderBy: {
+        CreatedAt: 'desc',
+      },
+    });
+  }
 }

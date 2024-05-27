@@ -16,6 +16,9 @@ import { BooksModule } from './modules/books/books.module';
 import { AuthorsModule } from './modules/authors/authors.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { AdminModule } from './modules/admin/admin.module';
+
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -39,6 +42,7 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     AuthorsModule,
     CategoriesModule,
     ReviewsModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [

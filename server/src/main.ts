@@ -20,6 +20,7 @@ async function bootstrap() {
             `'self'`,
             'data:',
             'apollo-server-landing-page.cdn.apollographql.com',
+            '*',
           ],
           scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
           manifestSrc: [
@@ -37,6 +38,8 @@ async function bootstrap() {
   });
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setLocal('hbs', { layout: 'layout' });
+
   app.setViewEngine('hbs');
 
   app.useGlobalPipes(

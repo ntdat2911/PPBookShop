@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { BooksRepository } from './books.repository';
 import { CommonService } from '../common/common.service';
 import { PrismaService } from 'src/database/prisma.service';
@@ -33,5 +33,10 @@ export class BooksService {
       records: books,
     };
     return result;
+  }
+
+  public async getAllBooks(page: number, size: number): Promise<BookEntity[]> {
+    const res = await this.booksRepository.findAll(page, size);
+    return res;
   }
 }
