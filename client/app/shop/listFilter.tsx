@@ -31,6 +31,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FilterAuthor } from "@/services/authors/dto";
+import { useEffect } from "react";
 
 const rating = ["5 ★★★★★", "4 ★★★★", "3 ★★★", , "2 ★★", "1 ★"];
 const categoryList: OptionType[] = [
@@ -75,17 +77,7 @@ const categoryList: OptionType[] = [
     tag_name: "All",
   },
 ];
-const authors = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
+
 const formSchema = z.object({
   // size: z.number().optional(),
   page: z.number().optional(),
@@ -95,7 +87,11 @@ const formSchema = z.object({
     required_error: "Please select a language.",
   }),
 });
-export const ListFilter = () => {
+interface ListFilterProps {
+  authorList: FilterAuthor[];
+}
+
+export const ListFilter = ({ authorList }: ListFilterProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -108,6 +104,10 @@ export const ListFilter = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values", values);
   }
+  const watchAllFields = form.watch();
+  useEffect(() => {
+    console.log("watchAllFields", watchAllFields);
+  }, [watchAllFields]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -216,9 +216,9 @@ export const ListFilter = () => {
                           )}
                         >
                           {field.value
-                            ? authors.find(
-                                (language) => language.value === field.value
-                              )?.label
+                            ? authorList.find(
+                                (author) => author.AuthorID === field.value
+                              )?.AuthorName
                             : "Select author"}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -232,19 +232,19 @@ export const ListFilter = () => {
                         />
                         <CommandEmpty>No author found.</CommandEmpty>
                         <CommandGroup>
-                          {authors.map((language) => (
+                          {authorList.map((author) => (
                             <CommandItem
-                              value={language.label}
-                              key={language.value}
+                              value={author.AuthorName}
+                              key={author.AuthorID}
                               onSelect={() => {
-                                form.setValue("author", language.value);
+                                form.setValue("author", author.AuthorID);
                               }}
                             >
-                              {language.label}
+                              {author.AuthorName}
                               <CheckIcon
                                 className={cn(
                                   "ml-auto h-4 w-4",
-                                  language.value === field.value
+                                  author.AuthorID === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}

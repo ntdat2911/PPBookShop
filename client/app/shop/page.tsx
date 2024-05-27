@@ -4,8 +4,19 @@ import { SearchIcon } from "lucide-react";
 import { SearchInput } from "./searchInput";
 import { ListFilter } from "./listFilter";
 import { SearchParamsContextWrapper } from "./searchParamsContext";
+import { getClient } from "@/lib/ApolloClient";
+import { GET_AUTHORS } from "@/services/authors/service";
+import { FilterAuthor } from "@/services/authors/dto";
 
-export default function Page() {
+export default async function Page() {
+  const client = getClient();
+  const { data } = await client.query<{
+    getAuthors: [FilterAuthor];
+    data: any;
+  }>({
+    query: GET_AUTHORS,
+  });
+  const authorList: [FilterAuthor] = data.getAuthors;
   return (
     <SearchParamsContextWrapper>
       <div className="container py-8">
@@ -17,7 +28,7 @@ export default function Page() {
         <div className="flex flex-col mt-0 space-y-3">
           <div className="grid grid-cols-12 xs:flex xs:flex-row">
             <div className="col-span-2 sticky top-[60px] hidden h-[calc(100vh-200px)] md:flex md:shrink-0 md:flex-col md:justify-between px-1 xs:w-min">
-              <ListFilter />
+              <ListFilter authorList={authorList} />
             </div>
             <div className=" col-span-10 mt-4 w-full min-w-0 flex flex-col">
               <ProductCard />

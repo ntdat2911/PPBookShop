@@ -129,10 +129,10 @@ export const ProductCard = () => {
                     <CardTitle className="text-center w-full">
                       {book.BookTitle}
                     </CardTitle>
+                    <p className="text-center w-full">{book.AuthorName}</p>
                     <CardDescription className="text-center w-full">
                       {book.BookPrice}$
                     </CardDescription>
-                    <p className="text-center w-full">{book.BookDescription}</p>
                   </CardFooter>
                 </Link>
               </Card>

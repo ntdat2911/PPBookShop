@@ -14,9 +14,9 @@ export const GET_BOOKS = gql(`
    records{
     BookID
    BookTitle
-   BookDescription
    ImageURL
    BookPrice
+   AuthorName
    }
  }
  }
