@@ -26,7 +26,6 @@ export class BooksService {
     const count = await this.booksRepository.count({
       input: input,
     });
-    console.log('count', count);
     const result: GPaginatedBookResponse = {
       page: page,
       size: size,
