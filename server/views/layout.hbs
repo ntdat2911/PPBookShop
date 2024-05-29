@@ -10,18 +10,34 @@
       rel='stylesheet'
       href='https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css'
     />
+    <link
+      rel='stylesheet'
+      href='https://unpkg.com/@themesberg/flowbite@1.1.0/dist/flowbite.min.css'
+    />
   </head>
   <body>
-    <div class='flex'>
-
-      <div
-        class='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 h-[100vh] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5'
-      >
+    <header
+      class='sticky top-0 border-b border-border/40 z-50 w-full bg-gray/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 justify-end'
+    >
+      <div class='container flex h-14 max-w-screen-2xl my-0.5 p-4 items-center'>
         <div class='mb-2 p-4'>
           <h5
             class='block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-gray-900'
           >PPBookShop</h5>
         </div>
+        <div
+          class='flex flex-1 items-center justify-between space-x-2 md:justify-end text-sm'
+        >
+
+          <p class=''>Hello, Dat Nguyen</p>
+
+        </div>
+      </div>
+    </header>
+    <div class='flex'>
+      <div
+        class='sticky top-[60px] hidden h-[calc(100vh-100px)] md:flex md:shrink-0 md:flex-col md:justify-between px-1 xs:w-min flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 h-[100vh] w-full max-w-min p-4 shadow-xl shadow-blue-gray-900/5'
+      >
         <nav
           class='flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700'
         >
@@ -173,20 +189,6 @@
         </nav>
       </div>
       <div class='flex flex-col w-full'>
-
-        <header
-          class='sticky top-0 border-b border-border/40 z-50 w-full bg-gray/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 justify-end'
-        >
-          <div
-            class='container flex h-14 max-w-screen-2xl justify-end my-0.5 p-4'
-          >
-            <div class='flex gap-4 items-center'>
-
-              <p class=''>Hello, Dat Nguyen</p>
-
-            </div>
-          </div>
-        </header>
         <div id='main-content'>
           {{{body}}}
         </div>

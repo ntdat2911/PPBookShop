@@ -5,9 +5,10 @@ import { BooksResolver } from './books.resolver';
 import { BooksRepository } from './books.repository';
 import { AuthorsModule } from '../authors/authors.module';
 import { BooksController } from './books.controller';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
-  imports: [PrismaModule, AuthorsModule],
+  imports: [PrismaModule, AuthorsModule, CloudinaryModule],
   providers: [BooksService, BooksResolver, BooksRepository],
   exports: [BooksService],
   controllers: [BooksController],

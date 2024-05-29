@@ -19,6 +19,7 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
 import { AdminModule } from './modules/admin/admin.module';
 
 import { join } from 'path';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { join } from 'path';
     CategoriesModule,
     ReviewsModule,
     AdminModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [

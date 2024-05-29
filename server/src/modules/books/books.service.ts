@@ -39,4 +39,40 @@ export class BooksService {
     const res = await this.booksRepository.findAll(page, size);
     return res;
   }
+
+  public async createBook(formData: any): Promise<BookEntity> {
+    formData.BookPrice = parseFloat(formData.BookPrice);
+    formData.PublishDate = new Date(formData.PublishDate);
+    formData.IsBookActive = formData.IsBookActive === 'true';
+    formData.IsOutOfStock = formData.IsOutOfStock === 'true';
+    const book = await this.booksRepository.create(formData);
+    return book;
+  }
+
+  public async updateActiveStatus(BookID: string, IsBookActive: boolean) {
+    const book = await this.booksRepository.updateActiveStatus(
+      BookID,
+      IsBookActive,
+    );
+    return book;
+  }
+
+  public async getBookById(BookID: string) {
+    const book = await this.booksRepository.getBookById(BookID);
+    return book;
+  }
+
+  public async updateBook(formData: any) {
+    formData.BookPrice = parseFloat(formData.BookPrice);
+    formData.PublishDate = new Date(formData.PublishDate);
+    formData.IsBookActive = formData.IsBookActive === 'true';
+    formData.IsOutOfStock = formData.IsOutOfStock === 'true';
+    const book = await this.booksRepository.updateBook(formData);
+    return book;
+  }
+
+  public async countAll() {
+    const result = await this.booksRepository.countAll();
+    return result;
+  }
 }

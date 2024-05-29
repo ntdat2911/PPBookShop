@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { create } from 'express-handlebars';
+import { hasPagination, next, pagy, previous } from 'src/app.helper';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -38,8 +40,35 @@ async function bootstrap() {
   });
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setLocal('hbs', { layout: 'layout' });
 
+  // Setup Handlebars view engine with helpers
+  const hbs = create({
+    extname: 'hbs',
+    layoutsDir: join(__dirname, '..', 'views', '/'),
+    partialsDir: join(__dirname, '..', 'views', 'partials'),
+    defaultLayout: 'layout',
+    helpers: {
+      equal: (a: any, b: any) => {
+        return a == b;
+      },
+      formatDate: (date: string) => {
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+      },
+      renderButtonPagy: pagy,
+      hasPagination: hasPagination,
+      previous: previous,
+      next: next,
+    },
+  });
+  app.engine('hbs', hbs.engine);
   app.setViewEngine('hbs');
 
   app.useGlobalPipes(
