@@ -13,7 +13,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n query getAuthors{\n  getAuthors{\n    AuthorID\n    AuthorName\n  }\n}\n": types.GetAuthorsDocument,
+    "\n  query getAuthorById($id:String!){\n    getAuthorById(id:$id){\n      AuthorID\n      AuthorName\n      Bio\n    }\n  }\n  ": types.GetAuthorByIdDocument,
     "\n query GetBooks($page: Int!,$size:Int!,$input:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   }\n }\n }\n": types.GetBooksDocument,
+    "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n": types.GetBookByIdDocument,
+    "\n query getReviewOverViewById($id:String!){\n  getReviewOverviewById(id:$id){\n    averageRating\n  countReviewList\n  total\n  }\n}\n": types.GetReviewOverViewByIdDocument,
+    "\nquery getReviewsByBookId($bookID:String!,$rating:Int!,$page:Int!,$size:Int!){\n  getReviewsByBookId(params:{\n    bookID:$bookID\n    rating: $rating\n    page:$page\n    size:$size\n  }){\n    page\n    size\n    count\n    records{\n      UserID\n      Username\n      Comment\n      ReviewTitle\n      Rating\n      CreatedAt\n      ReviewID\n    }}\n  }\n": types.GetReviewsByBookIdDocument,
     "\n  query GetUser {\n    user{\n      Email\n      Password\n      UserName\n      Name\n      CreatedAt\n      UpdatedAt\n    }\n  }\n": types.GetUserDocument,
 };
 
@@ -34,7 +39,27 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n query getAuthors{\n  getAuthors{\n    AuthorID\n    AuthorName\n  }\n}\n"): (typeof documents)["\n query getAuthors{\n  getAuthors{\n    AuthorID\n    AuthorName\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query getAuthorById($id:String!){\n    getAuthorById(id:$id){\n      AuthorID\n      AuthorName\n      Bio\n    }\n  }\n  "): (typeof documents)["\n  query getAuthorById($id:String!){\n    getAuthorById(id:$id){\n      AuthorID\n      AuthorName\n      Bio\n    }\n  }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n query GetBooks($page: Int!,$size:Int!,$input:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   }\n }\n }\n"): (typeof documents)["\n query GetBooks($page: Int!,$size:Int!,$input:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   }\n }\n }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"): (typeof documents)["\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n query getReviewOverViewById($id:String!){\n  getReviewOverviewById(id:$id){\n    averageRating\n  countReviewList\n  total\n  }\n}\n"): (typeof documents)["\n query getReviewOverViewById($id:String!){\n  getReviewOverviewById(id:$id){\n    averageRating\n  countReviewList\n  total\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery getReviewsByBookId($bookID:String!,$rating:Int!,$page:Int!,$size:Int!){\n  getReviewsByBookId(params:{\n    bookID:$bookID\n    rating: $rating\n    page:$page\n    size:$size\n  }){\n    page\n    size\n    count\n    records{\n      UserID\n      Username\n      Comment\n      ReviewTitle\n      Rating\n      CreatedAt\n      ReviewID\n    }}\n  }\n"): (typeof documents)["\nquery getReviewsByBookId($bookID:String!,$rating:Int!,$page:Int!,$size:Int!){\n  getReviewsByBookId(params:{\n    bookID:$bookID\n    rating: $rating\n    page:$page\n    size:$size\n  }){\n    page\n    size\n    count\n    records{\n      UserID\n      Username\n      Comment\n      ReviewTitle\n      Rating\n      CreatedAt\n      ReviewID\n    }}\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

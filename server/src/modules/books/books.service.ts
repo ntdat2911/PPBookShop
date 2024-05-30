@@ -19,13 +19,12 @@ export class BooksService {
     params: GPaginationRequest,
   ): Promise<GPaginatedBookResponse> {
     const { page, size, input } = params;
-
     const books = await this.booksRepository.findByFilter({
       page: page,
       size: size,
       input: input,
     });
-    const count = await this.booksRepository.count({
+    const count = await this.booksRepository.countAvailableBooks({
       input: input,
     });
     const result: GPaginatedBookResponse = {

@@ -21,3 +21,19 @@ export const GET_BOOKS = gql(`
  }
  }
 `);
+
+export const GET_BOOK = gql(`
+query getBookById($id:String!){
+  getBookById(id:$id){
+    BookID
+    CategoryName
+    BookTitle
+    BookPrice
+    BookDescription
+    AuthorBy
+    AuthorName
+    ImageURL
+    Rating
+  }
+}
+`);

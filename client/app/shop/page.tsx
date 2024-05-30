@@ -1,22 +1,25 @@
-import { Input } from "@/components/ui/input";
 import { ProductCard } from "./product-card";
-import { SearchIcon } from "lucide-react";
 import { SearchInput } from "./searchInput";
 import { ListFilter } from "./listFilter";
 import { SearchParamsContextWrapper } from "./searchParamsContext";
-import { getClient } from "@/lib/ApolloClient";
-import { GET_AUTHORS } from "@/services/authors/service";
-import { FilterAuthor } from "@/services/authors/dto";
+import { getAuthors } from "@/services/authors/services";
+import { getBooks } from "@/services/books/services";
+import {
+  AuthorEntity,
+  GPaginatedBookResponse,
+} from "@/codegen/__generated__/graphql";
+import { count } from "console";
 
-export default async function Page() {
-  const client = getClient();
-  const { data } = await client.query<{
-    getAuthors: [FilterAuthor];
-    data: any;
-  }>({
-    query: GET_AUTHORS,
-  });
-  const authorList: [FilterAuthor] = data.getAuthors;
+export default async function Page({ searchParams }: any) {
+  const page = parseInt(searchParams.page) || 1;
+
+  const [authorList, bookList]: [
+    authorList: AuthorEntity[],
+    bookList: GPaginatedBookResponse
+  ] = await Promise.all([
+    getAuthors(),
+    getBooks(page, 8, searchParams.input || ""),
+  ]);
   return (
     <SearchParamsContextWrapper>
       <div className="container py-8">
@@ -31,7 +34,14 @@ export default async function Page() {
               <ListFilter authorList={authorList} />
             </div>
             <div className=" col-span-10 mt-4 w-full min-w-0 flex flex-col">
-              <ProductCard />
+              <ProductCard
+                books={bookList.records}
+                pagyInfo={{
+                  page: bookList.page,
+                  size: bookList.size,
+                  count: bookList.count,
+                }}
+              />
             </div>
           </div>
         </div>

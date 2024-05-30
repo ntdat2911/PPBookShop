@@ -8,9 +8,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "th.bing.com",
+        hostname: "*",
         port: "",
-        pathname: "/th/**",
+        pathname: "/**",
       },
     ],
   },

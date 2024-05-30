@@ -15,6 +15,9 @@ export class BooksRepository {
     return this.prisma.book.findMany({
       skip: (params.page - 1) * params.size,
       take: params.size,
+      orderBy: {
+        CreatedAt: 'desc',
+      },
       select: {
         BookTitle: true,
         AuthorBy: true,
@@ -31,12 +34,17 @@ export class BooksRepository {
       },
     });
   }
-  async count(params: { input }) {
+  async countAvailableBooks(params: { input }) {
     const result = await this.prisma.book.count({
       where: {
         BookTitle: {
           contains: params.input,
         },
+        IsBookActive: true,
+        IsOutOfStock: false,
+      },
+      orderBy: {
+        CreatedAt: 'desc',
       },
     });
     return result;

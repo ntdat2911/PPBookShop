@@ -9,7 +9,6 @@ import {
 
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { GET_BOOKS } from "@/services/books/service";
 import { BookEntity } from "@/codegen/__generated__/graphql";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,32 +23,33 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import qs from "qs";
+interface ProductCardProps {
+  pagyInfo: {
+    page: number;
+    size: number;
+    count: number;
+  };
+  books: BookEntity[];
+}
 
-export const ProductCard = () => {
+export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
+  const [page, setPage] = useState(pagyInfo.page);
   const { searchParams } = useSearchParamsContext();
-  const [books, setBooks] = useState<BookEntity[]>([]);
-  const [getSearchResult, { loading, data, error }] = useLazyQuery(GET_BOOKS);
-  const [page, setPage] = useState(1);
-  useEffect(() => {
-    const { input } = searchParams;
+  const router = useRouter();
 
-    getSearchResult({
-      variables: { page: page, size: 9, input: input },
+  useEffect(() => {
+    const query = qs.stringify({
+      page: page.toString() || "1",
+      input: searchParams.input,
     });
-  }, [searchParams, page, getSearchResult]);
-
-  useEffect(() => {
-    if (data && data.getBooks && data.getBooks.records) {
-      setBooks(data.getBooks.records);
-      console.log("data", data);
-    }
-  }, [data]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+    if (searchParams.input == "") delete searchParams.input;
+    router.push(`/shop?${query}`);
+  }, [page, searchParams.input]);
   const paginationCreate = () => {
-    const totalPage = Math.ceil(data.getBooks.count / data.getBooks.size);
-    const currentPage = data.getBooks.page;
+    const totalPage = Math.ceil(pagyInfo.count / pagyInfo.size);
+    const currentPage = pagyInfo.page;
     let pages = Array.from({ length: totalPage }, (_, i) => i + 1);
 
     // Limit the number of pages to 4
@@ -112,17 +112,18 @@ export const ProductCard = () => {
   return (
     <>
       <div className="grid grid-cols-4 gap-4">
-        {books.length > 0 ? (
+        {books ? (
           books.map((book) => (
             <div className="flex w-full justify-center" key={book.BookID}>
               <Card className="w-5/6 justify-center p-2">
-                <Link href={`/shop/${book.BookID}`}>
+                <Link href={`/product/detail/${book.BookID}`}>
                   <CardContent>
                     <Image
                       src={book.ImageURL}
                       alt={book.BookTitle}
                       width={300}
                       height={300}
+                      className="w-[300px] h-[300px] object-contain"
                     />
                   </CardContent>
                   <CardFooter className="grid p-2 pt-0">
@@ -142,9 +143,7 @@ export const ProductCard = () => {
           <>No books found</>
         )}
       </div>
-      <div className="mt-8">
-        {data && data.getBooks && data.getBooks.records && paginationCreate()}
-      </div>
+      <div className="mt-8">{books && paginationCreate()}</div>
     </>
   );
 };
