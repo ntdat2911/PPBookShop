@@ -1,7 +1,7 @@
 <div class='p-10 pt-4'>
   <div
     class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
-  >Add new book</div>
+  >Update book</div>
 
   <form>
 
@@ -19,7 +19,7 @@
             id='BookTitle'
             placeholder='Book Title'
             class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-            value={{book.BookTitle}}
+            value="{{~book.BookTitle~}}"
           />
         </div>
         <div class='mb-5'>
@@ -35,7 +35,7 @@
             rows='5'
             required
           >
-            {{book.BookDescription}}
+            {{~book.BookDescription~}}
           </textarea>
         </div>
 
@@ -135,12 +135,12 @@
                 id='IsOutOfStock'
                 name='IsOutOfStock'
                 class='sr-only'
-                 {{#if book.IsOutOfStock}}checked{{/if}}
+                 {{#unless book.IsOutOfStock}}checked{{/unless}}
               />
               <div
                 class='toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full'
               ></div>
-              <span class='ml-3 text-gray-900 text-sm font-medium'>Out of stock</span>
+              <span class='ml-3 text-gray-900 text-sm font-medium'>In stock</span>
             </label>
           </div>
         </div>
@@ -182,8 +182,9 @@
       <button
         class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
         type='submit'
-      >Confirm</button>
+      >Update</button>
     </div>
   </form>
 
 </div>
+<script src='/js/book-management/bookEdit.js'></script>

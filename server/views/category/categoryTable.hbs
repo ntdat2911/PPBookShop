@@ -1,21 +1,26 @@
-<div class='container px-8 mt-10'>
+<div class='container px-8 mt-4'>
   <div class='flex justify-between items-center mb-6'>
     <h1 class='text-2xl font-bold'>Category Inventory</h1>
-    <button class='bg-blue-500 text-white px-4 py-2 rounded'>Create</button>
+    <button
+      data-ripple-light='true'
+      data-dialog-target='dialogCreate'
+      class='middle none center rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]'
+    >
+      Create
+    </button>
+
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>
+        
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Book Title</th>
+          >Category name</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Book Price</th>
-          <th
-            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Author Name</th>
+          >Parent category</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Is Active</th>
@@ -25,54 +30,193 @@
         </tr>
       </thead>
       <tbody class='text-gray-700'>
-        <tr class='border-t text-center'>
-          <td class='py-3 px-4'>The Great Gatsby</td>
-          <td class='py-3 px-4'>$10.99</td>
-          <td class='py-3 px-4'>F. Scott Fitzgerald</td>
-          <td class='py-3 px-4'><span
-              class='text-green-500 font-semibold'
-            >Active</span></td>
-          <td class='py-3 px-4 flex justify-center'>
-            <button
-              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
-            >Edit</button>
-            <button
-              class='bg-red-500 text-white px-3 py-1 rounded'
-            >Delete</button>
-          </td>
-        </tr>
-        <tr class='border-t text-center'>
-          <td class='py-3 px-4'>1984</td>
-          <td class='py-3 px-4'>$8.99</td>
-          <td class='py-3 px-4'>George Orwell</td>
-          <td class='py-3 px-4'><span
-              class='text-red-500 font-semibold'
-            >Inactive</span></td>
-          <td class='py-3 px-4 flex justify-center'>
-            <button
-              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
-            >Edit</button>
-            <button
-              class='bg-red-500 text-white px-3 py-1 rounded'
-            >Delete</button>
-          </td>
-        </tr>
-        <!-- Add more rows as needed -->
+        {{#each categoryList}}
+          <tr class='border-t text-center' data-category-id='{{CategoryID}}'>
+            <td class='py-3 px-4'>{{CategoryName}}</td>
+            <td class='py-3 px-4'>
+           {{!-- render parent category name if ParentCategoryID is not null and exists in categoryList --}}
+              {{#if (categoryExists ParentCategoryID @root.categoryList)}}
+               {{!-- get parent category name --}}
+                {{getCategoryName ParentCategoryID @root.categoryList}}
+              {{else}}
+                <span class='text-gray-500'>None</span>
+              {{/if}}
+            </td>
+
+
+            <td class='py-3 px-4'>
+              {{#if IsCategoryActive}}
+                <span class='text-green-500 font-semibold'>Active</span>
+              {{else}}
+                <span class='text-red-500 font-semibold'>Inactive</span>
+              {{/if}}
+            </td>
+          
+            <td class='py-3 px-4 flex justify-center gap-2'>
+              <button
+                data-ripple-light='true'
+                data-dialog-target='dialogEdit'
+                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+              >
+                Edit
+              </button>
+<button
+  type="button"
+  id="activateButton"
+  data-category-id='{{CategoryID}}'
+  class="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  {{#if IsCategoryActive}}
+  disabled
+  {{/if}}
+>
+  Activate
+</button>
+   <button
+  type="button"
+  id="deactivateButton"
+  data-category-id='{{CategoryID}}'
+  class="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  {{#unless IsCategoryActive}}
+  disabled
+  {{/unless}}
+>
+  Deactivate
+</button>
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
   <div class='flex justify-between items-center py-3'>
+   {{#if (hasPagination pagyInfo.pageCount)}}
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
     <div>
-      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Previous</button>
-    </div>
-    <div class='flex space-x-2'>
-      <button class='bg-blue-500 text-white px-3 py-1 rounded'>1</button>
-      <button class='bg-white text-gray-800 px-3 py-1 rounded'>2</button>
-      <button class='bg-white text-gray-800 px-3 py-1 rounded'>3</button>
-      <!-- Add more page numbers as needed -->
-    </div>
-    <div>
-      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Next</button>
+      <nav class="relative z-0 inline-flex shadow-sm">
+        {{#with (previous pagyInfo.page path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Previous">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+        {{#each (renderButtonPagy pagyInfo.page pagyInfo.pageCount path req.query)}}
+        {{#if dot}}
+        <span
+          class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700">
+          ...
+        </span>
+        {{/if}}
+        {{#if path}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+          {{page}}
+        </a>
+        {{/if}}
+        {{/each}}
+        {{#with (next pagyInfo.page pagyInfo.pageCount path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Next">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+      </nav>
     </div>
   </div>
+  {{/if}}
+  </div>
 </div>
+
+
+{{! Create form }}
+<div
+  data-dialog='dialogCreate'
+  class='pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300'
+>
+  <div
+    class='relative m-4 w-2/5 min-w-[70%] max-w-[70%] min-h-[100%] max-h-[100%] rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl'
+  >
+    <div
+      class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+    >Add new category</div>
+    <div
+      class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+    >
+      <form>
+
+
+    <div>
+      <div class='mb-5'>
+        <label
+          for='CategoryName'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >Category Name <span class="text-red-400">*</span></label>
+        <input
+          type='text'
+          name='CategoryName'
+          id='CategoryName'
+          placeholder='Category Name'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+        required
+        />
+      </div>
+      <div class='mb-5'>
+        <label
+          for='ParentCategoryID'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >Parent Category</label>
+        <select
+          name='ParentCategoryID'
+          id='ParentCategoryID'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+        >
+          <option value=''>None</option>
+          {{#each categoryList}}
+            <option value="{{this.CategoryID}}">{{this.CategoryName}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class='mb-5'>
+        <label
+          for='IsCategoryActive'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >Is Active</label>
+        <input
+          type='checkbox'
+          name='IsCategoryActive'
+          id='IsCategoryActive'
+          class='rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          checked=""
+        />
+
+    </div>
+  </div>
+        <div
+          class='flex shrink-0 flex-wrap items-center justify-end p-4 text-blue-gray-500'
+        >
+          <button
+            data-ripple-dark='true'
+            data-dialog-close='true'
+            type="button"
+            class='middle none center mr-1 rounded-lg py-3 px-6 font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+          >Cancel</button>
+          <button
+            class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+            type='submit'
+          >Create</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+<script src='/js/category-management/categoryTable.js'></script>

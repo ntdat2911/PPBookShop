@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isOutOfStockCheckbox = formData.get('IsOutOfStock');
 
       const isActive = isActiveCheckbox === 'on';
-      const isOutOfStock = isOutOfStockCheckbox === 'on';
+      const isOutOfStock = !(isOutOfStockCheckbox === 'on');
 
       formData.set('IsBookActive', isActive);
       formData.set('IsOutOfStock', isOutOfStock);
@@ -43,8 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
       closeDialog('dialogCreate');
       location.reload();
     });
-
-  // Function to handle Edit form submission
 
   const uploadButton = document.getElementById('upload-button');
   const fileInput = document.getElementById('bookCover');
@@ -128,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach((button) => {
       button.addEventListener('click', (event) => {
         const bookId = event.target.closest('tr').getAttribute('data-book-id');
-        window.location.href = `${window.location.href}/edit/${bookId}`;
+        window.location.href = `${window.location.pathname}/edit/${bookId}`;
       });
     });
 });

@@ -59,4 +59,43 @@ export class AdminService {
       categoryList,
     };
   }
+
+  public async getCategoryManagementData(page: number, size: number) {
+    page = page || 1;
+    size = size || 5;
+    const categoryList = await this.categoriesService.getPaginationCategories(
+      page,
+      size,
+    );
+
+    const count = await this.categoriesService.countAll();
+    const pageCount = Math.ceil(count / size);
+    return {
+      pagyInfo: {
+        page,
+        count: size,
+        pageCount,
+      },
+      categoryList,
+    };
+  }
+
+  public async getAuthorManagementData(page: number, size: number) {
+    page = page || 1;
+    size = size || 5;
+    const authorList = await this.authorsService.getPaginationAuthors(
+      page,
+      size,
+    );
+    const count = await this.authorsService.countAll();
+    const pageCount = Math.ceil(count / size);
+    return {
+      pagyInfo: {
+        page,
+        count: size,
+        pageCount,
+      },
+      authorList,
+    };
+  }
 }

@@ -31,4 +31,15 @@ export class AuthorsRepository {
       data,
     });
   }
+
+  async getPaginationAuthors(page: number, size: number) {
+    return this.prisma.author.findMany({
+      skip: (page - 1) * size,
+      take: size,
+    });
+  }
+
+  async countAll() {
+    return this.prisma.author.count();
+  }
 }

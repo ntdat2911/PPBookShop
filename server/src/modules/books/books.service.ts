@@ -5,12 +5,14 @@ import { PrismaService } from 'src/database/prisma.service';
 import { GPaginationRequest } from './dtos/pagination.dto';
 import { BookEntity } from './entities/book.entity';
 import { GPaginatedBookResponse } from './interfaces/books-response.interface';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class BooksService {
   constructor(
     private booksRepository: BooksRepository,
     private readonly prismaService: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   public async getBooks(
@@ -40,7 +42,14 @@ export class BooksService {
     return res;
   }
 
-  public async createBook(formData: any): Promise<BookEntity> {
+  public async createBook(formData: any, file: any): Promise<BookEntity> {
+    if (file) {
+      const res = await this.cloudinaryService.uploadFile(file);
+      formData.ImageURL = res.secure_url;
+    } else {
+      formData.ImageURL =
+        'https://res.cloudinary.com/dmntvhux1/image/upload/v1716950017/cover_book_template_wx5gh8.jpg';
+    }
     formData.BookPrice = parseFloat(formData.BookPrice);
     formData.PublishDate = new Date(formData.PublishDate);
     formData.IsBookActive = formData.IsBookActive === 'true';
@@ -62,11 +71,18 @@ export class BooksService {
     return book;
   }
 
-  public async updateBook(formData: any) {
+  public async updateBook(formData: any, file: any) {
+    if (file && !formData.ImageURL) {
+      const res = await this.cloudinaryService.uploadFile(file);
+      formData.ImageURL = res.secure_url;
+    } else {
+      formData.ImageURL = formData.ImageURL;
+    }
     formData.BookPrice = parseFloat(formData.BookPrice);
     formData.PublishDate = new Date(formData.PublishDate);
     formData.IsBookActive = formData.IsBookActive === 'true';
     formData.IsOutOfStock = formData.IsOutOfStock === 'true';
+    console.log(formData);
     const book = await this.booksRepository.updateBook(formData);
     return book;
   }

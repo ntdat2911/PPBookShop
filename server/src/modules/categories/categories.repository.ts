@@ -16,7 +16,7 @@ export class CategoriesRepository {
   }
 
   async getCategories() {
-    return this.prisma.category.findMany();
+    return this.prisma.category.findMany({ orderBy: { CreatedAt: 'desc' } });
   }
 
   async getCategoryById(id: string) {
@@ -29,7 +29,11 @@ export class CategoriesRepository {
 
   async updateCategory(
     id: string,
-    data: { CategoryName: string; ParentCategoryID: string },
+    data: {
+      CategoryName: string;
+      ParentCategoryID: string;
+      IsCategoryActive: boolean;
+    },
   ) {
     return this.prisma.category.update({
       where: {
@@ -45,5 +49,29 @@ export class CategoriesRepository {
         ParentCategoryID: id,
       },
     });
+  }
+
+  async updateActiveStatus(CategoryID: string, IsCategoryActive: boolean) {
+    console.log(CategoryID, IsCategoryActive);
+    return this.prisma.category.update({
+      where: {
+        CategoryID: CategoryID,
+      },
+      data: {
+        IsCategoryActive: IsCategoryActive,
+      },
+    });
+  }
+
+  async getPaginationCategories(page: number, size: number) {
+    return this.prisma.category.findMany({
+      skip: (page - 1) * size,
+      take: size,
+      orderBy: { CreatedAt: 'desc' },
+    });
+  }
+
+  async countAll() {
+    return this.prisma.category.count();
   }
 }

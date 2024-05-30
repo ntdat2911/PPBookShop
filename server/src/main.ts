@@ -62,6 +62,19 @@ async function bootstrap() {
 
         return [year, month, day].join('-');
       },
+      categoryExists: (parentCategoryID: any, categoryList: any) => {
+        if (parentCategoryID === null) return false;
+        const category = categoryList.find(
+          (category: any) => category.CategoryID === parentCategoryID,
+        );
+        return category !== undefined;
+      },
+      getCategoryName: (categoryID: any, categoryList: any) => {
+        const category = categoryList.find(
+          (category: any) => category.CategoryID === categoryID,
+        );
+        return category.CategoryName;
+      },
       renderButtonPagy: pagy,
       hasPagination: hasPagination,
       previous: previous,

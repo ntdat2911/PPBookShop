@@ -16,10 +16,7 @@ import { BookEntity } from './entities/book.entity';
 
 @Controller('api/books')
 export class BooksController {
-  constructor(
-    private readonly booksService: BooksService,
-    private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  constructor(private readonly booksService: BooksService) {}
 
   @Public()
   @Post('/create')
@@ -28,9 +25,7 @@ export class BooksController {
     @UploadedFile() file: Express.Multer.File,
     @Body() formData: any,
   ) {
-    const res = await this.cloudinaryService.uploadFile(file);
-    formData.ImageURL = res.secure_url;
-    return await this.booksService.createBook(formData);
+    return await this.booksService.createBook(formData, file);
   }
 
   @Public()
@@ -50,10 +45,15 @@ export class BooksController {
     return await this.booksService.getBookById(req.BookID);
   }
 
-  //update book
   @Public()
-  @Put('/update-book')
-  async updateBook(@Body() body: any) {
-    return await this.booksService.updateBook(body);
+  @Put('/update/:BookID')
+  @UseInterceptors(FileInterceptor('bookCover'))
+  async updateBook(
+    @Param() req: any,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() formData: any,
+  ) {
+    formData.BookID = req.BookID;
+    return await this.booksService.updateBook(formData, file);
   }
 }

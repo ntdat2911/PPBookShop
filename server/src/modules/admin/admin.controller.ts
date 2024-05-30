@@ -68,11 +68,10 @@ export class AdminController {
 
   @Public()
   @Get('/book-management/edit/:BookID')
-  @Render('book/editBook')
+  @Render('book/bookEdit')
   public async EditBook(@Param('BookID') BookID: string) {
     const { book, authorList, categoryList } =
       await this.adminService.getBookEditData(BookID);
-
     return {
       book,
       authorList,
@@ -83,8 +82,49 @@ export class AdminController {
   @Public()
   @Get('/category-management')
   @Render('category/categoryTable')
-  public CategoryManagement() {
-    return {};
+  public async CategoryManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { categoryList, pagyInfo } =
+      await this.adminService.getCategoryManagementData(page, size);
+    const path = '/admin/category-management';
+
+    return { categoryList, pagyInfo, req, path };
+  }
+
+  @Public()
+  @Get('/category-management/edit/:CategoryID')
+  @Render('category/categoryEdit')
+  public async EditCategory(@Param('CategoryID') CategoryID: string) {
+    const category = await this.CategoryService.getCategoryById(CategoryID);
+    const categoryList = await this.CategoryService.getCategories();
+    const index = categoryList.findIndex((x) => x.CategoryID === CategoryID);
+    categoryList.splice(index, 1);
+
+    return {
+      category,
+      categoryList,
+    };
+  }
+
+  @Public()
+  @Get('/author-management')
+  @Render('author/authorTable')
+  public async AuthorManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { authorList, pagyInfo } =
+      await this.adminService.getAuthorManagementData(page, size);
+    const path = '/admin/author-management';
+    return { authorList, pagyInfo, req, path };
+  }
+
+  @Public()
+  @Get('/author-management/edit/:AuthorID')
+  @Render('author/authorEdit')
+  public async EditAuthor(@Param('AuthorID') AuthorID: string) {
+    const author = await this.authorService.getAuthorById(AuthorID);
+    return {
+      author,
+    };
   }
 
   @Public()
