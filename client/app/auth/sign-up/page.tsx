@@ -67,11 +67,12 @@ const SignUpPage = () => {
       };
       const response = await signUp(userSignUp);
       toast({
-        title: "Sign up successful!",
-        description: `Welcome ${response.name}!`,
+        title:
+          "Sign up successful! We have sent you an email to verify your account.",
+        description: `Welcome!`,
+        variant: "success",
       });
     } catch (error) {
-      console.error(error);
       toast({
         title: "Sign up failed!",
         description: error?.toString(),

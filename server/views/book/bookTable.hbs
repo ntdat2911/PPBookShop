@@ -1,0 +1,363 @@
+<div class='container px-8 mt-4'>
+  <div class='flex justify-between items-center mb-6'>
+    <h1 class='text-2xl font-bold'>Book Inventory</h1>
+    <button
+      data-ripple-light='true'
+      data-dialog-target='dialogCreate'
+      class='middle none center rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]'
+    >
+      Create
+    </button>
+
+  </div>
+  <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+    <table class='min-w-full bg-white'>
+      <thead class='bg-gray-100'>
+        <tr>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Cover Image</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Book Title</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Book Price</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Author Name</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Category Name</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Is Active</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Status</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Action</th>
+        </tr>
+      </thead>
+      <tbody class='text-gray-700'>
+        {{#each bookList}}
+          <tr class='border-t text-center' data-book-id='{{BookID}}'>
+            <td class='py-3 px-4'>
+              <img
+                src='{{ImageURL}}'
+                alt='{{BookTitle}}'
+                class='w-16 h-16 mx-auto'
+              />
+            </td>
+            <td class='py-3 px-4'>{{BookTitle}}</td>
+            <td class='py-3 px-4'>${{BookPrice}}</td>
+            <td class='py-3 px-4'>
+              {{AuthorName}}</td>
+            <td class='py-3 px-4'>
+              {{CategoryName}}</td>
+
+            <td class='py-3 px-4'>
+              {{#if IsBookActive}}
+                <span class='text-green-500 font-semibold'>Active</span>
+              {{else}}
+                <span class='text-red-500 font-semibold'>Inactive</span>
+              {{/if}}
+            </td>
+            <td class='py-3 px-4'>
+              {{#if IsOutOfStock}}
+                <span class='text-red-500 font-semibold'>Out of stock</span>
+              {{else}}
+                <span class='text-green-500 font-semibold'>In stock</span>
+              {{/if}}
+            </td>
+            <td class='py-3 px-4 flex justify-center gap-2'>
+              <button
+                data-ripple-light='true'
+                data-dialog-target='dialogEdit'
+                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+              >
+                Edit
+              </button>
+<button
+  type="button"
+  id="activateButton"
+  data-book-id='{{BookID}}'
+  class="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  {{#if IsBookActive}}
+  disabled
+  {{/if}}
+>
+  Activate
+</button>
+   <button
+  type="button"
+  id="deactivateButton"
+  data-book-id='{{BookID}}'
+  class="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  {{#unless IsBookActive}}
+  disabled
+  {{/unless}}
+>
+  Deactivate
+</button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class='flex justify-between items-center py-3'>
+   {{#if (hasPagination pagyInfo.pageCount)}}
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+    <div>
+      <nav class="relative z-0 inline-flex shadow-sm">
+        {{#with (previous pagyInfo.page path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Previous">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+        {{#each (renderButtonPagy pagyInfo.page pagyInfo.pageCount path req.query)}}
+        {{#if dot}}
+        <span
+          class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700">
+          ...
+        </span>
+        {{/if}}
+        {{#if path}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+          {{page}}
+        </a>
+        {{/if}}
+        {{/each}}
+        {{#with (next pagyInfo.page pagyInfo.pageCount path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Next">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+      </nav>
+    </div>
+  </div>
+  {{/if}}
+  </div>
+</div>
+
+
+{{! Create form }}
+<div
+  data-dialog='dialogCreate'
+  class='pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300'
+>
+  <div
+    class='relative m-4 w-2/5 min-w-[70%] max-w-[70%] min-h-[100%] max-h-[100%] rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl'
+  >
+    <div
+      class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+    >Add new book</div>
+    <div
+      class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+    >
+      <form>
+
+        <div class='grid grid-cols-2 gap-2'>
+
+          <div>
+            <div class='mb-5'>
+              <label
+                for='BookTitle'
+                class='mb-3 block text-base font-medium text-[#07074D]'
+              >Book Title</label>
+              <input
+                type='text'
+                name='BookTitle'
+                id='BookTitle'
+                placeholder='Book Title'
+                class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              required
+              />
+            </div>
+            <div class='mb-5'>
+              <label
+                for='BookDescription'
+                class='mb-3 block text-base font-medium text-[#07074D]'
+              >Book Description</label>
+              <textarea
+                name='BookDescription'
+                id='BookDescription'
+                placeholder='Book Description'
+                class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+                rows='5'
+                required
+              ></textarea>
+            </div>
+
+            <div class='mb-5'>
+              <label
+                for='AuthorBy'
+                class='mb-3 block text-base font-medium text-[#07074D]'
+              >Select author</label>
+              <select
+                id='AuthorBy'
+                name='AuthorBy'
+                class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              >
+                {{#each authorList}}
+                  <option value={{AuthorID}}>{{AuthorName}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class='mb-5'>
+              <label
+                for='CategoryID'
+                class='mb-3 block text-base font-medium text-[#07074D]'
+              >Select category</label>
+              <select
+                id='CategoryID'
+                name='CategoryID'
+                class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              >
+
+                {{#each categoryList}}
+                  <option value={{CategoryID}}>{{CategoryName}}</option>
+                {{/each}}
+              </select>
+            </div>
+
+            <div class='mb-5'>
+              <label
+                for='PublishDate'
+                class='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400'
+              >Select a date</label>
+              <input
+                type='date'
+                id='PublishDate'
+                name='PublishDate'
+                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              />
+            </div>
+
+          </div>
+          <div class='mb-5 flex flex-col'>
+
+            <div class='mb-5'>
+              <label
+                for='BookPrice'
+                class='mb-3 block text-base font-medium text-[#07074D]'
+              >Book Price</label>
+              <input
+                type='number'
+                name='BookPrice'
+                id='BookPrice'
+                placeholder='Price'
+                min='0'
+                step='0.01'
+                class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+              />
+            </div>
+            <div class='grid grid-cols-2'>
+
+              <div class='mb-5'>
+                <label
+                  for='IsBookActive'
+                  class='flex items-center cursor-pointer relative'
+                >
+                  <input
+                    type='checkbox'
+                    id='IsBookActive'
+                    name='IsBookActive'
+                    class='sr-only'
+                    checked=''
+                  />
+                  <div
+                    class='toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full'
+                  ></div>
+                  <span
+                    class='ml-3 text-gray-900 text-sm font-medium'
+                  >Active</span>
+                </label>
+              </div>
+
+              <div class='mb-5'>
+                <label
+                  for='IsOutOfStock'
+                  class='flex items-center cursor-pointer relative'
+                >
+                  <input
+                    type='checkbox'
+                    id='IsOutOfStock'
+                    name='IsOutOfStock'
+                    class='sr-only'
+                    checked=""
+                  />
+                  <div
+                    class='toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full'
+                  ></div>
+                  <span class='ml-3 text-gray-900 text-sm font-medium'>In stock</span>
+                </label>
+              </div>
+            </div>
+
+            <label
+              for='bookCover'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >Book Cover</label>
+            <div
+              class='relative border-dashed border-2 border-gray-400 py-4 flex flex-col justify-center items-center'
+              id='file-drop-area'
+            >
+              <input
+                type='file'
+                id='bookCover'
+                name='bookCover'
+                class='hidden'
+                accept='image/*'
+              />
+              <button
+                type='button'
+                id='upload-button'
+                class='mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none'
+              >Upload a file</button>
+              <p id='file-name' class='mt-3 text-gray-700'></p>
+            </div>
+
+            <img
+              id='image-preview'
+              src='/img/cover_book_template.jpg'
+              alt='Image Preview'
+              class='mt-3 w-72 object-cover self-center'
+            />
+          </div>
+        </div>
+        <div
+          class='flex shrink-0 flex-wrap items-center justify-end p-4 text-blue-gray-500'
+        >
+          <button
+            data-ripple-dark='true'
+            data-dialog-close='true'
+            class='middle none center mr-1 rounded-lg py-3 px-6 font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+          type="button"
+          >Cancel</button>
+          <button
+            class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+            type='submit'
+          >Confirm</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+<script src='/js/book-management/bookTable.js'></script>

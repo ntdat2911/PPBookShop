@@ -12,6 +12,14 @@ import { MailerModule } from './modules/mailer/mailer.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { GraphQLConfig } from './config/graphql.config';
+import { BooksModule } from './modules/books/books.module';
+import { AuthorsModule } from './modules/authors/authors.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
+import { AdminModule } from './modules/admin/admin.module';
+
+import { join } from 'path';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -31,6 +39,12 @@ import { GraphQLConfig } from './config/graphql.config';
     CommonModule,
     JwtModule,
     MailerModule,
+    BooksModule,
+    AuthorsModule,
+    CategoriesModule,
+    ReviewsModule,
+    AdminModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [

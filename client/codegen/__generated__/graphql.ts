@@ -18,9 +18,61 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AuthorEntity = {
+  __typename?: 'AuthorEntity';
+  AuthorID: Scalars['String']['output'];
+  AuthorName: Scalars['String']['output'];
+  Bio: Scalars['String']['output'];
+};
+
+export type BookEntity = {
+  __typename?: 'BookEntity';
+  AuthorBy: Scalars['String']['output'];
+  AuthorName: Scalars['String']['output'];
+  BookDescription: Scalars['String']['output'];
+  BookID: Scalars['String']['output'];
+  BookPrice: Scalars['Float']['output'];
+  BookTitle: Scalars['String']['output'];
+  CategoryID: Scalars['String']['output'];
+  CreatedAt: Scalars['DateTime']['output'];
+  ImageURL: Scalars['String']['output'];
+  IsBookActive: Scalars['Boolean']['output'];
+  IsOutOfStock: Scalars['Boolean']['output'];
+  PublishDate: Scalars['DateTime']['output'];
+  Rating: Scalars['Float']['output'];
+  UpdatedAt: Scalars['DateTime']['output'];
+};
+
+export type GPaginatedBookResponse = {
+  __typename?: 'GPaginatedBookResponse';
+  count: Scalars['Int']['output'];
+  page: Scalars['Int']['output'];
+  records: Array<BookEntity>;
+  size: Scalars['Int']['output'];
+};
+
+export type GPaginationRequest = {
+  input?: InputMaybe<Scalars['String']['input']>;
+  page: Scalars['Int']['input'];
+  size: Scalars['Int']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getAuthorById: AuthorEntity;
+  getAuthors: Array<AuthorEntity>;
+  getBooks: GPaginatedBookResponse;
   user: UserEntity;
+};
+
+
+export type QueryGetAuthorByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetBooksArgs = {
+  params: GPaginationRequest;
 };
 
 export type UserEntity = {
@@ -37,10 +89,20 @@ export type UserEntity = {
   UserName: Scalars['String']['output'];
 };
 
+export type GetBooksQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  size: Scalars['Int']['input'];
+  input: Scalars['String']['input'];
+}>;
+
+
+export type GetBooksQuery = { __typename?: 'Query', getBooks: { __typename?: 'GPaginatedBookResponse', page: number, size: number, count: number, records: Array<{ __typename?: 'BookEntity', BookID: string, BookTitle: string, ImageURL: string, BookPrice: number, AuthorName: string }> } };
+
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'UserEntity', Email: string, Password: string, UserName: string, Name: string, CreatedAt: any, UpdatedAt: any } };
 
 
+export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"size"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getBooks"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"size"},"value":{"kind":"Variable","name":{"kind":"Name","value":"size"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"BookID"}},{"kind":"Field","name":{"kind":"Name","value":"BookTitle"}},{"kind":"Field","name":{"kind":"Name","value":"ImageURL"}},{"kind":"Field","name":{"kind":"Name","value":"BookPrice"}},{"kind":"Field","name":{"kind":"Name","value":"AuthorName"}}]}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
 export const GetUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Email"}},{"kind":"Field","name":{"kind":"Name","value":"Password"}},{"kind":"Field","name":{"kind":"Name","value":"UserName"}},{"kind":"Field","name":{"kind":"Name","value":"Name"}},{"kind":"Field","name":{"kind":"Name","value":"CreatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"UpdatedAt"}}]}}]}}]} as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;

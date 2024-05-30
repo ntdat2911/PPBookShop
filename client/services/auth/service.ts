@@ -6,7 +6,6 @@ const SERVER_BASE_URL = process.env.SERVER_BASE_URL;
 
 export async function signIn(params: SignInRequestDto) {
   try {
-    console.log(SERVER_BASE_URL);
     const response = await axios.post(
       `${SERVER_BASE_URL}/api/auth/sign-in`,
       params
