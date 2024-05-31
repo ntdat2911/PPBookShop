@@ -56,8 +56,11 @@ type GPaginatedBookResponse {
 }
 
 input GPaginationRequest {
+  author: String
+  category: String
   input: String
   page: Int!
+  rating: String
   size: Int!
 }
 

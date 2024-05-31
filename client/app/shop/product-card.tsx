@@ -25,6 +25,14 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import qs from "qs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 interface ProductCardProps {
   pagyInfo: {
     page: number;
@@ -35,18 +43,27 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
-  const [page, setPage] = useState(pagyInfo.page);
-  const { searchParams } = useSearchParamsContext();
+  const { searchParams, setSearchParams } = useSearchParamsContext();
   const router = useRouter();
 
   useEffect(() => {
-    const query = qs.stringify({
-      page: page.toString() || "1",
-      input: searchParams.input,
+    let params: { [key: string]: any } = searchParams;
+    Object.keys(params).forEach((key) => {
+      if (params[key] == null || params[key].length == 0) delete params[key];
     });
-    if (searchParams.input == "") delete searchParams.input;
-    router.push(`/shop?${query}`);
-  }, [page, searchParams.input]);
+
+    const updatedParams = new URLSearchParams();
+    Object.keys(params).forEach((key) => {
+      updatedParams.set(key, params[key] as string); // Add type assertion
+    });
+    router.push(`/shop?${updatedParams.toString()}`);
+  }, [
+    searchParams.page,
+    searchParams.input,
+    searchParams.category,
+    searchParams.rating,
+    searchParams.author,
+  ]);
   const paginationCreate = () => {
     const totalPage = Math.ceil(pagyInfo.count / pagyInfo.size);
     const currentPage = pagyInfo.page;
@@ -70,13 +87,15 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                 currentPage <= 1 ? "pointer-events-none opacity-50" : undefined,
                 "cursor-pointer"
               )}
-              onClick={() => setPage(currentPage - 1)}
+              onClick={() =>
+                setSearchParams({ ...searchParams, page: currentPage - 1 })
+              }
             />
           </PaginationItem>
           {pages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
-                onClick={() => setPage(page)}
+                onClick={() => setSearchParams({ ...searchParams, page: page })}
                 aria-current={currentPage === page ? "page" : undefined}
                 className={cn(
                   currentPage === page ? "bg-gray-200" : undefined,
@@ -102,7 +121,9 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                   : undefined,
                 "cursor-pointer"
               )}
-              onClick={() => setPage(currentPage + 1)}
+              onClick={() =>
+                setSearchParams({ ...searchParams, page: currentPage + 1 })
+              }
             />
           </PaginationItem>
         </PaginationContent>
@@ -111,6 +132,23 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   };
   return (
     <>
+      <div className="flex justify-between px-6 mb-4">
+        <div className="text-sm text-muted-foreground p-2">
+          {books.length} of {pagyInfo.count} books found
+        </div>
+        <div>
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">Sort by price</SelectItem>
+              <SelectItem value="dark">Sort by name</SelectItem>
+              <SelectItem value="system">Sort by on sale</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <div className="grid grid-cols-4 gap-4">
         {books ? (
           books.map((book) => (

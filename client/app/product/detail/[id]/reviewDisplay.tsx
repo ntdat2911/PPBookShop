@@ -12,15 +12,23 @@ import { GET_REVIEW_BY_BOOK_ID } from "@/services/reviews/queries";
 import { ReviewEntity } from "@/codegen/__generated__/graphql";
 import { format, formatDistanceToNow } from "date-fns";
 export default function ReviewDisplay({ bookID }: { bookID: string }) {
-  const [selected, setSelected] = useState(4);
   const { reviewInfo, setReviewInfo } = useReviewContext();
-  const [getReview, { data: reviewData }] = useLazyQuery(GET_REVIEW_BY_BOOK_ID);
-
+  const [getReview, { data: reviewData }] = useLazyQuery(
+    GET_REVIEW_BY_BOOK_ID,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
   useEffect(() => {
     getReview({
-      variables: { bookID: bookID, rating: selected + 1, page: 1, size: 100 },
+      variables: {
+        bookID: bookID,
+        rating: reviewInfo.selected + 1,
+        page: 1,
+        size: 100,
+      },
     });
-  }, [selected]);
+  }, [reviewInfo.selected, reviewInfo.isFetching]);
 
   return (
     <div className="h-full">
@@ -35,9 +43,11 @@ export default function ReviewDisplay({ bookID }: { bookID: string }) {
                     key={`review-${index}`}
                     className={cn(
                       "flex gap-2 items-center justify-start hover:bg-gray-200 rounded-lg p-2 cursor-pointer",
-                      selected === index ? "bg-gray-200" : ""
+                      reviewInfo.selected === index ? "bg-gray-200" : ""
                     )}
-                    onClick={() => setSelected(index)}
+                    onClick={() =>
+                      setReviewInfo({ ...reviewInfo, selected: index })
+                    }
                   >
                     <p>{index + 1}</p>
                     <StarFilledIcon className="w-6 h-6 text-yellow-400" />
@@ -47,13 +57,13 @@ export default function ReviewDisplay({ bookID }: { bookID: string }) {
                 ))}
               <div className="flex w-full justify-center">
                 <h1 className="text-2xl font-bold">
-                  {reviewInfo.averageRating}
+                  {reviewInfo?.averageRating.toFixed(2) || 0}
                 </h1>
               </div>
             </div>
 
             <div className="col-span-2 pl-4 border-l-2">
-              <ScrollArea className="h-96">
+              <ScrollArea className="h-96 pr-4">
                 {reviewData &&
                 reviewData.getReviewsByBookId.records.length > 0 ? (
                   reviewData.getReviewsByBookId.records.map((review, index) => (

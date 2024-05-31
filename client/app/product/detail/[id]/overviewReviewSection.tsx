@@ -7,19 +7,27 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_OVERVIEW_REVIEW_BY_ID } from "@/services/reviews/queries";
 import { GET_BOOKS } from "@/services/books/queries";
 import { set } from "zod";
+import Link from "next/link";
 
 export const OverviewReviewSection = ({ BookID }: { BookID: string }) => {
   const { reviewInfo, setReviewInfo } = useReviewContext();
   const { data } = useQuery(GET_OVERVIEW_REVIEW_BY_ID, {
     variables: { id: BookID },
+    fetchPolicy: "no-cache",
   });
   useEffect(() => {
-    setReviewInfo(data?.getReviewOverviewById);
-  }, [data]);
+    if (!data) return;
+    setReviewInfo({
+      ...reviewInfo,
+      averageRating: data.getReviewOverviewById?.averageRating,
+      total: data.getReviewOverviewById?.total,
+      countReviewList: data.getReviewOverviewById?.countReviewList,
+    });
+  }, [data, reviewInfo.isFetching]);
   return (
     <div className="grid grid-cols-2">
       <div className="flex gap-2">
-        <p>{reviewInfo?.averageRating}</p>
+        <p>{reviewInfo?.averageRating.toFixed(2)}</p>
         <Rating
           rating={reviewInfo?.averageRating || 0}
           totalStars={5}
@@ -30,9 +38,10 @@ export const OverviewReviewSection = ({ BookID }: { BookID: string }) => {
           disabled={true}
         />
       </div>
-
       <div className="flex gap-2">
-        <span>{reviewInfo?.total} reviews</span>
+        <Link href="#review-section">
+          <span className="hover:underline">{reviewInfo?.total} reviews</span>
+        </Link>
       </div>
     </div>
   );

@@ -7,14 +7,8 @@ import { OverviewDetailBook } from './interfaces/books-response.interface';
 export class BooksRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findByFilter(params: {
-    page: number;
-    size: number;
-    input: string;
-  }): Promise<OverviewDetailBook[]> {
+  async findByFilter(): Promise<OverviewDetailBook[]> {
     return this.prisma.book.findMany({
-      skip: (params.page - 1) * params.size,
-      take: params.size,
       orderBy: {
         CreatedAt: 'desc',
       },
@@ -24,11 +18,10 @@ export class BooksRepository {
         BookID: true,
         BookPrice: true,
         ImageURL: true,
+        Rating: true,
+        CategoryID: true,
       },
       where: {
-        BookTitle: {
-          contains: params.input,
-        },
         IsBookActive: true,
         IsOutOfStock: false,
       },

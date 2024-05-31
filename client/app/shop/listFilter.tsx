@@ -27,94 +27,73 @@ import {
 } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { CaretSortIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterAuthor } from "@/services/authors/dto";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParamsContext } from "./searchParamsContext";
 
-const rating = ["5 ★★★★★", "4 ★★★★", "3 ★★★", , "2 ★★", "1 ★"];
-const categoryList: OptionType[] = [
-  {
-    id: "1",
-    tag_name: "Novel",
-  },
-  {
-    id: "2",
-    tag_name: "Comic",
-  },
-  {
-    id: "3",
-    tag_name: "Manga",
-  },
-  {
-    id: "4",
-    tag_name: "Light Novel",
-  },
-  {
-    id: "5",
-    tag_name: "Webtoon",
-  },
-  {
-    id: "6",
-    tag_name: "Manhwa",
-  },
-  {
-    id: "7",
-    tag_name: "Manhua",
-  },
-  {
-    id: "8",
-    tag_name: "Doujinshi",
-  },
-  {
-    id: "9",
-    tag_name: "Other",
-  },
-  {
-    id: "10",
-    tag_name: "All",
-  },
-];
+const rating = ["5", "4", "3", "2", "1"];
 
 const formSchema = z.object({
-  // size: z.number().optional(),
   page: z.number().optional(),
   rating: z.array(z.string()).optional(),
   category: z.array(z.string()).optional(),
-  author: z.string({
-    required_error: "Please select a language.",
-  }),
+  author: z.string().optional(),
 });
+
 interface ListFilterProps {
   authorList: FilterAuthor[];
+  categoryList: OptionType[];
 }
 
-export const ListFilter = ({ authorList }: ListFilterProps) => {
+export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
+  const { searchParams, setSearchParams } = useSearchParamsContext();
+  const [currentForm, setCurrentForm] = useState<z.infer<typeof formSchema>>(
+    {}
+  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       page: 1,
       rating: [],
       category: [],
+      author: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values", values);
   }
+
   const watchAllFields = form.watch();
+
   useEffect(() => {
-    console.log("watchAllFields", watchAllFields);
-  }, [watchAllFields]);
+    if (
+      watchAllFields.author !== currentForm.author ||
+      watchAllFields.category !== currentForm.category ||
+      watchAllFields.rating !== currentForm.rating
+    ) {
+      setCurrentForm(watchAllFields);
+      setSearchParams({
+        ...searchParams,
+        page: 1,
+        author: watchAllFields.author,
+        category: watchAllFields.category,
+        rating: watchAllFields.rating,
+      });
+    }
+  }, [watchAllFields, currentForm]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <ScrollArea>
           <div className="my-2">
             <Label
-              key="rating"
+              key="category"
               className="flex flex-1 items-center justify-between py-2 font-medium transition-all text-lg"
             >
               Categories
@@ -184,7 +163,10 @@ export const ListFilter = ({ authorList }: ListFilterProps) => {
                                 }}
                               />
                             </FormControl>
-                            <FormLabel className="">{item}</FormLabel>
+                            <FormLabel className="flex items-center">
+                              {item}{" "}
+                              <StarFilledIcon className="text-yellow-500" />
+                            </FormLabel>
                           </FormItem>
                         );
                       }}
@@ -227,7 +209,7 @@ export const ListFilter = ({ authorList }: ListFilterProps) => {
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
                         <CommandInput
-                          placeholder="Search framework..."
+                          placeholder="Search author..."
                           className="h-9"
                         />
                         <CommandEmpty>No author found.</CommandEmpty>

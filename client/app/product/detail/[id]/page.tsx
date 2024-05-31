@@ -27,6 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAuthorById } from "@/services/authors/services";
 import ReviewSection from "./reviewSection";
 import ReviewDisplay from "./reviewDisplay";
+import { useSession } from "next-auth/react";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const book: BookEntity = await getBookById(params.id);
@@ -112,8 +113,8 @@ export default async function Page({ params }: { params: { id: string } }) {
             </div>
           </div>
         </Card>
-        <Card className="h-max">
-          <Tabs defaultValue="author" className="w-full">
+        <Card className="h-max" id="review-section">
+          <Tabs defaultValue="review" className="w-full">
             <TabsList>
               <TabsTrigger value="author">About author</TabsTrigger>
               <TabsTrigger value="review">Reviews</TabsTrigger>
@@ -133,7 +134,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <ReviewDisplay bookID={book.BookID} />
                   </div>
 
-                  <ReviewSection />
+                  <ReviewSection bookID={book.BookID} />
                 </div>
               </CardContent>
             </TabsContent>

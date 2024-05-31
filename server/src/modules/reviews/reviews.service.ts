@@ -26,8 +26,8 @@ export class ReviewsService {
     return this.reviewRepository.createReview(data);
   }
 
-  async getReviews() {
-    const reviewList = await this.reviewRepository.getReviews();
+  async getReviews(page: number, size: number) {
+    const reviewList = await this.reviewRepository.getReviews(page, size);
     const result = [];
     reviewList.forEach(async (review) => {
       const user = await this.usersService.findOneById(review.UserID);
@@ -83,5 +83,9 @@ export class ReviewsService {
       count,
       records: result,
     };
+  }
+
+  async countAll() {
+    return this.reviewRepository.countAll();
   }
 }

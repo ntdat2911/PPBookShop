@@ -9,6 +9,7 @@ export function SearchParamsContextWrapper({
   children: React.ReactNode;
 }) {
   let [searchParams, setSearchParams] = useState<object>({
+    page: 1,
     input: "",
     category: [],
     rating: [],

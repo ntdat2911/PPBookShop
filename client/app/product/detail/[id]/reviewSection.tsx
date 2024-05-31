@@ -23,6 +23,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { gql, useMutation } from "@apollo/client";
+import { CREATE_REVIEW } from "@/services/reviews/queries";
+import { useSession } from "next-auth/react";
+import { useReviewContext } from "./reviewContext";
+import { useToast } from "@/components/ui/use-toast";
+import { use, useEffect } from "react";
+import { useRouter } from "next/navigation";
 const ratingList = [
   {
     id: 5,
@@ -57,25 +64,62 @@ const FormSchema = z.object({
   }),
   comment: z
     .string()
-    .min(10, {
-      message: "Bio must be at least 10 characters.",
+    .min(1, {
+      message: "Comment must be at least 1 characters.",
     })
     .max(160, {
       message: "Bio must not be longer than 30 characters.",
     }),
 });
 
-export default function ReviewSection() {
+interface ReviewSectionProps {
+  bookID: string;
+}
+
+export default function ReviewSection({ bookID }: ReviewSectionProps) {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { reviewInfo, setReviewInfo } = useReviewContext();
+  const { toast } = useToast();
+  const [createReview, { data, loading, error }] = useMutation(CREATE_REVIEW);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      rating: "5",
+      rating: data?.createReview.Rating.toString() || "",
       title: "",
+      comment: "",
     },
   });
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    const userID = session?.user?.id;
+    if (!userID) {
+      return;
+    }
+    createReview({
+      variables: {
+        bookID: bookID,
+        userID: userID,
+        title: data.title,
+        comment: data.comment,
+        rating: parseInt(data.rating),
+      },
+    });
+
+    reviewInfo.countReviewList[parseInt(data.rating) - 1] += 1;
   }
+  useEffect(() => {
+    if (loading === false && data) {
+      toast({
+        title: "Comment successfully!",
+      });
+      form.reset();
+      setReviewInfo({
+        ...reviewInfo,
+        isFetching: !reviewInfo.isFetching,
+      });
+    }
+    router.refresh();
+  }, [loading]);
   return (
     <div className="relative hidden flex-col items-start gap-8 md:flex">
       <Form {...form}>

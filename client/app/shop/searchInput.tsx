@@ -16,7 +16,7 @@ export const SearchInput = () => {
       onChange={(e) => setInput(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          setSearchParams({ ...searchParams, input: input });
+          setSearchParams({ ...searchParams, input: input, page: 1 });
         }
       }}
     />

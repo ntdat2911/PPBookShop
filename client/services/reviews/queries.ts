@@ -32,3 +32,18 @@ query getReviewsByBookId($bookID:String!,$rating:Int!,$page:Int!,$size:Int!){
     }}
   }
 `);
+
+export const CREATE_REVIEW = gql(`
+mutation CreateReview($bookID:String!,$userID:String!,$title:String!,$comment:String!,$rating:Int!){
+createReview(data:{
+  BookID:$bookID
+  UserID:$userID
+  ReviewTitle:$title
+  Comment:$comment
+  Rating:$rating
+}) {
+  ReviewID
+  Rating
+}
+}  
+`);

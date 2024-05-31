@@ -18,8 +18,14 @@ export class ReviewRepository {
     });
   }
 
-  async getReviews() {
-    return this.prisma.review.findMany();
+  async getReviews(page: number, size: number) {
+    return this.prisma.review.findMany({
+      skip: (page - 1) * size,
+      take: size,
+      orderBy: {
+        CreatedAt: 'desc',
+      },
+    });
   }
 
   async getReviewById(id: string) {
@@ -55,6 +61,9 @@ export class ReviewRepository {
         BookID: params.bookID,
         Rating: params.rating,
       },
+      orderBy: {
+        CreatedAt: 'desc',
+      },
     });
     return res;
   }
@@ -72,5 +81,9 @@ export class ReviewRepository {
         Rating: Rating,
       },
     });
+  }
+
+  async countAll() {
+    return this.prisma.review.count();
   }
 }

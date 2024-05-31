@@ -10,4 +10,13 @@ export class GPaginationRequest {
 
   @Field(() => String, { nullable: true })
   input?: string;
+
+  @Field(() => String, { nullable: true })
+  category?: string;
+
+  @Field(() => String, { nullable: true })
+  author?: string;
+
+  @Field(() => String, { nullable: true })
+  rating?: string;
 }

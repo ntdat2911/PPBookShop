@@ -144,7 +144,11 @@ export class AdminController {
   @Public()
   @Get('/review-management')
   @Render('review/reviewTable')
-  public ReviewManagement() {
-    return {};
+  public async ReviewManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { reviewList, pagyInfo } =
+      await this.adminService.getReviewManagementData(page, size);
+    const path = '/admin/review-management';
+    return { reviewList, pagyInfo, req, path };
   }
 }

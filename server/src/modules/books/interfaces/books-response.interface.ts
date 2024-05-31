@@ -29,4 +29,10 @@ export class OverviewDetailBook {
 
   @Field(() => String)
   public AuthorBy: string;
+
+  @Field(() => Number)
+  public Rating: number;
+
+  @Field(() => String)
+  public CategoryID: string;
 }
