@@ -12,7 +12,7 @@ export class AuthorsRepository {
   }
 
   async getAuthors() {
-    return this.prisma.author.findMany();
+    return await this.prisma.author.findMany();
   }
 
   async getAuthorById(id: string) {

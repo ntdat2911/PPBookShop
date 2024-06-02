@@ -10,7 +10,7 @@ export class AuthorsService {
   ) {}
 
   public async getAuthors() {
-    return this.authorsRepository.getAuthors();
+    return await this.authorsRepository.getAuthors();
   }
 
   public async getAuthorById(id: string) {

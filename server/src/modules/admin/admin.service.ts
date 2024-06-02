@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BooksService } from '../books/books.service';
 import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Injectable()
 export class AdminService {
@@ -9,6 +10,7 @@ export class AdminService {
     private readonly booksService: BooksService,
     private readonly authorsService: AuthorsService,
     private readonly categoriesService: CategoriesService,
+    private readonly reviewsService: ReviewsService,
   ) {}
 
   public async getBookManagementData(page: number, size: number) {
@@ -96,6 +98,22 @@ export class AdminService {
         pageCount,
       },
       authorList,
+    };
+  }
+
+  public async getReviewManagementData(page: number, size: number) {
+    page = page || 1;
+    size = size || 5;
+    const reviewList = await this.reviewsService.getReviews(page, size);
+    const count = await this.reviewsService.countAll();
+    const pageCount = Math.ceil(count / size);
+    return {
+      pagyInfo: {
+        page,
+        count: size,
+        pageCount,
+      },
+      reviewList,
     };
   }
 }

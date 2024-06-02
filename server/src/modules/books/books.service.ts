@@ -6,6 +6,7 @@ import { GPaginationRequest } from './dtos/pagination.dto';
 import { BookEntity } from './entities/book.entity';
 import { GPaginatedBookResponse } from './interfaces/books-response.interface';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { RatingEnumRange } from './types/ratingEnumRange';
 
 @Injectable()
 export class BooksService {
@@ -18,21 +19,26 @@ export class BooksService {
   public async getBooks(
     params: GPaginationRequest,
   ): Promise<GPaginatedBookResponse> {
-    const { page, size, input } = params;
+    const { page, size, input, category, rating, author } = params;
+    //split the rating string into an array
+    const ratings = rating ? rating.split(',') : [];
+    const categories = category ? category.split(',') : [];
+    const ratingRanges = ratings.map((r) => RatingEnumRange[parseInt(r)]);
 
-    const books = await this.booksRepository.findByFilter({
-      page: page,
-      size: size,
-      input: input,
+    const { data, total } = await this.booksRepository.findByFilter({
+      page,
+      size,
+      input,
+      category: categories,
+      ratingRanges: ratingRanges,
+      author,
     });
-    const count = await this.booksRepository.count({
-      input: input,
-    });
+
     const result: GPaginatedBookResponse = {
       page: page,
       size: size,
-      count: count,
-      records: books,
+      count: total,
+      records: data,
     };
     return result;
   }

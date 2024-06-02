@@ -16,6 +16,7 @@ type BookEntity {
   BookPrice: Float!
   BookTitle: String!
   CategoryID: String!
+  CategoryName: String!
   CreatedAt: DateTime!
   ImageURL: String!
   IsBookActive: Boolean!
@@ -39,6 +40,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input GCreateReviewRequest {
+  BookID: String!
+  Comment: String!
+  Rating: Int!
+  ReviewTitle: String!
+  UserID: String!
+}
+
 type GPaginatedBookResponse {
   count: Int!
   page: Int!
@@ -47,18 +56,46 @@ type GPaginatedBookResponse {
 }
 
 input GPaginationRequest {
+  author: String
+  category: String
   input: String
   page: Int!
+  rating: String
   size: Int!
+}
+
+input GReviewPaginationRequest {
+  bookID: String!
+  page: Int!
+  rating: Int
+  size: Int!
+}
+
+type GReviewPaginationResponse {
+  count: Int!
+  page: Int!
+  records: [ReviewEntity!]!
+  size: Int!
+}
+
+type Mutation {
+  createReview(data: GCreateReviewRequest!): ReviewEntity!
+}
+
+type OverviewReviewResponse {
+  averageRating: Float!
+  countReviewList: [Float!]!
+  total: Float!
 }
 
 type Query {
   getAuthorById(id: String!): AuthorEntity!
   getAuthors: [AuthorEntity!]!
+  getBookById(id: String!): BookEntity!
   getBooks(params: GPaginationRequest!): GPaginatedBookResponse!
   getCategories: [CategoryEntity!]!
-  getReviewById(id: String!): ReviewEntity!
-  getReviews: [ReviewEntity!]!
+  getReviewOverviewById(id: String!): OverviewReviewResponse!
+  getReviewsByBookId(params: GReviewPaginationRequest!): GReviewPaginationResponse!
   user: UserEntity!
 }
 
@@ -70,6 +107,7 @@ type ReviewEntity {
   ReviewID: String!
   ReviewTitle: String!
   UserID: String!
+  Username: String!
 }
 
 type UserEntity {
