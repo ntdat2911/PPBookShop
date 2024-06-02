@@ -1,0 +1,177 @@
+<div class='container px-8 mt-4'>
+  <div class='flex justify-between items-center mb-6'>
+    <h1 class='text-2xl font-bold'>Review</h1>
+
+  </div>
+  <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+    <table class='min-w-full bg-white'>
+      <thead class='bg-gray-100'>
+        <tr>
+
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Book name</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Username</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Review title</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Review content</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Rating</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Created at</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Action</th>
+        </tr>
+      </thead>
+      <tbody class='text-gray-700'>
+        {{#each reviewList}}
+          <tr class='border-t text-center' data-review-id='{{ReviewID}}'>
+            <td class='py-3 px-4'>{{BookTitle}}</td>
+            <td class='py-3 px-4'>
+              {{UserName}}
+            </td>
+
+            <td class='py-3 px-4'>
+              {{ReviewTitle}}
+            </td>
+            <td class='py-3 px-4'>
+              {{Comment}}
+            </td>
+            <td class='py-3 px-4'>
+              {{Rating}}
+            </td>
+            <td class='py-3 px-4'>
+              {{formatDate CreatedAt}}
+            </td>
+            <td class='py-3 px-4 flex justify-center gap-2'>
+              <button
+                data-ripple-light='true'
+                data-dialog-target='dialogDetail'
+                class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+              >
+                Details
+              </button>
+              <button
+                type='button'
+                id='deleteButton'
+                data-review-id='{{ReviewID}}'
+                class='bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50'
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class='flex justify-between items-center py-3'>
+    {{#if (hasPagination pagyInfo.pageCount)}}
+      <div class='hidden sm:flex-1 sm:flex sm:items-center sm:justify-center'>
+        <div>
+          <nav class='relative z-0 inline-flex shadow-sm'>
+            {{#with (previous pagyInfo.page path req.query)}}
+              <a
+                href='{{path}}'
+                class='{{class}}
+                  relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150'
+                aria-label='Previous'
+              >
+                <svg class='h-5 w-5' fill='currentColor' viewBox='0 0 20 20'>
+                  <path
+                    fill-rule='evenodd'
+                    d='M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
+                    clip-rule='evenodd'
+                  />
+                </svg>
+              </a>
+            {{/with}}
+            {{#each
+              (renderButtonPagy pagyInfo.page pagyInfo.pageCount path req.query)
+            }}
+              {{#if dot}}
+                <span
+                  class='-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700'
+                >
+                  ...
+                </span>
+              {{/if}}
+              {{#if path}}
+                <a
+                  href='{{path}}'
+                  class='{{class}}
+                    -ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150'
+                >
+                  {{page}}
+                </a>
+              {{/if}}
+            {{/each}}
+            {{#with (next pagyInfo.page pagyInfo.pageCount path req.query)}}
+              <a
+                href='{{path}}'
+                class='{{class}}
+                  -ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150'
+                aria-label='Next'
+              >
+                <svg class='h-5 w-5' fill='currentColor' viewBox='0 0 20 20'>
+                  <path
+                    fill-rule='evenodd'
+                    d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z'
+                    clip-rule='evenodd'
+                  />
+                </svg>
+              </a>
+            {{/with}}
+          </nav>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>
+
+{{! Create form }}
+<div
+  data-dialog='dialogDetail'
+  class='pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300'
+>
+  <div
+    class='relative m-4 w-2/5 min-w-[70%] max-w-[70%] min-h-[100%] max-h-[100%] rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl'
+  >
+    <div
+      class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+    >Details</div>
+    <button
+      data-dialog-close='true'
+      class='absolute top-0 right-0 m-2 border border-red-500 bg-transparent text-red-500 font-semibold text-lg hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 p-1 rounded'
+    >
+      X
+    </button>
+    <div
+      class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+    >
+
+      <div class='flex flex-col'>
+        <p class='text-lg font-semibold text-blue-500'>Book Title:
+          {{BookTitle}}</p>
+        <p class='text-lg font-semibold text-blue-500'>Username:
+          {{UserName}}</p>
+        <p class='text-lg font-semibold text-blue-500'>Review Title:
+          {{ReviewTitle}}</p>
+        <p class='text-lg font-semibold text-blue-500'>Review Content:
+          {{Comment}}</p>
+        <p class='text-lg font-semibold text-blue-500'>Rating: {{Rating}}</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<script src='/js/review-management/reviewTable.js'></script>

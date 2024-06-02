@@ -1,138 +1,14 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // Updated for PostgreSQL
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  UserID       Int      @id @default(autoincrement())
-  ImageURL     String?
-  UserName     String
-  Password     String
-  Email        String
-  Role         String
-  IsUserActive Boolean
-  CreatedAt    DateTime @default(now())
-  UpdatedAt    DateTime @updatedAt
-  Reviews      Review[]
-  Orders       Order[]
-  Shipments    Ship[]
-}
-
-model BookPromotion {
-  id          Int       @id @default(autoincrement())
-  Promotion   Promotion @relation(fields: [PromotionID], references: [PromotionID])
-  PromotionID Int
-  Book        Book      @relation(fields: [BookID], references: [BookID])
-  BookID      Int
-  CreatedAt   DateTime  @default(now())
-  UpdatedAt   DateTime  @updatedAt
-}
-
-model Category {
-  CategoryID       Int        @id @default(autoincrement())
-  CategoryName     String
-  ParentCategory   Category?  @relation("CategoryToCategory", fields: [ParentCategoryID], references: [CategoryID])
-  ParentCategoryID Int?
-  IsCategoryActive Boolean
-  CreatedAt        DateTime   @default(now())
-  UpdatedAt        DateTime   @updatedAt
-  Books            Book[]
-  SubCategories    Category[] @relation("CategoryToCategory")
-}
-
-model Book {
-  BookID          Int             @id @default(autoincrement())
-  ImageURL        String
-  BookTitle       String
-  BookDescription String
-  BookPrice       Float
-  Category        Category        @relation(fields: [CategoryID], references: [CategoryID])
-  CategoryID      Int
-  Author          Author          @relation(fields: [AuthorID], references: [AuthorID])
-  AuthorID        Int
-  PublishDate     DateTime
-  BookQuantity    Int
-  IsBookActive    Boolean
-  Rating          Float
-  CreatedAt       DateTime        @default(now())
-  UpdatedAt       DateTime        @updatedAt
-  Reviews         Review[]
-  BookPromotions  BookPromotion[]
-  OrderItems      OrderItem[]
-}
-
-model Review {
-  ReviewID    Int      @id @default(autoincrement())
-  Book        Book     @relation(fields: [BookID], references: [BookID])
-  BookID      Int
-  User        User     @relation(fields: [UserID], references: [UserID])
-  UserID      Int
-  ReviewTitle String
-  Rating      Float
-  Comment     String
-  CreatedAt   DateTime @default(now())
-  UpdatedAt   DateTime @updatedAt
-}
-
-model Author {
-  AuthorID   Int      @id @default(autoincrement())
-  AuthorName String
-  Bio        String
-  CreatedAt  DateTime @default(now())
-  UpdatedAt  DateTime @updatedAt
-  Books      Book[]
-}
-
-model Order {
-  OrderID    Int         @id @default(autoincrement())
-  User       User        @relation(fields: [UserID], references: [UserID])
-  UserID     Int
-  TotalPrice Float
-  Status     String
-  Ship       Ship        @relation(fields: [ShipID], references: [ShipID])
-  ShipID     Int
-  CreatedAt  DateTime    @default(now())
-  UpdatedAt  DateTime    @updatedAt
-  OrderItems OrderItem[]
-}
-
-model OrderItem {
-  OrderItemID    Int      @id @default(autoincrement())
-  Order          Order    @relation(fields: [OrderID], references: [OrderID])
-  OrderID        Int
-  Book           Book     @relation(fields: [BookID], references: [BookID])
-  BookID         Int
-  ItemQuantity   Int
-  TotalItemPrice Float
-  CreatedAt      DateTime @default(now())
-  UpdatedAt      DateTime @updatedAt
-}
-
-model Ship {
-  ShipID       Int      @id @default(autoincrement())
-  User         User     @relation(fields: [UserID], references: [UserID])
-  UserID       Int
-  Phone        String
-  ReceiverName String
-  Address      String
-  IsDefault    Boolean
-  CreatedAt    DateTime @default(now())
-  UpdatedAt    DateTime @updatedAt
-  Orders       Order[]
-}
-
 model Promotion {
-  PromotionID      Int             @id @default(autoincrement())
+  PromotionID      String          @id @default(uuid())
   PromotionName    String
   DiscountPercent  Float
   DiscountQuantity Int
@@ -141,4 +17,138 @@ model Promotion {
   CreatedAt        DateTime        @default(now())
   UpdatedAt        DateTime        @updatedAt
   BookPromotions   BookPromotion[]
+  OrderItems       OrderItem[]
+}
+
+model Category {
+  CategoryID       String   @id @default(uuid())
+  CategoryName     String
+  ParentCategoryID String?
+  IsCategoryActive Boolean
+  CreatedAt        DateTime @default(now())
+  UpdatedAt        DateTime @updatedAt
+  Books            Book[]
+}
+
+model Author {
+  AuthorID   String @id @default(uuid())
+  AuthorName String
+  Bio        String
+  Books      Book[]
+}
+
+model Book {
+  BookID          String          @id @default(uuid())
+  ImageURL        String
+  BookTitle       String
+  BookDescription String
+  BookPrice       Float
+  CategoryID      String
+  AuthorBy        String
+  PublishDate     DateTime
+  IsBookActive    Boolean
+  IsOutOfStock    Boolean
+  Rating          Float
+  CreatedAt       DateTime        @default(now())
+  UpdatedAt       DateTime        @updatedAt
+  Category        Category        @relation(fields: [CategoryID], references: [CategoryID])
+  Author          Author          @relation(fields: [AuthorBy], references: [AuthorID])
+  Reviews         Review[]
+  BookPromotions  BookPromotion[]
+  OrderItems      OrderItem[]
+}
+
+model User {
+  UserID           String    @id @default(uuid())
+  ImageURL         String?
+  UserName         String
+  Name             String
+  Password         String
+  Email            String
+  IsUserActive     Boolean
+  IsEmailConfirmed Boolean
+  CreatedAt        DateTime  @default(now())
+  UpdatedAt        DateTime  @updatedAt
+  Reviews          Review[]
+  Orders           Order[]
+  Addresses        Address[]
+}
+
+model Review {
+  ReviewID    String   @id @default(uuid())
+  BookID      String
+  UserID      String
+  ReviewTitle String
+  Rating      Float
+  Comment     String
+  CreatedAt   DateTime @default(now())
+  Book        Book     @relation(fields: [BookID], references: [BookID])
+  User        User     @relation(fields: [UserID], references: [UserID])
+}
+
+model Admin {
+  AdminID   String @id @default(uuid())
+  AdminName String
+  Password  String
+  Email     String
+}
+
+model Address {
+  AddressID    String  @id @default(uuid())
+  UserID       String
+  Phone        String
+  ReceiverName String
+  Address      String
+  IsDefault    Boolean
+  User         User    @relation(fields: [UserID], references: [UserID])
+  Order        Order[]
+}
+
+model Order {
+  OrderID       String        @id @default(uuid())
+  UserID        String
+  TotalPrice    Float
+  Status        OrderStatus
+  AddressID     String
+  PaymentMethod PaymentMethod
+  CreatedAt     DateTime      @default(now())
+  User          User          @relation(fields: [UserID], references: [UserID])
+  Address       Address       @relation(fields: [AddressID], references: [AddressID])
+  OrderItems    OrderItem[]
+}
+
+model OrderItem {
+  OrderItemID          String         @id @default(uuid())
+  OrderID              String
+  BookID               String
+  ItemQuantity         Int
+  BookPromotionID      String?
+  UnitItemPrice        Float
+  TotalItemPrice       Float
+  Order                Order          @relation(fields: [OrderID], references: [OrderID])
+  Book                 Book           @relation(fields: [BookID], references: [BookID])
+  BookPromotion        BookPromotion? @relation(fields: [BookPromotionID], references: [BookPromotionID])
+  Promotion            Promotion?     @relation(fields: [promotionPromotionID], references: [PromotionID])
+  promotionPromotionID String?
+}
+
+model BookPromotion {
+  BookPromotionID String      @id @default(uuid())
+  PromotionID     String
+  BookID          String
+  Promotion       Promotion   @relation(fields: [PromotionID], references: [PromotionID])
+  Book            Book        @relation(fields: [BookID], references: [BookID])
+  OrderItem       OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  SHIPPED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PAYPAL
+  BANK_TRANSFER
 }
