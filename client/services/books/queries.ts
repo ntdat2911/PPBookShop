@@ -20,6 +20,7 @@ export const GET_BOOKS = gql(`
    ImageURL
    BookPrice
    AuthorName
+   Rating
    }
  }
  }

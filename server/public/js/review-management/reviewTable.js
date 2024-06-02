@@ -51,4 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
         );
       });
     });
+
+  document.querySelectorAll('#deleteButton').forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      const reviewID = event.target.getAttribute('data-review-id');
+      // Perform specific actions based on the bookId
+
+      await fetch(`http://localhost:4000/api/reviews/${reviewID}`, {
+        method: 'DELETE',
+      }).then(() => location.reload());
+    });
+  });
 });

@@ -1,6 +1,6 @@
 <div class='container px-8 mt-4'>
   <div class='flex justify-between items-center mb-6'>
-    <h1 class='text-2xl font-bold'>Category Inventory</h1>
+    <h1 class='text-2xl font-bold'>Review</h1>
 
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
@@ -25,12 +25,15 @@
           >Rating</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+          >Created at</th>
+          <th
+            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Action</th>
         </tr>
       </thead>
       <tbody class='text-gray-700'>
         {{#each reviewList}}
-          <tr class='border-t text-center' data-category-id='{{ReviewID}}'>
+          <tr class='border-t text-center' data-review-id='{{ReviewID}}'>
             <td class='py-3 px-4'>{{BookTitle}}</td>
             <td class='py-3 px-4'>
               {{UserName}}
@@ -45,7 +48,9 @@
             <td class='py-3 px-4'>
               {{Rating}}
             </td>
-
+            <td class='py-3 px-4'>
+              {{formatDate CreatedAt}}
+            </td>
             <td class='py-3 px-4 flex justify-center gap-2'>
               <button
                 data-ripple-light='true'
@@ -56,8 +61,8 @@
               </button>
               <button
                 type='button'
-                id='deactivateButton'
-                data-category-id='{{CategoryID}}'
+                id='deleteButton'
+                data-review-id='{{ReviewID}}'
                 class='bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50'
               >
                 Delete

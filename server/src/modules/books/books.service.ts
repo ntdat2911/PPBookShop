@@ -6,6 +6,7 @@ import { GPaginationRequest } from './dtos/pagination.dto';
 import { BookEntity } from './entities/book.entity';
 import { GPaginatedBookResponse } from './interfaces/books-response.interface';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { RatingEnumRange } from './types/ratingEnumRange';
 
 @Injectable()
 export class BooksService {
@@ -22,43 +23,22 @@ export class BooksService {
     //split the rating string into an array
     const ratings = rating ? rating.split(',') : [];
     const categories = category ? category.split(',') : [];
+    const ratingRanges = ratings.map((r) => RatingEnumRange[parseInt(r)]);
 
-    console.log(ratings, categories, author);
-
-    const books = await this.booksRepository.findByFilter();
-
-    // filter the books by rating, category, and author and book title
-    const filteredBooks = books.filter((book) => {
-      //check if the book title contains the input
-      const isBookTitleMatch = book.BookTitle.toLowerCase().includes(
-        input.toLowerCase(),
-      );
-
-      const isRatingMatch = ratings.length
-        ? ratings.includes(book.Rating.toString())
-        : true;
-      const isCategoryMatch = categories.length
-        ? categories.includes(book.CategoryID)
-        : true;
-      const isAuthorMatch = author ? author === book.AuthorBy : true;
-      return (
-        isRatingMatch && isCategoryMatch && isAuthorMatch && isBookTitleMatch
-      );
+    const { data, total } = await this.booksRepository.findByFilter({
+      page,
+      size,
+      input,
+      category: categories,
+      ratingRanges: ratingRanges,
+      author,
     });
-
-    const count = filteredBooks.length;
-
-    //paginate the books based on the page and size after filtering
-    const skip = (page - 1) * size;
-    const take = size;
-    //slice the books based on the skip and take
-    const paginatedBooks = filteredBooks.slice(skip, skip + take);
 
     const result: GPaginatedBookResponse = {
       page: page,
       size: size,
-      count: count,
-      records: paginatedBooks,
+      count: total,
+      records: data,
     };
     return result;
   }

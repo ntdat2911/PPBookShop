@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Rating } from "@/components/ui/rating";
 
 interface ProductCardProps {
   pagyInfo: {
@@ -165,13 +166,26 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                     />
                   </CardContent>
                   <CardFooter className="grid p-2 pt-0">
-                    <CardTitle className="text-center w-full">
+                    <CardTitle className="text-center w-full text-xl">
                       {book.BookTitle}
                     </CardTitle>
+
                     <p className="text-center w-full">{book.AuthorName}</p>
+
                     <CardDescription className="text-center w-full">
                       {book.BookPrice}$
                     </CardDescription>
+                    <div className="pb-4">
+                      <Rating
+                        rating={book.Rating}
+                        totalStars={5}
+                        size={24}
+                        variant="yellow"
+                        className="h-1"
+                        showText={false}
+                        disabled={true}
+                      />
+                    </div>
                   </CardFooter>
                 </Link>
               </Card>

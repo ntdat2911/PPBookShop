@@ -28,16 +28,17 @@ export class ReviewsService {
 
   async getReviews(page: number, size: number) {
     const reviewList = await this.reviewRepository.getReviews(page, size);
-    const result = [];
-    reviewList.forEach(async (review) => {
-      const user = await this.usersService.findOneById(review.UserID);
-      const book = await this.booksService.getBookById(review.BookID);
-      result.push({
-        ...review,
-        UserName: user.UserName,
-        BookTitle: book.BookTitle,
-      });
-    });
+    const result = await Promise.all(
+      reviewList.map(async (review) => {
+        const user = await this.usersService.findOneById(review.UserID);
+        const book = await this.booksService.getBookById(review.BookID);
+        return {
+          ...review,
+          UserName: user.UserName,
+          BookTitle: book.BookTitle,
+        };
+      }),
+    );
     return result;
   }
 
@@ -87,5 +88,9 @@ export class ReviewsService {
 
   async countAll() {
     return this.reviewRepository.countAll();
+  }
+
+  async deleteReview(id: string) {
+    return this.reviewRepository.deleteReview(id);
   }
 }

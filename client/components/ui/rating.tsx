@@ -95,7 +95,10 @@ export const Rating = ({
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <div className="flex items-center" onMouseEnter={handleMouseEnter}>
+      <div
+        className="flex items-center justify-center"
+        onMouseEnter={handleMouseEnter}
+      >
         {[...Array(fullStars)].map((_, i) =>
           React.cloneElement(Icon, {
             key: i,

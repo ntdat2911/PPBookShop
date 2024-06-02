@@ -86,4 +86,12 @@ export class ReviewRepository {
   async countAll() {
     return this.prisma.review.count();
   }
+
+  async deleteReview(id: string) {
+    return this.prisma.review.delete({
+      where: {
+        ReviewID: id,
+      },
+    });
+  }
 }

@@ -35,7 +35,13 @@ import { FilterAuthor } from "@/services/authors/dto";
 import { useEffect, useState } from "react";
 import { useSearchParamsContext } from "./searchParamsContext";
 
-const rating = ["5", "4", "3", "2", "1"];
+const rating = [
+  { value: "5", label: "5" },
+  { value: "4", label: "4-5" },
+  { value: "3", label: "3-4" },
+  { value: "2", label: "2-3" },
+  { value: "1", label: "1-2" },
+];
 
 const formSchema = z.object({
   page: z.number().optional(),
@@ -130,7 +136,7 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
                 <FormItem>
                   {rating.map((item) => (
                     <FormField
-                      key={item}
+                      key={"rating" + item.value}
                       control={form.control}
                       name="rating"
                       render={({ field }) => {
@@ -143,7 +149,7 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
                               <Checkbox
                                 checked={
                                   Array.isArray(field.value) &&
-                                  field.value.includes(item ?? "")
+                                  field.value.includes(item.value ?? "")
                                 }
                                 onCheckedChange={(checked: any) => {
                                   return checked
@@ -151,12 +157,13 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
                                         ...(Array.isArray(field.value)
                                           ? field.value
                                           : []),
-                                        item,
+                                        item.value,
                                       ])
                                     : field.onChange(
                                         Array.isArray(field.value)
                                           ? field.value.filter(
-                                              (value: any) => value !== item
+                                              (value: any) =>
+                                                value !== item.value
                                             )
                                           : []
                                       );
@@ -164,7 +171,7 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
                               />
                             </FormControl>
                             <FormLabel className="flex items-center">
-                              {item}{" "}
+                              {item.label}{" "}
                               <StarFilledIcon className="text-yellow-500" />
                             </FormLabel>
                           </FormItem>

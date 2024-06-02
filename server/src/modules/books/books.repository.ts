@@ -2,13 +2,54 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { BookEntity } from './entities/book.entity';
 import { OverviewDetailBook } from './interfaces/books-response.interface';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BooksRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findByFilter(): Promise<OverviewDetailBook[]> {
-    return this.prisma.book.findMany({
+  async findByFilter(params: {
+    page: number;
+    size: number;
+    input: string;
+    category: string[];
+    ratingRanges: { min: number; max: number }[];
+    author: string;
+  }): Promise<{ data: OverviewDetailBook[]; total: number }> {
+    const whereClause: Prisma.BookWhereInput = {
+      BookTitle: {
+        contains: params.input,
+      },
+      IsBookActive: true,
+      IsOutOfStock: false,
+    };
+
+    if (params.author) {
+      whereClause.AuthorBy = params.author;
+    }
+
+    if (params.category && params.category.length > 0) {
+      whereClause.CategoryID = {
+        in: params.category,
+      };
+    }
+
+    if (params.ratingRanges && params.ratingRanges.length > 0) {
+      whereClause.OR = params.ratingRanges.map((range) => ({
+        Rating: {
+          gte: range.min,
+          lte: range.max,
+        },
+      }));
+    }
+
+    const total = await this.prisma.book.count({
+      where: whereClause,
+    });
+
+    const data = await this.prisma.book.findMany({
+      skip: (params.page - 1) * params.size,
+      take: params.size,
       orderBy: {
         CreatedAt: 'desc',
       },
@@ -21,11 +62,10 @@ export class BooksRepository {
         Rating: true,
         CategoryID: true,
       },
-      where: {
-        IsBookActive: true,
-        IsOutOfStock: false,
-      },
+      where: whereClause,
     });
+
+    return { data, total };
   }
   async countAvailableBooks(params: { input }) {
     const result = await this.prisma.book.count({
