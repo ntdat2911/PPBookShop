@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getFromLocalStorage, writeToLocalStorage } from "@/lib/localStorage";
-import { write } from "fs";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -27,6 +26,9 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AddressChooseComponents } from "./AddressChooseComponents";
 import { Label } from "@/components/ui/label";
+import { CREATE_ORDER } from "@/services/orders/queries";
+import { useMutation } from "@apollo/client";
+import { useToast } from "@/components/ui/use-toast";
 interface ItemType {
   BookImage: string;
   BookID: string;
@@ -45,9 +47,33 @@ export default function Page() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-
+  const [addressID, setAddressID] = useState<string>("");
+  const [createOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
+  const { toast } = useToast();
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    if (session?.user.id) {
+      createOrder({
+        variables: {
+          UserID: session.user.id,
+          TotalPrice: Object.entries(items).reduce(
+            (acc, [key, item]: [string, ItemType]) =>
+              acc + item.Price * item.Quantity,
+            0
+          ),
+          Status: "PENDING",
+          AddressID: addressID,
+          PaymentMethod: data.paymentMethod,
+          OrderItems: JSON.stringify(items),
+        },
+      });
+      writeToLocalStorage(session.user.id, {});
+      setItems([]);
+      toast({
+        title: "Order created",
+        description: "Your order has been created.",
+        duration: 5000,
+      });
+    }
   }
   useEffect(() => {
     if (session) {
@@ -64,7 +90,7 @@ export default function Page() {
       const newItems = {
         ...prevItems,
         [id]: {
-          ...prevItems[id],
+          ...(prevItems[id] as ItemType),
           Quantity: quantity > 0 ? quantity : 1,
         },
       };
@@ -76,15 +102,19 @@ export default function Page() {
   const deleteItem = (id: string) => {
     setItems((prevItems) => {
       const newItems = { ...prevItems };
-      delete newItems[id];
+      delete newItems[id as keyof typeof newItems];
       writeToLocalStorage(session.user.id, newItems);
       return newItems;
     });
   };
+
+  const handleAddressChange = (addressID: string) => {
+    setAddressID(addressID);
+  };
   return (
     <div className="container py-4 space-y-8">
-      <div className="grid grid-cols-3">
-        <div className="col-span-2">
+      <div className="grid grid-cols-3 gap-2">
+        <div className="col-span-2 h-full">
           <Card>
             <CardHeader>
               <h1 className="text-3xl font-bold">Cart</h1>
@@ -153,12 +183,15 @@ export default function Page() {
             </CardContent>
           </Card>
         </div>
-        <div className="flex flex-col">
-          <Card className="p-2 py-4">
+        <div className="flex flex-col h-full">
+          <Card className="p-2 pt-4 h-full">
             <CardContent>
               <div className="pb-2 flex flex-col gap-2">
                 <Label>Choose Address</Label>
-                <AddressChooseComponents UserID={session.user.id} />
+                <AddressChooseComponents
+                  UserID={session.user.id}
+                  handleAddressChange={handleAddressChange}
+                />
               </div>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="">
@@ -198,22 +231,20 @@ export default function Page() {
                       )}
                     />
                   </div>
+
+                  <div>
+                    <span className="text-lg font-bold">Total:</span>{" "}
+                    {items &&
+                      Object.entries(items).reduce(
+                        (acc, [key, item]: [string, ItemType]) =>
+                          acc + item.Price * item.Quantity,
+                        0
+                      )}
+                  </div>
+                  <Button type="submit">Checkout</Button>
                 </form>
               </Form>
-
-              <div>
-                <span className="text-lg font-bold">Total:</span>{" "}
-                {items &&
-                  Object.entries(items).reduce(
-                    (acc, [key, item]: [string, ItemType]) =>
-                      acc + item.Price * item.Quantity,
-                    0
-                  )}
-              </div>
             </CardContent>
-            <CardFooter>
-              <Button type="submit">Checkout</Button>
-            </CardFooter>
           </Card>
         </div>
       </div>

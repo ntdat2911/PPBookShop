@@ -23,6 +23,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { CartsModule } from './modules/carts/carts.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
+import { OrderItemsModule } from './modules/order-items/order-items.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AddressesModule } from './modules/addresses/addresses.module';
     CartsModule,
     OrdersModule,
     AddressesModule,
+    OrderItemsModule,
   ],
   controllers: [],
   providers: [

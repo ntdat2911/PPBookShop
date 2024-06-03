@@ -17,12 +17,17 @@ import { Edit } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { UploadAddress } from "./UploadAddress";
+import { Separator } from "@radix-ui/react-separator";
 
 interface AddressProps {
   UserID: string;
+  handleAddressChange: (addressID: string) => void;
 }
 
-export const AddressChooseComponents = ({ UserID }: AddressProps) => {
+export const AddressChooseComponents = ({
+  UserID,
+  handleAddressChange,
+}: AddressProps) => {
   const { data, loading, error } = useQuery(GET_ADDRESSES_BY_USER_ID, {
     variables: { UserID },
     fetchPolicy: "network-only",
@@ -31,37 +36,40 @@ export const AddressChooseComponents = ({ UserID }: AddressProps) => {
   useEffect(() => {
     if (data?.getAddressesByUserId && data.getAddressesByUserId.length > 0) {
       data.getAddressesByUserId.map((address) => {
-        console.log(address);
         if (address.IsDefault) {
           setSelectedAddress(address.AddressID);
         }
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    handleAddressChange(selectedAddress || "");
+  }, [selectedAddress]);
   return (
     <Dialog>
-      <DialogTrigger className="border-2 border-gray-200 rounded-lg min-h-12 p-2 flex justify-between items-center">
+      <DialogTrigger className="border-y-2 border-gray-200 min-h-12 py-4 flex justify-between items-center">
         {selectedAddress ? (
           <>
-            <p className="text-start text-md">
-              {data?.getAddressesByUserId &&
-                data.getAddressesByUserId.map((address) => {
-                  if (address.AddressID == selectedAddress) {
-                    return (
-                      <>
-                        <span className="text-md">
-                          Receiver: {address.ReceiverName} - Phone:{" "}
-                          {address.Phone}
-                        </span>
-                        <br />
-                        <span className="text-md">
-                          Address: {address.Address}
-                        </span>
-                      </>
-                    );
-                  }
-                })}
-            </p>
+            {data?.getAddressesByUserId &&
+              data.getAddressesByUserId.map((address) => {
+                if (address.AddressID == selectedAddress) {
+                  return (
+                    <div
+                      className="flex flex-col justify-center w-full"
+                      key={"address" + address.AddressID}
+                    >
+                      <div className="text-lg w-5/6 truncate flex h-5 space-x-4 items-end">
+                        <p className="font-bold">{address.ReceiverName}</p>
+                        <p>|</p>
+                        <p className="text-sm">{address.Phone}</p>
+                      </div>
+                      <p className="text-sm text-start">{address.Address}</p>
+                    </div>
+                  );
+                }
+              })}
+
             <Edit className="w-6 h-6" />
           </>
         ) : (
@@ -97,10 +105,12 @@ export const AddressChooseComponents = ({ UserID }: AddressProps) => {
                     <CardContent className="p-2">
                       <div className="grid grid-cols-6">
                         <div className="flex flex-col justify-center col-span-5">
-                          <p className="text-md w-5/6 truncate">
-                            {address.ReceiverName} - {address.Phone}
-                          </p>
-                          <p className="text-md">{address.Address}</p>
+                          <div className="text-lg w-5/6 truncate flex h-5 space-x-4 items-end">
+                            <p className="font-bold">{address.ReceiverName}</p>
+                            <p>|</p>
+                            <p className="text-sm">{address.Phone}</p>
+                          </div>
+                          <p className="text-sm">{address.Address}</p>
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2 justify-items-end">
                           <RadioGroupItem
@@ -113,7 +123,7 @@ export const AddressChooseComponents = ({ UserID }: AddressProps) => {
                   </Card>
                 ))
               ) : (
-                <p>No resumes found</p>
+                <p>No address found</p>
               )}
             </ScrollArea>
           </div>

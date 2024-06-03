@@ -173,4 +173,15 @@ export class BooksRepository {
   async countAll() {
     return this.prisma.book.count();
   }
+
+  async updateRating(BookID: string, rating: number) {
+    return this.prisma.book.update({
+      where: {
+        BookID: BookID,
+      },
+      data: {
+        Rating: rating,
+      },
+    });
+  }
 }

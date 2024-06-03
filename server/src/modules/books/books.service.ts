@@ -88,7 +88,6 @@ export class BooksService {
     formData.PublishDate = new Date(formData.PublishDate);
     formData.IsBookActive = formData.IsBookActive === 'true';
     formData.IsOutOfStock = formData.IsOutOfStock === 'true';
-    console.log(formData);
     const book = await this.booksRepository.updateBook(formData);
     return book;
   }
@@ -96,5 +95,10 @@ export class BooksService {
   public async countAll() {
     const result = await this.booksRepository.countAll();
     return result;
+  }
+
+  public async updateRating(BookID: string, rating: number) {
+    const book = await this.booksRepository.updateRating(BookID, rating);
+    return book;
   }
 }

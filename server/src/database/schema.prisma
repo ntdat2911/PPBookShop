@@ -17,7 +17,6 @@ model Promotion {
   CreatedAt        DateTime        @default(now())
   UpdatedAt        DateTime        @updatedAt
   BookPromotions   BookPromotion[]
-  OrderItems       OrderItem[]
 }
 
 model Category {
@@ -119,18 +118,16 @@ model Order {
 }
 
 model OrderItem {
-  OrderItemID          String         @id @default(uuid())
-  OrderID              String
-  BookID               String
-  ItemQuantity         Int
-  BookPromotionID      String?
-  UnitItemPrice        Float
-  TotalItemPrice       Float
-  Order                Order          @relation(fields: [OrderID], references: [OrderID])
-  Book                 Book           @relation(fields: [BookID], references: [BookID])
-  BookPromotion        BookPromotion? @relation(fields: [BookPromotionID], references: [BookPromotionID])
-  Promotion            Promotion?     @relation(fields: [promotionPromotionID], references: [PromotionID])
-  promotionPromotionID String?
+  OrderItemID     String         @id @default(uuid())
+  OrderID         String
+  BookID          String
+  ItemQuantity    Int
+  BookPromotionID String?
+  UnitItemPrice   Float
+  TotalItemPrice  Float
+  Order           Order          @relation(fields: [OrderID], references: [OrderID])
+  Book            Book           @relation(fields: [BookID], references: [BookID])
+  BookPromotion   BookPromotion? @relation(fields: [BookPromotionID], references: [BookPromotionID])
 }
 
 model BookPromotion {

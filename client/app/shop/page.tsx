@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: any) {
     getAuthors(),
     getBooks(
       page,
-      8,
+      6,
       searchParams.input || "",
       searchParams.category || "",
       searchParams.rating || "",

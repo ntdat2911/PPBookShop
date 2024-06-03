@@ -51,6 +51,15 @@ type CategoryEntity {
   UpdatedAt: DateTime!
 }
 
+input CreateOrderInput {
+  AddressID: String!
+  OrderItems: String!
+  PaymentMethod: String!
+  Status: String!
+  TotalPrice: Float!
+  UserID: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -97,9 +106,30 @@ type GReviewPaginationResponse {
 type Mutation {
   createAddress(address: String!, isDefault: Boolean!, phone: String!, receiverName: String!, userId: String!): AddressEntity!
   createOrUpdateCart(CartDetail: String!, UserID: String!): CartEntity!
+  createOrder(data: CreateOrderInput!): OrderEntity!
   createReview(data: GCreateReviewRequest!): ReviewEntity!
   deleteCart(id: String!): CartEntity!
   updateAddress(address: String!, addressId: String!, isDefault: Boolean!, phone: String!, receiverName: String!): AddressEntity!
+}
+
+type OrderEntity {
+  AddressID: String!
+  CreatedAt: DateTime!
+  OrderID: String!
+  PaymentMethod: String!
+  Status: String!
+  TotalPrice: Float!
+  UserID: String!
+}
+
+type OrderItemEntity {
+  BookID: String!
+  BookPromotionID: String!
+  ItemQuantity: Float!
+  OrderID: String!
+  OrderItemID: String!
+  TotalItemPrice: Float!
+  UnitItemPrice: Float!
 }
 
 type OverviewReviewResponse {
@@ -116,6 +146,7 @@ type Query {
   getBooks(params: GPaginationRequest!): GPaginatedBookResponse!
   getCart(id: String!): CartEntity!
   getCategories: [CategoryEntity!]!
+  getOrderItemsByOrderId(orderId: String!): [OrderItemEntity!]!
   getReviewOverviewById(id: String!): OverviewReviewResponse!
   getReviewsByBookId(params: GReviewPaginationRequest!): GReviewPaginationResponse!
   user: UserEntity!

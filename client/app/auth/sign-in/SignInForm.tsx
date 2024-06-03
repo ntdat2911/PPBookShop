@@ -67,6 +67,7 @@ const SignInForm = (props: Props) => {
           },
         });
         if (
+          cart.data.getCart &&
           cart.data.getCart.CartDetail &&
           cart.data.getCart.CartDetail.length > 0 &&
           session?.user.id
