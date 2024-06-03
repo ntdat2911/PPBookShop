@@ -10,14 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+
 import { Button } from "@/components/ui/button";
 import { ReviewContexttWrapper } from "./reviewContext";
 import { Minus, Plus } from "lucide-react";
@@ -28,6 +21,8 @@ import { getAuthorById } from "@/services/authors/services";
 import ReviewSection from "./reviewSection";
 import ReviewDisplay from "./reviewDisplay";
 import { useSession } from "next-auth/react";
+import { BreadcrumbComponents } from "./breadcrumb";
+import { CartSection } from "./cartSection";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const book: BookEntity = await getBookById(params.id);
@@ -36,23 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     <ReviewContexttWrapper>
       <div className="container py-4 flex flex-col space-y-8">
         <div className="flex">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/shop">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/components">
-                  {book.CategoryName}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{book.BookTitle}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <BreadcrumbComponents book={book} />
         </div>
         <Card className="">
           <div className="grid grid-cols-2 grid-rows-1 p-4 h-[70vh]">
@@ -92,24 +71,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   ${book.BookPrice}
                 </div>
               </div>
-              <div className="QUANTITY ">
-                <Label>Quantity</Label>
-                <div className="flex gap-2">
-                  <Button size="icon" variant="outline">
-                    <Minus className="w-6 h-6" />
-                  </Button>
-                  <Button size="icon" variant="outline">
-                    2
-                  </Button>
-                  <Button size="icon" variant="outline">
-                    <Plus className="w-6 h-6" />
-                  </Button>
-                </div>
-              </div>
-              <div className="ACTION grid grid-cols-2 gap-2 ">
-                <Button>Add to cart</Button>
-                <Button variant="outline">Checkout</Button>
-              </div>
+              <CartSection book={book} />
             </div>
           </div>
         </Card>

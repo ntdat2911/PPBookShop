@@ -11,13 +11,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { SignInRequestDto } from "@/services/auth/dto";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Button } from "@/components/ui/button";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { GET_CARTS } from "@/services/carts/queries";
+
+import { useEffect } from "react";
+import { writeToLocalStorageWithoutStringify } from "@/lib/localStorage";
 interface Props {
   callbackUrl?: string;
 }
@@ -41,9 +46,10 @@ const formSchema = z.object({
 });
 
 const SignInForm = (props: Props) => {
+  const { data: session } = useSession();
   const { toast } = useToast();
   const router = useRouter();
-
+  const [getCart, { data, loading, error }] = useLazyQuery(GET_CARTS);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,6 +57,29 @@ const SignInForm = (props: Props) => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    async function fetchCart() {
+      if (session?.user.id) {
+        const cart = await getCart({
+          variables: {
+            UserID: session?.user.id,
+          },
+        });
+        if (
+          cart.data.getCart.CartDetail &&
+          cart.data.getCart.CartDetail.length > 0 &&
+          session?.user.id
+        ) {
+          writeToLocalStorageWithoutStringify(
+            session?.user.id,
+            cart.data.getCart.CartDetail
+          );
+        }
+      }
+    }
+    fetchCart();
+  }, [session?.user.id]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const result = await signIn("credentials", {
@@ -73,6 +102,7 @@ const SignInForm = (props: Props) => {
       duration: 3000,
       variant: "success",
     });
+
     router.push(props.callbackUrl ? props.callbackUrl : "/");
   };
 
