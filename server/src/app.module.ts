@@ -20,6 +20,7 @@ import { AdminModule } from './modules/admin/admin.module';
 
 import { join } from 'path';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { CartsModule } from './modules/carts/carts.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     ReviewsModule,
     AdminModule,
     CloudinaryModule,
+    CartsModule,
   ],
   controllers: [],
   providers: [

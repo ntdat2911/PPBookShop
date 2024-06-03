@@ -21,6 +21,7 @@ export const GET_BOOKS = gql(`
    BookPrice
    AuthorName
    Rating
+   CategoryName
    }
  }
  }
@@ -30,6 +31,7 @@ export const GET_BOOK = gql(`
 query getBookById($id:String!){
   getBookById(id:$id){
     BookID
+    CategoryID
     CategoryName
     BookTitle
     BookPrice

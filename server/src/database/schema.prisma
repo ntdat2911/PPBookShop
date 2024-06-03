@@ -72,6 +72,7 @@ model User {
   Reviews          Review[]
   Orders           Order[]
   Addresses        Address[]
+  Cart             Cart?
 }
 
 model Review {
@@ -139,6 +140,14 @@ model BookPromotion {
   Promotion       Promotion   @relation(fields: [PromotionID], references: [PromotionID])
   Book            Book        @relation(fields: [BookID], references: [BookID])
   OrderItem       OrderItem[]
+}
+
+model Cart {
+  CartID     String   @id @default(uuid())
+  UserID     String   @unique
+  CartDetail Json
+  CreatedAt  DateTime @default(now())
+  User       User     @relation(fields: [UserID], references: [UserID])
 }
 
 enum OrderStatus {

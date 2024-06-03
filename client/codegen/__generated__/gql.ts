@@ -15,8 +15,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n query getAuthors{\n  getAuthors{\n    AuthorID\n    AuthorName\n  }\n}\n": types.GetAuthorsDocument,
     "\n  query getAuthorById($id:String!){\n    getAuthorById(id:$id){\n      AuthorID\n      AuthorName\n      Bio\n    }\n  }\n  ": types.GetAuthorByIdDocument,
-    "\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   }\n }\n }\n": types.GetBooksDocument,
-    "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n": types.GetBookByIdDocument,
+    "\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   CategoryName\n   }\n }\n }\n": types.GetBooksDocument,
+    "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n": types.GetBookByIdDocument,
+    "\n query getCart($UserID:String!){\n  getCart(id:$UserID){\n    CartDetail\n  }\n}\n": types.GetCartDocument,
+    "\n  mutation UpdateCart($UserID: String!,$CartDetail: String!){\n    createOrUpdateCart(UserID:$UserID,CartDetail:$CartDetail){\n      UserID\n      CartDetail\n    }\n  }\n  ": types.UpdateCartDocument,
     "\nquery GetCategories{\n  getCategories{\n    CategoryID\n    CategoryName\n  }\n}\n": types.GetCategoriesDocument,
     "\n query getReviewOverViewById($id:String!){\n  getReviewOverviewById(id:$id){\n    averageRating\n  countReviewList\n  total\n  }\n}\n": types.GetReviewOverViewByIdDocument,
     "\nquery getReviewsByBookId($bookID:String!,$rating:Int!,$page:Int!,$size:Int!){\n  getReviewsByBookId(params:{\n    bookID:$bookID\n    rating: $rating\n    page:$page\n    size:$size\n  }){\n    page\n    size\n    count\n    records{\n      UserID\n      Username\n      Comment\n      ReviewTitle\n      Rating\n      CreatedAt\n      ReviewID\n    }}\n  }\n": types.GetReviewsByBookIdDocument,
@@ -49,11 +51,19 @@ export function gql(source: "\n  query getAuthorById($id:String!){\n    getAutho
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   }\n }\n }\n"): (typeof documents)["\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   }\n }\n }\n"];
+export function gql(source: "\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   CategoryName\n   }\n }\n }\n"): (typeof documents)["\n query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){\n  getBooks(params:{\n   page:$page\n   size:$size\n   input:$input\n    category:$category\n    rating:$rating\n    author:$author\n }){\n page\n size\n count\n   records{\n    BookID\n   BookTitle\n   ImageURL\n   BookPrice\n   AuthorName\n   Rating\n   CategoryName\n   }\n }\n }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"): (typeof documents)["\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"];
+export function gql(source: "\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"): (typeof documents)["\nquery getBookById($id:String!){\n  getBookById(id:$id){\n    BookID\n    CategoryID\n    CategoryName\n    BookTitle\n    BookPrice\n    BookDescription\n    AuthorBy\n    AuthorName\n    ImageURL\n    Rating\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n query getCart($UserID:String!){\n  getCart(id:$UserID){\n    CartDetail\n  }\n}\n"): (typeof documents)["\n query getCart($UserID:String!){\n  getCart(id:$UserID){\n    CartDetail\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateCart($UserID: String!,$CartDetail: String!){\n    createOrUpdateCart(UserID:$UserID,CartDetail:$CartDetail){\n      UserID\n      CartDetail\n    }\n  }\n  "): (typeof documents)["\n  mutation UpdateCart($UserID: String!,$CartDetail: String!){\n    createOrUpdateCart(UserID:$UserID,CartDetail:$CartDetail){\n      UserID\n      CartDetail\n    }\n  }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -64,9 +64,9 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       page: 1,
-      rating: [],
-      category: [],
-      author: "",
+      rating: searchParams.rating || [],
+      category: searchParams.category || [],
+      author: searchParams.author || "",
     },
   });
 
