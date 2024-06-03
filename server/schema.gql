@@ -26,6 +26,13 @@ type BookEntity {
   UpdatedAt: DateTime!
 }
 
+type CartEntity {
+  CartDetail: String!
+  CartID: String!
+  CreatedAt: DateTime!
+  UserID: String!
+}
+
 type CategoryEntity {
   CategoryID: String!
   CategoryName: String!
@@ -79,7 +86,9 @@ type GReviewPaginationResponse {
 }
 
 type Mutation {
+  createOrUpdateCart(CartDetail: String!, UserID: String!): CartEntity!
   createReview(data: GCreateReviewRequest!): ReviewEntity!
+  deleteCart(id: String!): CartEntity!
 }
 
 type OverviewReviewResponse {
@@ -93,6 +102,7 @@ type Query {
   getAuthors: [AuthorEntity!]!
   getBookById(id: String!): BookEntity!
   getBooks(params: GPaginationRequest!): GPaginatedBookResponse!
+  getCart(id: String!): CartEntity!
   getCategories: [CategoryEntity!]!
   getReviewOverviewById(id: String!): OverviewReviewResponse!
   getReviewsByBookId(params: GReviewPaginationRequest!): GReviewPaginationResponse!

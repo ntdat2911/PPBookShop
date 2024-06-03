@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Rating } from "@/components/ui/rating";
+import { Badge } from "@/components/ui/badge";
 
 interface ProductCardProps {
   pagyInfo: {
@@ -46,7 +47,6 @@ interface ProductCardProps {
 export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   const { searchParams, setSearchParams } = useSearchParamsContext();
   const router = useRouter();
-
   useEffect(() => {
     let params: { [key: string]: any } = searchParams;
     Object.keys(params).forEach((key) => {
@@ -57,6 +57,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
     Object.keys(params).forEach((key) => {
       updatedParams.set(key, params[key] as string); // Add type assertion
     });
+    console.log("updatedParams", updatedParams.toString());
     router.push(`/shop?${updatedParams.toString()}`);
   }, [
     searchParams.page,
@@ -150,13 +151,13 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {books ? (
           books.map((book) => (
             <div className="flex w-full justify-center" key={book.BookID}>
               <Card className="w-5/6 justify-center p-2">
                 <Link href={`/product/detail/${book.BookID}`}>
-                  <CardContent>
+                  <CardContent className="py-0">
                     <Image
                       src={book.ImageURL}
                       alt={book.BookTitle}
@@ -175,6 +176,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                     <CardDescription className="text-center w-full">
                       {book.BookPrice}$
                     </CardDescription>
+
                     <div className="pb-4">
                       <Rating
                         rating={book.Rating}
@@ -185,6 +187,9 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                         showText={false}
                         disabled={true}
                       />
+                    </div>
+                    <div className="flex justify-center pt-2">
+                      <Badge variant="outline">{book.CategoryName}</Badge>
                     </div>
                   </CardFooter>
                 </Link>
