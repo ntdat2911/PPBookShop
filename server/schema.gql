@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AddressEntity {
+  Address: String!
+  AddressID: String!
+  IsDefault: Boolean!
+  Phone: String!
+  ReceiverName: String!
+  UserID: String!
+}
+
 type AuthorEntity {
   AuthorID: String!
   AuthorName: String!
@@ -86,9 +95,11 @@ type GReviewPaginationResponse {
 }
 
 type Mutation {
+  createAddress(address: String!, isDefault: Boolean!, phone: String!, receiverName: String!, userId: String!): AddressEntity!
   createOrUpdateCart(CartDetail: String!, UserID: String!): CartEntity!
   createReview(data: GCreateReviewRequest!): ReviewEntity!
   deleteCart(id: String!): CartEntity!
+  updateAddress(address: String!, addressId: String!, isDefault: Boolean!, phone: String!, receiverName: String!): AddressEntity!
 }
 
 type OverviewReviewResponse {
@@ -98,6 +109,7 @@ type OverviewReviewResponse {
 }
 
 type Query {
+  getAddressesByUserId(userId: String!): [AddressEntity!]!
   getAuthorById(id: String!): AuthorEntity!
   getAuthors: [AuthorEntity!]!
   getBookById(id: String!): BookEntity!

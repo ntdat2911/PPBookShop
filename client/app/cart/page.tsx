@@ -13,7 +13,20 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AddressChooseComponents } from "./AddressChooseComponents";
+import { Label } from "@/components/ui/label";
 interface ItemType {
   BookImage: string;
   BookID: string;
@@ -21,11 +34,21 @@ interface ItemType {
   Quantity: number;
   Price: number;
 }
-
+const FormSchema = z.object({
+  paymentMethod: z.enum(["COD", "PAYPAL"], {
+    required_error: "You need to select a payment method.",
+  }),
+});
 export default function Page() {
   const { data: session } = useSession();
   const [items, setItems] = useState([]);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
 
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
+  }
   useEffect(() => {
     if (session) {
       const tempItem = getFromLocalStorage(session.user.id);
@@ -131,12 +154,55 @@ export default function Page() {
           </Card>
         </div>
         <div className="flex flex-col">
-          <Card>
-            <CardHeader>
-              <h1 className="text-3xl font-bold">Total</h1>
-            </CardHeader>
+          <Card className="p-2 py-4">
             <CardContent>
+              <div className="pb-2 flex flex-col gap-2">
+                <Label>Choose Address</Label>
+                <AddressChooseComponents UserID={session.user.id} />
+              </div>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="">
+                  <div className="pb-2">
+                    <FormField
+                      control={form.control}
+                      name="paymentMethod"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Choose payment method</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-1"
+                            >
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="COD" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  COD
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="PAYPAL" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  PAYPAL
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </form>
+              </Form>
+
               <div>
+                <span className="text-lg font-bold">Total:</span>{" "}
                 {items &&
                   Object.entries(items).reduce(
                     (acc, [key, item]: [string, ItemType]) =>
@@ -146,7 +212,7 @@ export default function Page() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Checkout</Button>
+              <Button type="submit">Checkout</Button>
             </CardFooter>
           </Card>
         </div>

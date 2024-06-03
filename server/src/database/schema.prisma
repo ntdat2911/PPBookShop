@@ -153,11 +153,12 @@ model Cart {
 enum OrderStatus {
   PENDING
   COMPLETED
-  SHIPPED
+  SHIPPING
+  CANCELLED
+  PAID
 }
 
 enum PaymentMethod {
-  CREDIT_CARD
   PAYPAL
-  BANK_TRANSFER
+  COD
 }
