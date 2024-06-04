@@ -17,17 +17,18 @@ export class OrderItemsRepository {
     OrderID: string,
     BookID: string,
     Quantity: number,
-    price: number,
-    total: number,
+    Price: number,
+    Discount: number,
+    Total: number,
   ) {
     return this.prismaService.orderItem.create({
       data: {
         OrderID,
         BookID,
         ItemQuantity: Quantity,
-        BookPromotionID: null,
-        UnitItemPrice: price,
-        TotalItemPrice: total,
+        UnitItemPrice: Price,
+        TotalItemPrice: Total,
+        Discount,
       },
     });
   }

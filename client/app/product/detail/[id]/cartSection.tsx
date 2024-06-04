@@ -7,11 +7,13 @@ import { useState } from "react";
 import { writeToLocalStorage } from "@/lib/localStorage";
 import { useSession } from "next-auth/react";
 import { BookEntity } from "@/codegen/__generated__/graphql";
+import { useToast } from "@/components/ui/use-toast";
 interface CartSectionProps {
   book: BookEntity;
 }
 
 export const CartSection = ({ book }: CartSectionProps) => {
+  const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const { data: session } = useSession();
   function addToCart() {
@@ -26,10 +28,16 @@ export const CartSection = ({ book }: CartSectionProps) => {
       BookID: book.BookID,
       Quantity: quantity,
       Price: book.BookPrice,
+      Promotion: book.Promotion,
     };
 
     const newCart = { ...cart, [book.BookID]: storedData };
     writeToLocalStorage(session?.user.id, newCart);
+    toast({
+      title: "Added to cart",
+      description: `${book.BookTitle} has been added to cart`,
+      variant: "success",
+    });
   }
   return (
     <>

@@ -30,6 +30,7 @@ type BookEntity {
   ImageURL: String!
   IsBookActive: Boolean!
   IsOutOfStock: Boolean!
+  Promotion: [PromotionEntity!]!
   PublishDate: DateTime!
   Rating: Float!
   UpdatedAt: DateTime!
@@ -124,7 +125,7 @@ type OrderEntity {
 
 type OrderItemEntity {
   BookID: String!
-  BookPromotionID: String!
+  Discount: Float!
   ItemQuantity: Float!
   OrderID: String!
   OrderItemID: String!
@@ -136,6 +137,16 @@ type OverviewReviewResponse {
   averageRating: Float!
   countReviewList: [Float!]!
   total: Float!
+}
+
+type PromotionEntity {
+  CreatedAt: DateTime!
+  DiscountPercent: Float!
+  ExpiredDate: DateTime!
+  IsAvailable: Boolean!
+  PromotionID: String!
+  PromotionName: String!
+  UpdatedAt: DateTime!
 }
 
 type Query {

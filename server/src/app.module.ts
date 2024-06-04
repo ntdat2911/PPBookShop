@@ -24,6 +24,7 @@ import { CartsModule } from './modules/carts/carts.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
 import { OrderItemsModule } from './modules/order-items/order-items.module';
+import { PromotionsModule } from './modules/promotions/promotions.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { OrderItemsModule } from './modules/order-items/order-items.module';
     OrdersModule,
     AddressesModule,
     OrderItemsModule,
+    PromotionsModule,
   ],
   controllers: [],
   providers: [

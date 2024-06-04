@@ -130,8 +130,31 @@ export class AdminController {
   @Public()
   @Get('/promotion-management')
   @Render('promotion/promotionTable')
-  public PromotionManagement() {
-    return {};
+  public async PromotionManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { promotionList, pagyInfo, bookList } =
+      await this.adminService.getPromotionManagementData(page, size);
+    const path = '/admin/promotion-management';
+    return {
+      promotionList,
+      bookList,
+      pagyInfo,
+      req,
+      path,
+    };
+  }
+
+  @Public()
+  @Get('/promotion-management/edit/:PromotionID')
+  @Render('promotion/promotionEdit')
+  public async EditPromotion(@Param('PromotionID') PromotionID: string) {
+    const { promotion, bookPromotionList, bookList } =
+      await this.adminService.getPromotionEditData(PromotionID);
+    return {
+      promotion,
+      bookPromotionList,
+      bookList,
+    };
   }
 
   @Public()

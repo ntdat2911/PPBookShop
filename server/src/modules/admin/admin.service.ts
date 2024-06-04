@@ -3,6 +3,7 @@ import { BooksService } from '../books/books.service';
 import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
 import { ReviewsService } from '../reviews/reviews.service';
+import { PromotionsService } from '../promotions/promotions.service';
 
 @Injectable()
 export class AdminService {
@@ -11,6 +12,7 @@ export class AdminService {
     private readonly authorsService: AuthorsService,
     private readonly categoriesService: CategoriesService,
     private readonly reviewsService: ReviewsService,
+    private readonly promotionsService: PromotionsService,
   ) {}
 
   public async getBookManagementData(page: number, size: number) {
@@ -114,6 +116,39 @@ export class AdminService {
         pageCount,
       },
       reviewList,
+    };
+  }
+
+  public async getPromotionManagementData(page: number, size: number) {
+    page = page || 1;
+    size = size || 5;
+    const promotionList = await this.promotionsService.getPaginationPromotions(
+      page,
+      size,
+    );
+    const count = await this.promotionsService.countAll();
+    const pageCount = Math.ceil(count / size);
+    const bookList = await this.booksService.getAllBooks(1, 1000);
+    return {
+      pagyInfo: {
+        page,
+        count: size,
+        pageCount,
+      },
+      promotionList,
+      bookList,
+    };
+  }
+
+  public async getPromotionEditData(PromotionID: string) {
+    const [{ promotion, bookPromotionList }, bookList] = await Promise.all([
+      this.promotionsService.getDetailPromotion(PromotionID),
+      this.booksService.getAllBooks(1, 1000),
+    ]);
+    return {
+      promotion,
+      bookPromotionList,
+      bookList,
     };
   }
 }

@@ -19,6 +19,7 @@ export class BooksRepository {
     const whereClause: Prisma.BookWhereInput = {
       BookTitle: {
         contains: params.input,
+        mode: 'insensitive',
       },
       IsBookActive: true,
       IsOutOfStock: false,

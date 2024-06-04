@@ -86,6 +86,11 @@ async function bootstrap() {
         );
         return category.CategoryName;
       },
+      getBookTitle: (bookID: any, bookList: any) => {
+        const book = bookList.find((book: any) => book.BookID === bookID);
+        return book.BookTitle;
+      },
+
       renderButtonPagy: pagy,
       hasPagination: hasPagination,
       previous: previous,

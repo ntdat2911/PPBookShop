@@ -7,6 +7,8 @@ import { BookEntity } from './entities/book.entity';
 import { AuthorsService } from '../authors/authors.service';
 import { AuthorEntity } from '../authors/entities/author.entity';
 import { CategoriesService } from '../categories/categories.service';
+import { PromotionEntity } from '../promotions/entities/promotion.entity';
+import { PromotionsService } from '../promotions/promotions.service';
 
 @Resolver(() => BookEntity)
 export class BooksResolver {
@@ -14,6 +16,7 @@ export class BooksResolver {
     private readonly booksService: BooksService,
     private readonly authorsService: AuthorsService,
     private readonly categoriesService: CategoriesService,
+    private readonly promotionsService: PromotionsService,
   ) {}
 
   @Public()
@@ -44,5 +47,13 @@ export class BooksResolver {
       book.CategoryID,
     );
     return category.CategoryName;
+  }
+
+  @ResolveField(() => [PromotionEntity])
+  async Promotion(@Parent() book: BookEntity): Promise<PromotionEntity[]> {
+    const result = await this.promotionsService.getPromotionByBookID(
+      book.BookID,
+    );
+    return result || [];
   }
 }

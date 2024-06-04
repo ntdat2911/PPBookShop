@@ -29,12 +29,23 @@ import { Label } from "@/components/ui/label";
 import { CREATE_ORDER } from "@/services/orders/queries";
 import { useMutation } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { isArray } from "@apollo/client/utilities";
+
 interface ItemType {
   BookImage: string;
   BookID: string;
   BookTitle: string;
   Quantity: number;
   Price: number;
+  Promotion: any;
+  Discount: number;
 }
 const FormSchema = z.object({
   paymentMethod: z.enum(["COD", "PAYPAL"], {
@@ -108,6 +119,20 @@ export default function Page() {
     });
   };
 
+  const handleDiscountChange = (id: string, discount: number) => {
+    setItems((prevItems) => {
+      const newItems = {
+        ...prevItems,
+        [id]: {
+          ...(prevItems[id] as ItemType),
+          Discount: discount,
+        },
+      };
+      writeToLocalStorage(session.user.id, newItems);
+      return newItems;
+    });
+  };
+
   const handleAddressChange = (addressID: string) => {
     setAddressID(addressID);
   };
@@ -120,11 +145,13 @@ export default function Page() {
               <h1 className="text-3xl font-bold">Cart</h1>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-6 gap-2 justify-center items-center text-center">
+              <div className="grid grid-cols-7 gap-2 justify-center items-center text-center">
                 <div className="text-lg font-bold">Product</div>
                 <div className="text-lg font-bold">Title</div>
                 <div className="text-lg font-bold">Quantity</div>
                 <div className="text-lg font-bold">Unit price</div>
+                <div className="text-lg font-bold">Discount</div>
+
                 <div className="text-lg font-bold">Total</div>
                 <div className="text-lg font-bold"></div>
               </div>
@@ -134,7 +161,7 @@ export default function Page() {
                     <Separator />
                     <div
                       key={key}
-                      className="grid grid-cols-6 gap-2 h-[100px] justify-center items-center text-center"
+                      className="grid grid-cols-7 gap-2 h-[100px] justify-center items-center text-center"
                     >
                       <div>
                         <Image
@@ -166,7 +193,56 @@ export default function Page() {
                         </Button>
                       </div>
                       <div className="">{item.Price}</div>
-                      <div>{item.Price * item.Quantity}</div>
+                      <div className="">
+                        {isArray(item.Promotion) &&
+                        item.Promotion.length > 0 ? (
+                          <Select
+                            defaultValue={item.Promotion[0].PromotionID}
+                            onValueChange={(value: string) =>
+                              handleDiscountChange(key, parseInt(value))
+                            }
+                          >
+                            <SelectTrigger className="None">
+                              <SelectValue placeholder="Choose Discount" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0">None</SelectItem>
+                              {item.Promotion.map((promotion: any) => (
+                                <SelectItem
+                                  key={
+                                    promotion.PromotionID +
+                                    promotion.DiscountPercent
+                                  }
+                                  value={promotion.DiscountPercent}
+                                >
+                                  {promotion.DiscountPercent}% -{" "}
+                                  {promotion.PromotionName}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          "None"
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        {item.Discount > 0 ? (
+                          <>
+                            <p className="line-through text-xs text-red-400">
+                              {item.Price * item.Quantity}
+                            </p>
+                            <p>
+                              {item.Price *
+                                item.Quantity *
+                                ((100 - item.Discount) / 100)}
+                              $
+                            </p>
+                          </>
+                        ) : (
+                          <p>{item.Price * item.Quantity}</p>
+                        )}
+                      </div>
                       <div className="flex justify-center">
                         <Button
                           size="icon"
@@ -237,7 +313,10 @@ export default function Page() {
                     {items &&
                       Object.entries(items).reduce(
                         (acc, [key, item]: [string, ItemType]) =>
-                          acc + item.Price * item.Quantity,
+                          acc +
+                          item.Price *
+                            item.Quantity *
+                            ((100 - item.Discount) / 100),
                         0
                       )}
                   </div>

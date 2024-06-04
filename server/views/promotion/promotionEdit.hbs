@@ -1,0 +1,187 @@
+<div class='p-10 pt-4'>
+  <div
+    class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+  >
+    Update promotion
+  </div>
+  <div
+    class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+  >
+    <form id='editForm'>
+      <!-- Other form fields -->
+      <div class='mb-5'>
+        <label
+          for='PromotionName'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Promotion Name
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='text'
+          name='PromotionName'
+          id='PromotionName'
+          placeholder='Promotion Name'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          value='{{promotion.PromotionName}}'
+        />
+      </div>
+      <div class='mb-5'>
+        <label
+          for='DiscountPercent'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Discount percentage
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='number'
+          max='100'
+          min='0'
+          name='DiscountPercent'
+          id='DiscountPercent'
+          placeholder='Discount Percent'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          value='{{promotion.DiscountPercent}}'
+        />
+      </div>
+      <div class='mb-5'>
+        <label
+          for='ExpiredDate'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Expired Date
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='date'
+          name='ExpiredDate'
+          id='ExpiredDate'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          value={{formatDate promotion.ExpiredDate}}
+        />
+      </div>
+        <div class='mb-5'>
+        <label
+          for='IsAvailable'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >Is Available</label>
+        <input
+          type='checkbox'
+          name='IsAvailable'
+          id='IsAvailable'
+          class='rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          {{#if promotion.IsAvailable}}checked{{/if}}
+        />
+    </div>
+      <div class='mb-5' id='multiselect'>
+        <div class='w-full flex flex-col mx-auto mt-10'>
+          <div class='w-full'>
+            <div class='flex flex-col items-center relative'>
+              <div class='w-full svelte-1l8159u'>
+                <div
+                  class='my-2 p-1 flex border border-gray-200 bg-white rounded svelte-1l8159u'
+                >
+                  <div class='flex flex-auto flex-wrap' id='selectedItems'>
+                    {{#each bookPromotionList}}
+                      <div
+                        class='flex items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300'
+                        data-id='{{BookID}}'
+                      >
+                        {{getBookTitle BookID ../bookList}}
+                        <span class='cursor-pointer ml-2 text-teal-500'>
+                          <svg
+                            class='w-4 h-4'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                            xmlns='http://www.w3.org/2000/svg'
+                          >
+                            <path
+                              stroke-linecap='round'
+                              stroke-linejoin='round'
+                              stroke-width='2'
+                              d='M6 18L18 6M6 6l12 12'
+                            ></path>
+                          </svg>
+                        </span>
+                      </div>
+                    {{/each}}
+                    <div class='flex-1'>
+                      <input
+                        id='inputBox'
+                        placeholder=''
+                        class='bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800'
+                        readonly
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class='text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u'
+                  >
+                    <button
+                      id='toggleDropdown'
+                      class='cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none'
+                      type='button'
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='100%'
+                        height='100%'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        stroke='currentColor'
+                        stroke-width='2'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        class='feather feather-chevron-up w-4 h-4'
+                      >
+                        <polyline points='18 15 12 9 6 15'></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                id='dropdown'
+                class='absolute shadow top-100 bg-white z-40 w-full left-0 rounded max-h-72 overflow-y-auto svelte-5uyqqj hidden'
+              >
+                <div class='flex flex-col w-full' id='dropdownItems'>
+                  {{#each bookList}}
+                    <div
+                      class='cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100'
+                      data-value='{{BookID}}'
+                    >
+                      <div
+                        class='flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100'
+                      >
+                        <div class='w-full items-center flex'>
+                          <div class='mx-2 leading-6'>{{BookTitle}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Other form fields -->
+      <div
+        class='flex shrink-0 flex-wrap items-center justify-end p-4 text-blue-gray-500'
+      >
+   
+        <button
+          class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+          type='submit'
+        >Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src='/js/promotion-management/promotionEdit.js'></script>

@@ -40,6 +40,11 @@ query getBookById($id:String!){
     AuthorName
     ImageURL
     Rating
+    Promotion{
+      PromotionID
+      PromotionName
+      DiscountPercent
+    }
   }
 }
 `);

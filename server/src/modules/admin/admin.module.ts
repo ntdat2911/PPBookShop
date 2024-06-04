@@ -5,9 +5,16 @@ import { BooksModule } from '../books/books.module';
 import { AuthorsModule } from '../authors/authors.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { ReviewsModule } from '../reviews/reviews.module';
+import { PromotionsModule } from '../promotions/promotions.module';
 
 @Module({
-  imports: [BooksModule, AuthorsModule, CategoriesModule, ReviewsModule],
+  imports: [
+    BooksModule,
+    AuthorsModule,
+    CategoriesModule,
+    ReviewsModule,
+    PromotionsModule,
+  ],
   controllers: [AdminController],
   providers: [AdminService],
   exports: [AdminService],

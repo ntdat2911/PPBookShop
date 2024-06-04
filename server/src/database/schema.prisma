@@ -8,15 +8,14 @@ datasource db {
 }
 
 model Promotion {
-  PromotionID      String          @id @default(uuid())
-  PromotionName    String
-  DiscountPercent  Float
-  DiscountQuantity Int
-  ExpiredDate      DateTime
-  IsAvailable      Boolean
-  CreatedAt        DateTime        @default(now())
-  UpdatedAt        DateTime        @updatedAt
-  BookPromotions   BookPromotion[]
+  PromotionID     String          @id @default(uuid())
+  PromotionName   String
+  DiscountPercent Float
+  ExpiredDate     DateTime
+  IsAvailable     Boolean
+  CreatedAt       DateTime        @default(now())
+  UpdatedAt       DateTime        @updatedAt
+  BookPromotions  BookPromotion[]
 }
 
 model Category {
@@ -118,25 +117,23 @@ model Order {
 }
 
 model OrderItem {
-  OrderItemID     String         @id @default(uuid())
-  OrderID         String
-  BookID          String
-  ItemQuantity    Int
-  BookPromotionID String?
-  UnitItemPrice   Float
-  TotalItemPrice  Float
-  Order           Order          @relation(fields: [OrderID], references: [OrderID])
-  Book            Book           @relation(fields: [BookID], references: [BookID])
-  BookPromotion   BookPromotion? @relation(fields: [BookPromotionID], references: [BookPromotionID])
+  OrderItemID    String @id @default(uuid())
+  OrderID        String
+  BookID         String
+  ItemQuantity   Int
+  UnitItemPrice  Float
+  TotalItemPrice Float
+  Order          Order  @relation(fields: [OrderID], references: [OrderID])
+  Book           Book   @relation(fields: [BookID], references: [BookID])
+  Discount       Float?
 }
 
 model BookPromotion {
-  BookPromotionID String      @id @default(uuid())
+  BookPromotionID String    @id @default(uuid())
   PromotionID     String
   BookID          String
-  Promotion       Promotion   @relation(fields: [PromotionID], references: [PromotionID])
-  Book            Book        @relation(fields: [BookID], references: [BookID])
-  OrderItem       OrderItem[]
+  Promotion       Promotion @relation(fields: [PromotionID], references: [PromotionID])
+  Book            Book      @relation(fields: [BookID], references: [BookID])
 }
 
 model Cart {

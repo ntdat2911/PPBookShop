@@ -23,10 +23,12 @@ import ReviewDisplay from "./reviewDisplay";
 import { useSession } from "next-auth/react";
 import { BreadcrumbComponents } from "./breadcrumb";
 import { CartSection } from "./cartSection";
+import { cn } from "@/lib/utils";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const book: BookEntity = await getBookById(params.id);
   const author = await getAuthorById(book.AuthorBy);
+  console.log(book);
   return (
     <ReviewContexttWrapper>
       <div className="container py-4 flex flex-col space-y-8">
@@ -56,19 +58,32 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <Label className="font-bold">Description:</Label>
                 <div className="text-md">{book.BookDescription}</div>
               </div>
-              <div className="DISCOUNT flex flex-col gap-2">
-                <Label className="font-bold">Discount:</Label>
-                <div className="flex gap-4">
-                  <Badge variant="outline">50% Sale</Badge>
-                </div>
+              <div className="DISCOUNT flex gap-2">
+                {book.Promotion &&
+                  book.Promotion?.map((promotion) => (
+                    <div key={promotion.PromotionID} className="flex gap-4">
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          promotion.PromotionID == book.Promotion[0].PromotionID
+                            ? "border-2 border-green-500"
+                            : "bg-gray-200"
+                        )}
+                      >
+                        {promotion.DiscountPercent}% - {promotion.PromotionName}
+                      </Badge>
+                    </div>
+                  ))}
               </div>
               <div className="PRICE ">
                 <div className="text-2xl font-semibold line-through">
-                  ${100}
+                  ${book.BookPrice}
                 </div>
 
                 <div className="text-4xl font-bold text-red-500">
-                  ${book.BookPrice}
+                  $
+                  {book.BookPrice -
+                    (book.BookPrice * book.Promotion[0].DiscountPercent) / 100}
                 </div>
               </div>
               <CartSection book={book} />

@@ -10,15 +10,15 @@ export class OrderItemsService {
   }
 
   async createOrderItemByString(orderId: string, orderItems: string) {
-    console.log(orderItems);
     const items = JSON.parse(orderItems);
     Object.entries(items).forEach(async ([key, item]: [string, any]) => {
-      const total = item.Quantity * item.Price;
+      const total = item.Price * item.Quantity * ((100 - item.Discount) / 100);
       await this.orderItemsRepository.createOrderItem(
         orderId,
         key,
         item.Quantity,
         item.Price,
+        item.Discount,
         total,
       );
     });

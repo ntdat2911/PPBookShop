@@ -15,12 +15,12 @@ export class OrderItemEntity {
   @Field(() => Number)
   ItemQuantity: number;
 
-  @Field(() => String)
-  BookPromotionID: string;
-
   @Field(() => Number)
   UnitItemPrice: number;
 
   @Field(() => Number)
   TotalItemPrice: number;
+
+  @Field(() => Number)
+  Discount: number;
 }
