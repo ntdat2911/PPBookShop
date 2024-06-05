@@ -49,7 +49,7 @@ export class BooksResolver {
     return category.CategoryName;
   }
 
-  @ResolveField(() => [PromotionEntity])
+  @ResolveField(() => [PromotionEntity], { nullable: true })
   async Promotion(@Parent() book: BookEntity): Promise<PromotionEntity[]> {
     const result = await this.promotionsService.getPromotionByBookID(
       book.BookID,

@@ -197,7 +197,7 @@ export default function Page() {
                         {isArray(item.Promotion) &&
                         item.Promotion.length > 0 ? (
                           <Select
-                            defaultValue={item.Promotion[0].PromotionID}
+                            defaultValue={item.Promotion[0].DiscountPercent}
                             onValueChange={(value: string) =>
                               handleDiscountChange(key, parseInt(value))
                             }
@@ -263,14 +263,16 @@ export default function Page() {
           <Card className="p-2 pt-4 h-full">
             <CardContent>
               <div className="pb-2 flex flex-col gap-2">
-                <Label>Choose Address</Label>
                 <AddressChooseComponents
                   UserID={session.user.id}
                   handleAddressChange={handleAddressChange}
                 />
               </div>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
                   <div className="pb-2">
                     <FormField
                       control={form.control}
@@ -309,14 +311,16 @@ export default function Page() {
                   </div>
 
                   <div>
-                    <span className="text-lg font-bold">Total:</span>{" "}
+                    <span className="text-lg font-bold">Total:</span> $
                     {items &&
                       Object.entries(items).reduce(
                         (acc, [key, item]: [string, ItemType]) =>
                           acc +
                           item.Price *
                             item.Quantity *
-                            ((100 - item.Discount) / 100),
+                            (item.Discount > 0
+                              ? (100 - item.Discount) / 100
+                              : 1),
                         0
                       )}
                   </div>

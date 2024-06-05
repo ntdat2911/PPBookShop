@@ -49,6 +49,30 @@ export class PromotionsService {
       PromotionID,
       updatedPromotion,
     );
+    const bookPromotionList =
+      await this.promotionsRepository.getBooksByPromotionID(PromotionID);
+    const selectedBooks = data.SelectedBooks.split(',');
+
+    const newBooks = selectedBooks.filter(
+      (bookID: string) =>
+        bookPromotionList.findIndex((item) => item.BookID === bookID) === -1,
+    );
+
+    const deletedBooks = bookPromotionList.filter(
+      (item) => selectedBooks.indexOf(item.BookID) === -1,
+    );
+
+    newBooks.forEach(async (bookID: string) => {
+      await this.promotionsRepository.createBookPromotion({
+        PromotionID: PromotionID,
+        BookID: bookID,
+      });
+    });
+
+    deletedBooks.forEach(async (item) => {
+      await this.promotionsRepository.deleteBookPromotion(item.BookPromotionID);
+    });
+
     return result;
   }
 
@@ -81,5 +105,13 @@ export class PromotionsService {
     promotionList.sort((a, b) => b.DiscountPercent - a.DiscountPercent);
 
     return promotionList;
+  }
+
+  async updateActiveStatus(data: any) {
+    const { PromotionID, IsAvailable } = data;
+    return await this.promotionsRepository.updateActiveStatus({
+      PromotionID,
+      IsAvailable,
+    });
   }
 }

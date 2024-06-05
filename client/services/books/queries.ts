@@ -2,7 +2,7 @@ import { useQuery, gql, TypedDocumentNode } from "@apollo/client";
 import { GPaginatedBookResponse } from "@/codegen/__generated__/graphql";
 
 export const GET_BOOKS = gql(`
- query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!){
+ query GetBooks($page: Int!,$size:Int!,$input:String!,$category:String!,$rating:String!,$author:String!,$sort:String!){
   getBooks(params:{
    page:$page
    size:$size
@@ -10,6 +10,7 @@ export const GET_BOOKS = gql(`
     category:$category
     rating:$rating
     author:$author
+    sort:$sort
  }){
  page
  size

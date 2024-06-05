@@ -1,5 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Event listener for the Create button
+  window.onload = function () {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.focus();
+    searchInput.setSelectionRange(
+      searchInput.value.length,
+      searchInput.value.length,
+    );
+  };
+  const searchInput = document.getElementById('searchInput');
+  let timeout = null;
+
+  searchInput.addEventListener('input', function () {
+    const searchValue = searchInput.value.toLowerCase();
+    // const rows = document.querySelectorAll('tbody tr');
+
+    // rows.forEach((row) => {
+    //   const columns = row.querySelectorAll('td');
+    //   let found = false;
+
+    //   columns.forEach((column) => {
+    //     if (column.textContent.toLowerCase().includes(searchValue)) {
+    //       found = true;
+    //     }
+    //   });
+
+    //   if (found) {
+    //     row.classList.remove('hidden');
+    //   } else {
+    //     row.classList.add('hidden');
+    //   }
+    // });
+    //add input to search params in URL
+    //debounce the search input
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('search', searchValue);
+      window.location.href = url;
+    }, 1000);
+  });
   document
     .querySelector('button[data-dialog-target="dialogCreate"]')
     .addEventListener('click', () => {

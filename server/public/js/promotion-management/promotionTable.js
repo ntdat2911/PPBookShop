@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
           await fetch(
             'http://localhost:4000/api/promotions/update-active-status',
             {
-              method: 'POST',
+              method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -80,13 +80,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 IsAvailable: true,
               }),
             },
-          ).then(() => this.location.reload());
+          ).then(() =>
+            // console.log('Activated promotion'),
+            this.location.reload(),
+          );
           // Activate the book
         } else if (event.target.id === 'deactivateButton') {
           await fetch(
             'http://localhost:4000/api/promotions/update-active-status',
             {
-              method: 'POST',
+              method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -95,7 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 IsAvailable: false,
               }),
             },
-          ).then(() => this.location.reload());
+          ).then(() =>
+            // console.log('Deactivated promotion'),
+            this.location.reload(),
+          );
         }
       });
     });

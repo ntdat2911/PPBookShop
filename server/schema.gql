@@ -30,7 +30,7 @@ type BookEntity {
   ImageURL: String!
   IsBookActive: Boolean!
   IsOutOfStock: Boolean!
-  Promotion: [PromotionEntity!]!
+  Promotion: [PromotionEntity!]
   PublishDate: DateTime!
   Rating: Float!
   UpdatedAt: DateTime!
@@ -88,6 +88,7 @@ input GPaginationRequest {
   page: Int!
   rating: String
   size: Int!
+  sort: String
 }
 
 input GReviewPaginationRequest {

@@ -26,9 +26,9 @@ export class AdminController {
   @Get()
   @Render('book/bookTable')
   async root(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { bookList, authorList, categoryList, pagyInfo } =
-      await this.adminService.getBookManagementData(page, size);
+      await this.adminService.getBookManagementData(page, size, search);
     const path = '/admin/book-management';
     return {
       pagyInfo,
@@ -51,9 +51,9 @@ export class AdminController {
   @Get('/book-management')
   @Render('book/bookTable')
   public async BookManagement(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { bookList, authorList, categoryList, pagyInfo } =
-      await this.adminService.getBookManagementData(page, size);
+      await this.adminService.getBookManagementData(page, size, search);
     const path = '/admin/book-management';
 
     return {

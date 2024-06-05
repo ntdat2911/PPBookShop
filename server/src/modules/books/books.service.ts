@@ -19,7 +19,7 @@ export class BooksService {
   public async getBooks(
     params: GPaginationRequest,
   ): Promise<GPaginatedBookResponse> {
-    const { page, size, input, category, rating, author } = params;
+    const { page, size, input, category, rating, author, sort } = params;
     //split the rating string into an array
     const ratings = rating ? rating.split(',') : [];
     const categories = category ? category.split(',') : [];
@@ -32,6 +32,7 @@ export class BooksService {
       category: categories,
       ratingRanges: ratingRanges,
       author,
+      sort,
     });
 
     const result: GPaginatedBookResponse = {
@@ -43,8 +44,12 @@ export class BooksService {
     return result;
   }
 
-  public async getAllBooks(page: number, size: number): Promise<BookEntity[]> {
-    const res = await this.booksRepository.findAll(page, size);
+  public async getAllBooks(
+    page: number,
+    size: number,
+    search?: string,
+  ): Promise<BookEntity[]> {
+    const res = await this.booksRepository.findAll(page, size, search);
     return res;
   }
 
@@ -92,8 +97,8 @@ export class BooksService {
     return book;
   }
 
-  public async countAll() {
-    const result = await this.booksRepository.countAll();
+  public async countAll(search?: string) {
+    const result = await this.booksRepository.countAll(search);
     return result;
   }
 

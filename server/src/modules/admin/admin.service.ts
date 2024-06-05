@@ -15,15 +15,19 @@ export class AdminService {
     private readonly promotionsService: PromotionsService,
   ) {}
 
-  public async getBookManagementData(page: number, size: number) {
+  public async getBookManagementData(
+    page: number,
+    size: number,
+    search: string,
+  ) {
     page = page || 1;
     size = size || 5;
     const [bookList, authorList, categoryList] = await Promise.all([
-      this.booksService.getAllBooks(page, size),
+      this.booksService.getAllBooks(page, size, search),
       this.authorsService.getAuthors(),
       this.categoriesService.getCategories(),
     ]);
-    const count = await this.booksService.countAll();
+    const count = await this.booksService.countAll(search);
     const newBookList: Object[] = [...bookList];
     bookList.forEach((book, index) => {
       const AuthorName = authorList.find(

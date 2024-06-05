@@ -65,7 +65,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                       <Badge
                         variant="outline"
                         className={cn(
-                          promotion.PromotionID == book.Promotion[0].PromotionID
+                          book.Promotion &&
+                            book.Promotion[0] &&
+                            promotion.PromotionID ==
+                              book.Promotion[0].PromotionID
                             ? "border-2 border-green-500"
                             : "bg-gray-200"
                         )}
@@ -76,14 +79,24 @@ export default async function Page({ params }: { params: { id: string } }) {
                   ))}
               </div>
               <div className="PRICE ">
-                <div className="text-2xl font-semibold line-through">
-                  ${book.BookPrice}
-                </div>
-
-                <div className="text-4xl font-bold text-red-500">
-                  $
-                  {book.BookPrice -
-                    (book.BookPrice * book.Promotion[0].DiscountPercent) / 100}
+                <div className="">
+                  {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                    <>
+                      <div className="text-2xl font-semibold line-through">
+                        ${book.BookPrice}
+                      </div>
+                      <div className="text-4xl font-bold text-red-500">
+                        $
+                        {book.BookPrice -
+                          (book.BookPrice * book.Promotion[0].DiscountPercent) /
+                            100}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-4xl font-bold text-black">
+                      ${book.BookPrice}
+                    </p>
+                  )}
                 </div>
               </div>
               <CartSection book={book} />

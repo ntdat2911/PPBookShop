@@ -88,4 +88,31 @@ export class PromotionsRepository {
       },
     });
   }
+
+  async updateActiveStatus(data: any) {
+    return await this.prisma.promotion.update({
+      where: {
+        PromotionID: data.PromotionID,
+      },
+      data: {
+        IsAvailable: data.IsAvailable,
+      },
+    });
+  }
+
+  async getBookPromotionByPromotionID(PromotionID: string) {
+    return this.prisma.bookPromotion.findMany({
+      where: {
+        PromotionID: PromotionID,
+      },
+    });
+  }
+
+  async deleteBookPromotion(BookPromotionID: string) {
+    return this.prisma.bookPromotion.delete({
+      where: {
+        BookPromotionID: BookPromotionID,
+      },
+    });
+  }
 }

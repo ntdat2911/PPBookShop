@@ -25,6 +25,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CREATE_ADDRESS } from "@/services/addresses/queries";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface UploadAddressProps {
   UserID: string;
@@ -44,6 +45,7 @@ const FormSchema = z.object({
 export const UploadAddress = ({ UserID }: UploadAddressProps) => {
   const [createAddress, { data, loading, error }] = useMutation(CREATE_ADDRESS);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -66,6 +68,7 @@ export const UploadAddress = ({ UserID }: UploadAddressProps) => {
       },
     });
     setOpen(false);
+    router.refresh();
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>

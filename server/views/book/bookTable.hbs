@@ -11,6 +11,10 @@
 
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+     <div class="flex justify-start max-w-md bg-white rounded-lg h-12" x-data="{ search: '' }">
+            <input type="search" id="searchInput" class="w-full px-4 py-1 text-gray-800 focus:outline-none"
+                placeholder="search" x-model="search" value="{{~req.query.search~}}">
+    </div>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>
@@ -116,7 +120,7 @@
   </div>
   <div class='flex justify-between items-center py-3'>
    {{#if (hasPagination pagyInfo.pageCount)}}
-  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center" id="pagination">
     <div>
       <nav class="relative z-0 inline-flex shadow-sm">
         {{#with (previous pagyInfo.page path req.query)}}

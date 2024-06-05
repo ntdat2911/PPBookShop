@@ -11,7 +11,8 @@ export async function getBooks(
   input: string,
   category: string,
   rating: string,
-  author: string
+  author: string,
+  sort: string
 ) {
   const { data } = await client.query({
     query: GET_BOOKS,
@@ -22,6 +23,7 @@ export async function getBooks(
       category: category,
       rating: rating,
       author: author,
+      sort: sort,
     },
   });
   revalidatePath("/shop");

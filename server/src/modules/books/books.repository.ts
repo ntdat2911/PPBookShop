@@ -15,6 +15,7 @@ export class BooksRepository {
     category: string[];
     ratingRanges: { min: number; max: number }[];
     author: string;
+    sort: string;
   }): Promise<{ data: OverviewDetailBook[]; total: number }> {
     const whereClause: Prisma.BookWhereInput = {
       BookTitle: {
@@ -44,6 +45,24 @@ export class BooksRepository {
       }));
     }
 
+    let orderClause;
+    switch (params.sort) {
+      case 'name':
+        orderClause = { BookTitle: 'asc' };
+        break;
+      case 'priceHighToLow':
+        orderClause = { BookPrice: 'desc' };
+        break;
+      case 'priceLowToHigh':
+        orderClause = { BookPrice: 'asc' };
+        break;
+      case 'popularity':
+        orderClause = { Rating: 'desc' };
+        break;
+      default:
+        orderClause = { CreatedAt: 'asc' };
+    }
+
     const total = await this.prisma.book.count({
       where: whereClause,
     });
@@ -51,9 +70,7 @@ export class BooksRepository {
     const data = await this.prisma.book.findMany({
       skip: (params.page - 1) * params.size,
       take: params.size,
-      orderBy: {
-        CreatedAt: 'desc',
-      },
+      orderBy: orderClause,
       select: {
         BookTitle: true,
         AuthorBy: true,
@@ -84,11 +101,17 @@ export class BooksRepository {
     return result;
   }
 
-  async findAll(page: number, size: number): Promise<BookEntity[]> {
+  async findAll(
+    page: number,
+    size: number,
+    search?: string,
+  ): Promise<BookEntity[]> {
     return this.prisma.book.findMany({
       skip: (page - 1) * size,
       take: size,
-      //sort by CreatedAt
+      ...(search && {
+        where: { BookTitle: { contains: search, mode: 'insensitive' } },
+      }),
       orderBy: {
         CreatedAt: 'desc',
       },
@@ -171,8 +194,19 @@ export class BooksRepository {
     });
   }
 
-  async countAll() {
-    return this.prisma.book.count();
+  async countAll(search?: string) {
+    return this.prisma.book.count(
+      search
+        ? {
+            where: {
+              BookTitle: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+          }
+        : undefined,
+    );
   }
 
   async updateRating(BookID: string, rating: number) {

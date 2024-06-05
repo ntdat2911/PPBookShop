@@ -48,7 +48,7 @@ export const AddressChooseComponents = ({
   }, [selectedAddress]);
   return (
     <Dialog>
-      <DialogTrigger className="border-y-2 border-gray-200 min-h-12 py-4 flex justify-between items-center">
+      <DialogTrigger className="border-b-2 border-gray-200 min-h-12 p-4 flex justify-between items-center hover:bg-gray-200 hover:rounded-lg ">
         {selectedAddress ? (
           <>
             {data?.getAddressesByUserId &&

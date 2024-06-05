@@ -44,6 +44,15 @@ interface ProductCardProps {
   books: BookEntity[];
 }
 
+const shows = ["6", "12", "18", "24"];
+const sorts = [
+  { value: "newest", label: "Newest" },
+  { value: "priceLowToHigh", label: "Price low to high" },
+  { value: "priceHighToLow", label: "Price high to low" },
+  { value: "sale", label: "On sale" },
+  { value: "popularity", label: "Popularity" },
+];
+
 export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   const { searchParams, setSearchParams } = useSearchParamsContext();
   const router = useRouter();
@@ -65,6 +74,8 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
     searchParams.category,
     searchParams.rating,
     searchParams.author,
+    searchParams.size,
+    searchParams.sort,
   ]);
   const paginationCreate = () => {
     const totalPage = Math.ceil(pagyInfo.count / pagyInfo.size);
@@ -138,15 +149,39 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
         <div className="text-sm text-muted-foreground p-2">
           {books.length} of {pagyInfo.count} books found
         </div>
-        <div>
-          <Select>
+        <div className="flex gap-4">
+          <Select
+            defaultValue={shows[0]}
+            onValueChange={(value) =>
+              setSearchParams({ ...searchParams, size: parseInt(value) })
+            }
+          >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort" />
+              <SelectValue placeholder="Shows" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Sort by price</SelectItem>
-              <SelectItem value="dark">Sort by name</SelectItem>
-              <SelectItem value="system">Sort by on sale</SelectItem>
+              {shows.map((show) => (
+                <SelectItem key={show} value={show}>
+                  Show {show} books
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) =>
+              setSearchParams({ ...searchParams, sort: value })
+            }
+            defaultValue={sorts[0].value}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sorts" />
+            </SelectTrigger>
+            <SelectContent>
+              {sorts.map((sort) => (
+                <SelectItem key={sort.value} value={sort.value}>
+                  {sort.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

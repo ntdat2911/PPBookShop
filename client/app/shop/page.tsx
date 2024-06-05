@@ -15,7 +15,7 @@ import { OptionType } from "@/components/ui/multi-select";
 
 export default async function Page({ searchParams }: any) {
   const page = parseInt(searchParams.page) || 1;
-
+  const size = parseInt(searchParams.size) || 6;
   const [authorList, bookList, categoryList]: [
     authorList: AuthorEntity[],
     bookList: GPaginatedBookResponse,
@@ -24,11 +24,12 @@ export default async function Page({ searchParams }: any) {
     getAuthors(),
     getBooks(
       page,
-      6,
+      size,
       searchParams.input || "",
       searchParams.category || "",
       searchParams.rating || "",
-      searchParams.author || ""
+      searchParams.author || "",
+      searchParams.sort || ""
     ),
     getCategories(),
   ]);

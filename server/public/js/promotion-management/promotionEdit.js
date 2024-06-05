@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        // window.location.href = '/admin/promotion-management';
+        window.location.href = '/admin/promotion-management';
       })
       .catch((error) => console.error('Error:', error));
   });

@@ -44,4 +44,11 @@ export class PromotionsController {
   async delete(PromotionID: string) {
     return await this.promotionsService.delete(PromotionID);
   }
+
+  @Public()
+  @Put('/update-active-status')
+  @UseInterceptors(NoFilesInterceptor())
+  async updateActiveStatus(@Body() formData: any) {
+    return await this.promotionsService.updateActiveStatus(formData);
+  }
 }
