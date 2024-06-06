@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { isArray } from "@apollo/client/utilities";
+import { useCartContext } from "../CartContext";
 
 interface ItemType {
   BookImage: string;
@@ -61,6 +62,7 @@ export default function Page() {
   const [addressID, setAddressID] = useState<string>("");
   const [createOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
   const { toast } = useToast();
+  const { cartCount, setCartCount } = useCartContext();
   function onSubmit(data: z.infer<typeof FormSchema>) {
     if (session?.user.id) {
       createOrder({
@@ -120,6 +122,7 @@ export default function Page() {
       writeToLocalStorage(session.user.id, newItems);
       return newItems;
     });
+    setCartCount(cartCount - 1);
   };
 
   const handleDiscountChange = (id: string, discount: number) => {

@@ -15,12 +15,13 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CART } from "@/services/carts/queries";
 import { useRouter } from "next/navigation";
+import { useCartContext } from "@/app/CartContext";
 function underlineAnimation() {
   return "relative text-black hover:no-underline hover:text-gray-400 cursor-pointer transition-all ease-in-out before:transition-[width] before:ease-in-out before:duration-300 before:absolute before:bg-gray-400 before:origin-center before:h-[1px] before:w-0 hover:before:w-[40%] before:bottom-2 before:left-[50%] after:transition-[width] after:ease-in-out after:duration-300 after:absolute after:bg-gray-400 after:origin-center after:h-[1px] after:w-0 hover:after:w-[40%] after:bottom-2 after:right-[50%]";
 }
 export function Header() {
   const { data: session } = useSession();
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount, setCartCount } = useCartContext();
   const [updateCart, { data, loading, error }] = useMutation(UPDATE_CART);
   const router = useRouter();
   useEffect(() => {

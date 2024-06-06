@@ -49,7 +49,7 @@ const sorts = [
   { value: "newest", label: "Newest" },
   { value: "priceLowToHigh", label: "Price low to high" },
   { value: "priceHighToLow", label: "Price high to low" },
-  { value: "sale", label: "On sale" },
+  // { value: "sale", label: "On sale" },
   { value: "popularity", label: "Popularity" },
 ];
 

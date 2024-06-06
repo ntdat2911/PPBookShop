@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "./AuthProvider";
 import { ApolloWrapper } from "./ApolloWrapper";
+import { CartContextWrapper } from "./CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <ApolloWrapper>
-            <Header />
-            <main className="flex-1 min-h-[70vh]">{children}</main>
-            <Footer />
-            <Toaster />
+            <CartContextWrapper>
+              <Header />
+              <main className="flex-1 min-h-[70vh]">{children}</main>
+              <Footer />
+              <Toaster />
+            </CartContextWrapper>
           </ApolloWrapper>
         </AuthProvider>
       </body>

@@ -15,21 +15,23 @@ async function bootstrap() {
   app.use(cookieParser(configService.get<string>('COOKIE_SECRET')));
   app.use(
     helmet({
-      crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
+          defaultSrc: ["'self'"],
+          connectSrc: ["'self'", 'https://cdn.tiny.cloud'],
           imgSrc: [
-            `'self'`,
+            "'self'",
             'data:',
             'apollo-server-landing-page.cdn.apollographql.com',
             '*',
           ],
-          scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+          scriptSrc: ["'self'", "https: 'unsafe-inline'", '*'],
           manifestSrc: [
-            `'self'`,
+            "'self'",
             'apollo-server-landing-page.cdn.apollographql.com',
+            '*',
           ],
-          frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+          frameSrc: ["'self'", 'sandbox.embed.apollographql.com', '*'],
         },
       },
     }),

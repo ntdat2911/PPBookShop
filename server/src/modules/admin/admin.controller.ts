@@ -189,4 +189,11 @@ export class AdminController {
     const path = '/admin/review-management';
     return { reviewList, pagyInfo, req, path };
   }
+
+  @Public()
+  @Get('/about-us')
+  @Render('about-us/aboutUs')
+  public async AboutUs() {
+    return {};
+  }
 }

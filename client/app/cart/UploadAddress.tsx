@@ -68,7 +68,6 @@ export const UploadAddress = ({ UserID }: UploadAddressProps) => {
       },
     });
     setOpen(false);
-    router.refresh();
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
