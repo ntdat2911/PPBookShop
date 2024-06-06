@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\nquery getAboutUs{\ngetAboutUs\n}\n": types.GetAboutUsDocument,
     "\nquery getAddress($UserID:String!){\n  getAddressesByUserId(userId:$UserID){\n    Address\n    Phone\n    ReceiverName\n    IsDefault\n    AddressID\n    UserID\n  }\n}\n": types.GetAddressDocument,
     "\nmutation createAddress($UserID:String!,$Phone:String!,$ReceiverName:String!,$Address:String!,$IsDefault:Boolean!){\n  createAddress(userId:$UserID,phone:$Phone,receiverName:$ReceiverName,address:$Address,isDefault:$IsDefault){\n    Address\n    AddressID\n    UserID\n    ReceiverName\n    Phone\n    IsDefault\n  }\n}\n": types.CreateAddressDocument,
     "\nmutation updateAddress($AddressID:String!,$Phone:String!,$ReceiverName:String!,$Address:String!,$IsDefault:Boolean!){\n  updateAddress(addressId:$AddressID,phone:$Phone,receiverName:$ReceiverName,address:$Address,isDefault:$IsDefault){\n    Address\n    AddressID\n    UserID\n    ReceiverName\n    Phone\n    IsDefault\n  }\n}\n": types.UpdateAddressDocument,
@@ -47,6 +48,10 @@ const documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery getAboutUs{\ngetAboutUs\n}\n"): (typeof documents)["\nquery getAboutUs{\ngetAboutUs\n}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

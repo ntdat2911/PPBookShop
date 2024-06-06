@@ -152,6 +152,7 @@ type PromotionEntity {
 }
 
 type Query {
+  getAboutUs: String!
   getAddressesByUserId(userId: String!): [AddressEntity!]!
   getAuthorById(id: String!): AuthorEntity!
   getAuthors: [AuthorEntity!]!

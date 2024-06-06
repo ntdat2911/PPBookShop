@@ -13,6 +13,7 @@ import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
 import { AdminService } from './admin.service';
 import { OrdersService } from '../orders/orders.service';
+import { AboutUsService } from '../about-us/about-us.service';
 
 @Controller('admin')
 export class AdminController {
@@ -22,6 +23,7 @@ export class AdminController {
     private readonly authorService: AuthorsService,
     private readonly CategoryService: CategoriesService,
     private readonly OrdersService: OrdersService,
+    private readonly AboutUsService: AboutUsService,
   ) {}
 
   @Public()
@@ -194,6 +196,9 @@ export class AdminController {
   @Get('/about-us')
   @Render('about-us/aboutUs')
   public async AboutUs() {
-    return {};
+    const aboutUs = await this.AboutUsService.getAboutUs();
+    return {
+      aboutUs,
+    };
   }
 }
