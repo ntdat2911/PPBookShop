@@ -52,7 +52,6 @@ export class CategoriesRepository {
   }
 
   async updateActiveStatus(CategoryID: string, IsCategoryActive: boolean) {
-    console.log(CategoryID, IsCategoryActive);
     return this.prisma.category.update({
       where: {
         CategoryID: CategoryID,

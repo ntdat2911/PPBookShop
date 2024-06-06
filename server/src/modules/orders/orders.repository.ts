@@ -23,4 +23,34 @@ export class OrdersRepository {
       },
     });
   }
+
+  async getAllOrders(page: number, size: number) {
+    return this.prismaService.order.findMany({
+      take: size,
+      skip: (page - 1) * size,
+    });
+  }
+
+  async countAll() {
+    return this.prismaService.order.count();
+  }
+
+  async updateStatus(OrderID: string, OrderStatus: OrderStatus) {
+    return this.prismaService.order.update({
+      where: {
+        OrderID,
+      },
+      data: {
+        Status: OrderStatus,
+      },
+    });
+  }
+
+  async getOrderByID(OrderID: string) {
+    return this.prismaService.order.findUnique({
+      where: {
+        OrderID,
+      },
+    });
+  }
 }

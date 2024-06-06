@@ -7,6 +7,8 @@ import { BookEntity } from './entities/book.entity';
 import { GPaginatedBookResponse } from './interfaces/books-response.interface';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { RatingEnumRange } from './types/ratingEnumRange';
+import { PromotionsService } from '../promotions/promotions.service';
+import { OrderItemsService } from '../order-items/order-items.service';
 
 @Injectable()
 export class BooksService {
@@ -14,6 +16,8 @@ export class BooksService {
     private booksRepository: BooksRepository,
     private readonly prismaService: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly promotionService: PromotionsService,
+    private readonly orderItemsService: OrderItemsService,
   ) {}
 
   public async getBooks(
@@ -105,5 +109,25 @@ export class BooksService {
   public async updateRating(BookID: string, rating: number) {
     const book = await this.booksRepository.updateRating(BookID, rating);
     return book;
+  }
+
+  public async getOnSaleBooks(size: number) {
+    const onSaleBookIds = await this.promotionService.getOnSaleBooks(size);
+    const booksId = onSaleBookIds.map((item) => item.BookID);
+    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    return books;
+  }
+
+  public async getRecommendedBooks(size: number) {
+    const recommendedBooks = this.booksRepository.getRecommendedBooks(size);
+    return recommendedBooks;
+  }
+
+  public async getPopularBooks(size: number) {
+    const popularBookIds = await this.orderItemsService.getPopularBooks(size);
+
+    const booksId = popularBookIds.map((item) => item.BookID);
+    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    return books;
   }
 }

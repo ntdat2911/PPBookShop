@@ -9,6 +9,7 @@ import { AuthorEntity } from '../authors/entities/author.entity';
 import { CategoriesService } from '../categories/categories.service';
 import { PromotionEntity } from '../promotions/entities/promotion.entity';
 import { PromotionsService } from '../promotions/promotions.service';
+import { OrderItemsService } from '../order-items/order-items.service';
 
 @Resolver(() => BookEntity)
 export class BooksResolver {
@@ -17,6 +18,7 @@ export class BooksResolver {
     private readonly authorsService: AuthorsService,
     private readonly categoriesService: CategoriesService,
     private readonly promotionsService: PromotionsService,
+    private readonly orderItemsService: OrderItemsService,
   ) {}
 
   @Public()
@@ -55,5 +57,28 @@ export class BooksResolver {
       book.BookID,
     );
     return result || [];
+  }
+
+  @Public()
+  @Query(() => [BookEntity])
+  async getOnSaleBooks(@Args('size') size: number): Promise<BookEntity[]> {
+    return await this.booksService.getOnSaleBooks(size);
+  }
+
+  @Public()
+  @Query(() => [BookEntity])
+  async getRecommendedBooks(@Args('size') size: number): Promise<BookEntity[]> {
+    return await this.booksService.getRecommendedBooks(size);
+  }
+
+  @Public()
+  @Query(() => [BookEntity])
+  async getPopularBooks(@Args('size') size: number): Promise<BookEntity[]> {
+    return await this.booksService.getPopularBooks(size);
+  }
+
+  @ResolveField(() => Number, { nullable: true })
+  async SoldQuantity(@Parent() book: BookEntity): Promise<number> {
+    return await this.orderItemsService.getSoldBookByBookId(book.BookID);
   }
 }

@@ -114,4 +114,11 @@ export class PromotionsService {
       IsAvailable,
     });
   }
+
+  async getOnSaleBooks(size: number) {
+    const bookPromotionList: any =
+      await this.promotionsRepository.getOnSaleBooks(size);
+
+    return bookPromotionList;
+  }
 }

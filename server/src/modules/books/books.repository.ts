@@ -219,4 +219,25 @@ export class BooksRepository {
       },
     });
   }
+
+  async getOnSaleBooks(onSaleBookIds: string[]) {
+    const books = await this.prisma.book.findMany({
+      where: {
+        BookID: {
+          in: onSaleBookIds,
+        },
+      },
+    });
+
+    return onSaleBookIds.map((id) => books.find((book) => book.BookID === id));
+  }
+
+  async getRecommendedBooks(size: number) {
+    return this.prisma.book.findMany({
+      take: size,
+      orderBy: {
+        Rating: 'desc',
+      },
+    });
+  }
 }

@@ -115,4 +115,11 @@ export class PromotionsRepository {
       },
     });
   }
+
+  async getOnSaleBooks(size: number) {
+    return this.prisma.bookPromotion.findMany({
+      take: size,
+      distinct: ['BookID'],
+    });
+  }
 }

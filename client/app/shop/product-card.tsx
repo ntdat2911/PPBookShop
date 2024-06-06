@@ -186,7 +186,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4 grid-cols-1">
         {books ? (
           books.map((book) => (
             <div className="flex w-full justify-center" key={book.BookID}>
@@ -207,12 +207,25 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                     </CardTitle>
 
                     <p className="text-center w-full">{book.AuthorName}</p>
-
-                    <CardDescription className="text-center w-full">
-                      {book.BookPrice}$
-                    </CardDescription>
-
-                    <div className="pb-4">
+                    <div className="flex justify-center items-center w-full p-2 gap-2">
+                      {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                        <>
+                          <div className=" text-red-500">
+                            $
+                            {book.BookPrice -
+                              (book.BookPrice *
+                                book.Promotion[0].DiscountPercent) /
+                                100}
+                          </div>
+                          <div className=" text-gray-400 text-sm line-through">
+                            ${book.BookPrice}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-black">${book.BookPrice}</p>
+                      )}
+                    </div>
+                    <div className="pb-4 flex justify-center gap-2">
                       <Rating
                         rating={book.Rating}
                         totalStars={5}
@@ -222,6 +235,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                         showText={false}
                         disabled={true}
                       />
+                      <p className="text-sm">Sold {book.SoldQuantity}</p>
                     </div>
                     <div className="flex justify-center pt-2">
                       <Badge variant="outline">{book.CategoryName}</Badge>

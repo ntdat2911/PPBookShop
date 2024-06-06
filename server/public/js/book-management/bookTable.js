@@ -35,7 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       const url = new URL(window.location.href);
+
       url.searchParams.set('search', searchValue);
+      if (searchValue === '') {
+        url.searchParams.delete('search');
+      }
       window.location.href = url;
     }, 1000);
   });

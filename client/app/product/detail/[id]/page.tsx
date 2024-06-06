@@ -28,7 +28,6 @@ import { cn } from "@/lib/utils";
 export default async function Page({ params }: { params: { id: string } }) {
   const book: BookEntity = await getBookById(params.id);
   const author = await getAuthorById(book.AuthorBy);
-  console.log(book);
   return (
     <ReviewContexttWrapper>
       <div className="container py-4 flex flex-col space-y-8">
@@ -54,10 +53,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <div className="FEEDBACK">
                 <OverviewReviewSection BookID={book.BookID} />
               </div>
-              <div className="DESCRIPTION grid">
-                <Label className="font-bold">Description:</Label>
-                <div className="text-md">{book.BookDescription}</div>
-              </div>
+
               <div className="DISCOUNT flex gap-2">
                 {book.Promotion &&
                   book.Promotion?.map((promotion) => (
@@ -104,11 +100,18 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
         </Card>
         <Card className="h-max" id="review-section">
-          <Tabs defaultValue="review" className="w-full">
+          <Tabs defaultValue="description" className="w-full">
             <TabsList>
+              <TabsTrigger value="description">Book Description</TabsTrigger>
               <TabsTrigger value="author">About author</TabsTrigger>
+
               <TabsTrigger value="review">Reviews</TabsTrigger>
             </TabsList>
+            <TabsContent value="description">
+              <CardContent>
+                <CardDescription>{book.BookDescription}</CardDescription>
+              </CardContent>
+            </TabsContent>
             <TabsContent value="author">
               <CardHeader>
                 <CardTitle>{author.AuthorName}</CardTitle>

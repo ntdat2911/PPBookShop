@@ -1,6 +1,12 @@
 "use server";
 import { getClient } from "@/lib/ApolloClient";
-import { GET_BOOK, GET_BOOKS } from "./queries";
+import {
+  GET_BOOK,
+  GET_BOOKS,
+  GET_ON_SALE_BOOKS,
+  GET_POPULAR_BOOKS,
+  GET_RECOMMENDED_BOOKS,
+} from "./queries";
 import { revalidatePath } from "next/cache";
 
 const client = getClient();
@@ -39,4 +45,37 @@ export async function getBookById(id: string) {
   });
   revalidatePath(`/product/detail/${id}`);
   return data.getBookById;
+}
+
+export async function getOnSaleBooks(size: number) {
+  const { data } = await client.query({
+    query: GET_ON_SALE_BOOKS,
+    variables: {
+      size: size,
+    },
+  });
+  revalidatePath("/");
+  return data.getOnSaleBooks;
+}
+
+export async function getRecommendedBooks(size: number) {
+  const { data } = await client.query({
+    query: GET_RECOMMENDED_BOOKS,
+    variables: {
+      size: size,
+    },
+  });
+  revalidatePath("/");
+  return data.getRecommendedBooks;
+}
+
+export async function getPopularBooks(size: number) {
+  const { data } = await client.query({
+    query: GET_POPULAR_BOOKS,
+    variables: {
+      size: size,
+    },
+  });
+  revalidatePath("/");
+  return data.getPopularBooks;
 }

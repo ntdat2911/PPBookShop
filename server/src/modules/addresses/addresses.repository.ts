@@ -59,4 +59,12 @@ export class AddressesRepository {
     });
     return address.UserID;
   }
+
+  async getAddressByAddressID(addressID: string) {
+    return await this.prisma.address.findUnique({
+      where: {
+        AddressID: addressID,
+      },
+    });
+  }
 }

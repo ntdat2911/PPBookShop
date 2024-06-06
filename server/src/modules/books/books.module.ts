@@ -8,6 +8,7 @@ import { BooksController } from './books.controller';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { PromotionsModule } from '../promotions/promotions.module';
+import { OrderItemsModule } from '../order-items/order-items.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PromotionsModule } from '../promotions/promotions.module';
     CloudinaryModule,
     CategoriesModule,
     PromotionsModule,
+    OrderItemsModule,
   ],
   providers: [BooksService, BooksResolver, BooksRepository],
   exports: [BooksService],

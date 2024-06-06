@@ -60,4 +60,8 @@ export class AddressesService {
     }
     return await this.addressesRepository.updateAddress(data);
   }
+
+  async getAddressByAddressID(addressID: string) {
+    return await this.addressesRepository.getAddressByAddressID(addressID);
+  }
 }

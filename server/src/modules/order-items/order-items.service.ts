@@ -12,7 +12,7 @@ export class OrderItemsService {
   async createOrderItemByString(orderId: string, orderItems: string) {
     const items = JSON.parse(orderItems);
     Object.entries(items).forEach(async ([key, item]: [string, any]) => {
-      const total = item.Price * item.Quantity * ((100 - item.Discount) / 100);
+      const total = item.Price * item.Quantity;
       await this.orderItemsRepository.createOrderItem(
         orderId,
         key,
@@ -22,5 +22,17 @@ export class OrderItemsService {
         total,
       );
     });
+  }
+
+  async getPopularBooks(size: number): Promise<any> {
+    const res = await this.orderItemsRepository.getPopularBooks(size);
+    return res;
+  }
+
+  async getSoldBookByBookId(bookId: string): Promise<any> {
+    const result = await this.orderItemsRepository.getSoldBookByBookId(bookId);
+
+    const count = result.length > 0 ? result[0]._sum.ItemQuantity : 0;
+    return count;
   }
 }

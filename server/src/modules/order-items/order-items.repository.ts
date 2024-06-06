@@ -32,4 +32,37 @@ export class OrderItemsRepository {
       },
     });
   }
+
+  async getPopularBooks(size: number): Promise<any> {
+    return this.prismaService.orderItem.groupBy({
+      by: ['BookID'],
+      _count: {
+        BookID: true,
+      },
+      _sum: {
+        ItemQuantity: true,
+      },
+      orderBy: {
+        _sum: {
+          ItemQuantity: 'desc',
+        },
+      },
+      take: size,
+    });
+  }
+
+  async getSoldBookByBookId(bookId: string): Promise<any> {
+    return this.prismaService.orderItem.groupBy({
+      by: ['BookID'],
+      _count: {
+        BookID: true,
+      },
+      _sum: {
+        ItemQuantity: true,
+      },
+      where: {
+        BookID: bookId,
+      },
+    });
+  }
 }

@@ -4,6 +4,9 @@ import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
 import { ReviewsService } from '../reviews/reviews.service';
 import { PromotionsService } from '../promotions/promotions.service';
+import { OrdersService } from '../orders/orders.service';
+import { AddressesService } from '../addresses/addresses.service';
+import { OrderItemsService } from '../order-items/order-items.service';
 
 @Injectable()
 export class AdminService {
@@ -13,6 +16,9 @@ export class AdminService {
     private readonly categoriesService: CategoriesService,
     private readonly reviewsService: ReviewsService,
     private readonly promotionsService: PromotionsService,
+    private readonly ordersService: OrdersService,
+    private readonly addressService: AddressesService,
+    private readonly orderItemsService: OrderItemsService,
   ) {}
 
   public async getBookManagementData(
@@ -153,6 +159,52 @@ export class AdminService {
       promotion,
       bookPromotionList,
       bookList,
+    };
+  }
+
+  public async getOrderManagementData(page: number, size: number) {
+    page = page || 1;
+    size = size || 5;
+    const orderList = await this.ordersService.getAllOrders(page, size);
+    const newOrderList = await Promise.all(
+      orderList.map(async (order) => {
+        const address = await this.addressService.getAddressByAddressID(
+          order.AddressID,
+        );
+        return {
+          ...order,
+          Address: address.Address,
+        };
+      }),
+    );
+    const count = await this.ordersService.countAll();
+    const pageCount = Math.ceil(count / size);
+    const OrderStatus = await this.ordersService.getOrderStatus();
+    return {
+      pagyInfo: {
+        page,
+        count: size,
+        pageCount,
+      },
+      orderList: newOrderList,
+      OrderStatus,
+    };
+  }
+
+  async getOrderDetailData(OrderID: string) {
+    const order = await this.ordersService.getOrderByID(OrderID);
+    const orderItems =
+      await this.orderItemsService.getOrderItemsByOrderId(OrderID);
+
+    await Promise.all(
+      orderItems.map(async (orderItem) => {
+        const book = await this.booksService.getBookById(orderItem.BookID);
+        orderItem.BookImage = book.ImageURL;
+      }),
+    );
+    return {
+      order,
+      orderItems,
     };
   }
 }

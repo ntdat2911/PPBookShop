@@ -25,4 +25,24 @@ export class OrdersService {
     );
     return order;
   }
+
+  async getAllOrders(page: number, size: number) {
+    return this.ordersRepository.getAllOrders(page, size);
+  }
+
+  async countAll() {
+    return this.ordersRepository.countAll();
+  }
+
+  async getOrderStatus() {
+    return Object.values(OrderStatus);
+  }
+
+  async updateStatus(OrderID: string, OrderStatus: OrderStatus) {
+    return this.ordersRepository.updateStatus(OrderID, OrderStatus);
+  }
+
+  async getOrderByID(OrderID: string) {
+    return this.ordersRepository.getOrderByID(OrderID);
+  }
 }

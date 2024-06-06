@@ -80,10 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 IsAvailable: true,
               }),
             },
-          ).then(() =>
-            // console.log('Activated promotion'),
-            this.location.reload(),
-          );
+          ).then(() => this.location.reload());
           // Activate the book
         } else if (event.target.id === 'deactivateButton') {
           await fetch(
@@ -98,10 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 IsAvailable: false,
               }),
             },
-          ).then(() =>
-            // console.log('Deactivated promotion'),
-            this.location.reload(),
-          );
+          ).then(() => this.location.reload());
         }
       });
     });

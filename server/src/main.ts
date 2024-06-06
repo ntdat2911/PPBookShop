@@ -90,7 +90,14 @@ async function bootstrap() {
         const book = bookList.find((book: any) => book.BookID === bookID);
         return book.BookTitle;
       },
-
+      statusColor: (status: any) => {
+        if (status === 'PENDING') return 'bg-blue-600';
+        if (status === 'PAID') return 'bg-green-600';
+        if (status === 'CANCELLED') return 'bg-red-600';
+        if (status === 'SHIPPING') return 'bg-yellow-600';
+        if (status === 'COMPLETED') return 'bg-purple-600';
+        return 'bg-gray-600';
+      },
       renderButtonPagy: pagy,
       hasPagination: hasPagination,
       previous: previous,

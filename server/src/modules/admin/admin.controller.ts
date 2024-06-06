@@ -12,6 +12,7 @@ import { BooksService } from '../books/books.service';
 import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
 import { AdminService } from './admin.service';
+import { OrdersService } from '../orders/orders.service';
 
 @Controller('admin')
 export class AdminController {
@@ -20,6 +21,7 @@ export class AdminController {
     private readonly bookService: BooksService,
     private readonly authorService: AuthorsService,
     private readonly CategoryService: CategoriesService,
+    private readonly OrdersService: OrdersService,
   ) {}
 
   @Public()
@@ -158,10 +160,23 @@ export class AdminController {
   }
 
   @Public()
-  @Get('/process-orders-management')
-  @Render('process-order/processOrderTable')
-  public ProcessOrderManagement() {
-    return {};
+  @Get('/orders-management')
+  @Render('order/orderTable')
+  public async OrderManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { orderList, pagyInfo, OrderStatus } =
+      await this.adminService.getOrderManagementData(page, size);
+    const path = '/admin/orders-management';
+    return { orderList, pagyInfo, req, path, OrderStatus };
+  }
+
+  @Public()
+  @Get('/orders-management/detail/:OrderID')
+  @Render('order/orderDetail')
+  public async OrderDetail(@Param('OrderID') OrderID: string) {
+    const { order, orderItems } =
+      await this.adminService.getOrderDetailData(OrderID);
+    return { order, orderItems };
   }
 
   @Public()

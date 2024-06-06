@@ -68,7 +68,10 @@ export default function Page() {
           UserID: session.user.id,
           TotalPrice: Object.entries(items).reduce(
             (acc, [key, item]: [string, ItemType]) =>
-              acc + item.Price * item.Quantity,
+              acc +
+              item.Price *
+                item.Quantity *
+                (item.Discount > 0 ? (100 - item.Discount) / 100 : 1),
             0
           ),
           Status: "PENDING",
@@ -197,7 +200,7 @@ export default function Page() {
                         {isArray(item.Promotion) &&
                         item.Promotion.length > 0 ? (
                           <Select
-                            defaultValue={item.Promotion[0].DiscountPercent}
+                            defaultValue={"0"}
                             onValueChange={(value: string) =>
                               handleDiscountChange(key, parseInt(value))
                             }
