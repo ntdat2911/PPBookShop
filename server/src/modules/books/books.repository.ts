@@ -14,7 +14,7 @@ export class BooksRepository {
     input: string;
     category: string[];
     ratingRanges: { min: number; max: number }[];
-    author: string;
+    author: string[];
     sort: string;
   }): Promise<{ data: OverviewDetailBook[]; total: number }> {
     const whereClause: Prisma.BookWhereInput = {
@@ -26,8 +26,10 @@ export class BooksRepository {
       IsOutOfStock: false,
     };
 
-    if (params.author) {
-      whereClause.AuthorBy = params.author;
+    if (params.author && params.author.length > 0) {
+      whereClause.AuthorBy = {
+        in: params.author,
+      };
     }
 
     if (params.category && params.category.length > 0) {

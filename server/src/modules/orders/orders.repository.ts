@@ -28,6 +28,9 @@ export class OrdersRepository {
     return this.prismaService.order.findMany({
       take: size,
       skip: (page - 1) * size,
+      orderBy: {
+        CreatedAt: 'desc',
+      },
     });
   }
 

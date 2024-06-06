@@ -272,4 +272,8 @@ export class UsersService {
 
     return pointSlug;
   }
+
+  public async updateImage(userId: string, image: string): Promise<UserEntity> {
+    return this.usersRepository.updateImage(userId, image);
+  }
 }

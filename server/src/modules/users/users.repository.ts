@@ -67,4 +67,11 @@ export class UsersRepository {
     const { where } = params;
     return await this.prisma.user.delete({ where });
   }
+
+  async updateImage(userId: string, image: string) {
+    return await this.prisma.user.update({
+      where: { UserID: userId },
+      data: { ImageURL: image },
+    });
+  }
 }

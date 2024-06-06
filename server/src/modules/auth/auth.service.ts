@@ -23,6 +23,7 @@ import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { IEmailToken } from '../jwt/interfaces/email-token.interface';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { ConfirmEmailDto } from './dtos/confirm-email.dto';
+import { IAccessToken } from '../jwt/interfaces/access-token.interface';
 
 @Injectable()
 export class AuthService {
@@ -96,7 +97,24 @@ export class AuthService {
       user,
       domain,
     );
-    return { user, accessToken, refreshToken };
+    const { exp: accessTokenExpiresIn } =
+      await this.jwtService.verifyToken<IAccessToken>(
+        accessToken,
+        TokenTypeEnum.ACCESS,
+      );
+    const { exp: refreshTokenExpiresIn } =
+      await this.jwtService.verifyToken<IRefreshToken>(
+        refreshToken,
+        TokenTypeEnum.REFRESH,
+      );
+
+    return {
+      user,
+      accessToken,
+      refreshToken,
+      accessTokenExpiresIn,
+      refreshTokenExpiresIn,
+    };
   }
 
   private async userByEmailOrUsername(

@@ -67,6 +67,7 @@ export const UploadAddress = ({ UserID }: UploadAddressProps) => {
         IsDefault: data.isDefault || false,
       },
     });
+    window.location.reload();
     setOpen(false);
   }
   return (

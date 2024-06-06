@@ -17,19 +17,21 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 
-export type OptionType = {
-  tag_name: string;
-  id: string;
+export type OptionType<T, T1> = {
+  tag_name: T;
+  id: T1;
 };
 
 interface MultiSelectProps {
-  options: OptionType[];
+  options: OptionType<string, string>[];
   selected: string[];
   onChange: React.Dispatch<React.SetStateAction<string[]>>;
   className?: string;
+  filterName: string;
 }
 
 function MultiSelect({
+  filterName,
   options,
   selected,
   onChange,
@@ -49,7 +51,7 @@ function MultiSelect({
           <Badge
             variant="outline"
             key={item}
-            className="mr-1 mb-1 mt-2  border-ocean-300 transition-colors text-xs font-medium cursor-pointer"
+            className="mr-1 mb-1 mt-2 border border-dark-brown rounded-full transition-colors text-xs font-medium cursor-pointer"
             onClick={() => handleUnselect(item)}
           >
             {options.find((option) => option.id === item)?.tag_name}
@@ -75,18 +77,18 @@ function MultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="mr-1 mb-1 mt-2 h-5 px-2.5 py-1 border-ocean-500 transition-colors text-xs font-medium rounded-full text-black"
+            className="mr-1 mb-1 mt-2 h-8 px-2.5 py-1 border-dark-brown transition-colors text-xs font-medium rounded-full text-black"
             onClick={() => setOpen(!open)}
             type="button"
           >
-            Add Category
+            Add {filterName}
             <Plus className="ml-1 h-4 w-4" />
           </Button>
         </PopoverTrigger>
       </div>
       {/* <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" /> */}
       <PopoverContent
-        className="w-full max-w-30 p-0"
+        className="w-full max-w-72 p-0"
         side="right"
         align="start"
       >

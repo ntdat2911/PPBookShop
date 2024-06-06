@@ -38,6 +38,8 @@ import {
 } from "@/components/ui/select";
 import { isArray } from "@apollo/client/utilities";
 import { useCartContext } from "../CartContext";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface ItemType {
   BookImage: string;
@@ -61,11 +63,11 @@ export default function Page() {
   });
   const [addressID, setAddressID] = useState<string>("");
   const [createOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
-  const { toast } = useToast();
+  const router = useRouter();
   const { cartCount, setCartCount } = useCartContext();
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (session?.user.id) {
-      createOrder({
+      const order = await createOrder({
         variables: {
           UserID: session.user.id,
           TotalPrice: Object.entries(items).reduce(
@@ -84,11 +86,8 @@ export default function Page() {
       });
       writeToLocalStorage(session.user.id, {});
       setItems([]);
-      toast({
-        title: "Order created",
-        description: "Your order has been created.",
-        duration: 5000,
-      });
+      if (order?.data)
+        router.push(`/thank-you/${order?.data.createOrder.OrderID}`);
     }
   }
   useEffect(() => {
@@ -99,7 +98,7 @@ export default function Page() {
   }, [session?.user.id]);
 
   if (!session) {
-    return <div>loading...</div>;
+    return;
   }
   const setQuantity = (id: string, quantity: number) => {
     setItems((prevItems) => {
@@ -143,7 +142,9 @@ export default function Page() {
     setAddressID(addressID);
   };
   return (
-    <div className="container py-4 space-y-8">
+    <div
+      className={cn("container py-4 space-y-8", loading ? "bg-gray-200" : "")}
+    >
       <div className="grid grid-cols-3 gap-2">
         <div className="col-span-2 h-full">
           <Card>
@@ -175,7 +176,7 @@ export default function Page() {
                           alt={item.BookTitle}
                           width={100}
                           height={100}
-                          className="w-18 h-18 object-contain"
+                          className="w-16 h-16 object-cover"
                         />
                       </div>
                       <div>{item.BookTitle}</div>
@@ -239,9 +240,11 @@ export default function Page() {
                               {item.Price * item.Quantity}
                             </p>
                             <p>
-                              {item.Price *
+                              {(
+                                item.Price *
                                 item.Quantity *
-                                ((100 - item.Discount) / 100)}
+                                ((100 - item.Discount) / 100)
+                              ).toFixed(2)}
                               $
                             </p>
                           </>
@@ -319,16 +322,18 @@ export default function Page() {
                   <div>
                     <span className="text-lg font-bold">Total:</span> $
                     {items &&
-                      Object.entries(items).reduce(
-                        (acc, [key, item]: [string, ItemType]) =>
-                          acc +
-                          item.Price *
-                            item.Quantity *
-                            (item.Discount > 0
-                              ? (100 - item.Discount) / 100
-                              : 1),
-                        0
-                      )}
+                      Object.entries(items)
+                        .reduce(
+                          (acc, [key, item]: [string, ItemType]) =>
+                            acc +
+                            item.Price *
+                              item.Quantity *
+                              (item.Discount > 0
+                                ? (100 - item.Discount) / 100
+                                : 1),
+                          0
+                        )
+                        .toFixed(2)}
                   </div>
                   <Button type="submit">Checkout</Button>
                 </form>

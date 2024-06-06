@@ -39,3 +39,44 @@ export async function confirmEmail(confirmationToken: string) {
     throw error;
   }
 }
+
+export async function forgotPassword(email: string) {
+  try {
+    const response = await axios.post(
+      `${SERVER_BASE_URL}/api/auth/forgot-password`,
+      { email }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function resetPassword(params: {
+  resetToken: string;
+  password1: string;
+  password2: string;
+}) {
+  try {
+    const response = await axios.post(
+      `${SERVER_BASE_URL}/api/auth/reset-password`,
+      params
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function refreshAccessToken() {
+  try {
+    const response = await axios.post(
+      `${SERVER_BASE_URL}/api/auth/refresh-access`,
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+}

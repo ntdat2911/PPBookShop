@@ -27,6 +27,7 @@ export class BooksService {
     //split the rating string into an array
     const ratings = rating ? rating.split(',') : [];
     const categories = category ? category.split(',') : [];
+    const authors = author ? author.split(',') : [];
     const ratingRanges = ratings.map((r) => RatingEnumRange[parseInt(r)]);
 
     const { data, total } = await this.booksRepository.findByFilter({
@@ -35,7 +36,7 @@ export class BooksService {
       input,
       category: categories,
       ratingRanges: ratingRanges,
-      author,
+      author: authors,
       sort,
     });
 

@@ -163,4 +163,9 @@ export class JwtService {
         );
     }
   }
+
+  public async getExpiresIn(tokenType: TokenTypeEnum) {
+    const { time } = this.jwtConfig[tokenType];
+    return time;
+  }
 }

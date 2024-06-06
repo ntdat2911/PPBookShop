@@ -66,7 +66,6 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
     Object.keys(params).forEach((key) => {
       updatedParams.set(key, params[key] as string); // Add type assertion
     });
-    console.log("updatedParams", updatedParams.toString());
     router.push(`/shop?${updatedParams.toString()}`);
   }, [
     searchParams.page,
@@ -145,7 +144,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   };
   return (
     <>
-      <div className="flex justify-between px-6 mb-4">
+      <div className="flex justify-between px-6 mb-4 ">
         <div className="text-sm text-muted-foreground p-2">
           {books.length} of {pagyInfo.count} books found
         </div>
@@ -201,7 +200,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                       className="w-[300px] h-[300px] object-contain"
                     />
                   </CardContent>
-                  <CardFooter className="grid p-2 pt-0">
+                  <CardFooter className="grid p-2 pt-0 text-dark-brown">
                     <CardTitle className="text-center w-full text-xl">
                       {book.BookTitle}
                     </CardTitle>

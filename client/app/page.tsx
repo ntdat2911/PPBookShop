@@ -22,8 +22,9 @@ import { BookEntity } from "@/codegen/__generated__/graphql";
 import Link from "next/link";
 import { Rating } from "@/components/ui/rating";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 export default async function Home() {
   const [onSalebooks, recommendedBooks, popularBooks] = await Promise.all([
@@ -33,19 +34,21 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 space-y-16">
-      <Card className="w-full ">
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 pt-12 space-y-16">
+      <Card className="w-full text-dark-brown ">
         <CardHeader>
-          <div className="flex w-full justify-between">
-            <Label className="text-2xl">On Sale</Label>
-            <Link href="/shop?page=1">
-              <Badge variant="outline" className="text-lg hover:bg-gray-200">
+          <div className="grid grid-cols-3 ">
+            <Label className="text-4xl col-start-2 justify-self-center">
+              On Sale
+            </Label>
+            <Link href="/shop?page=1" className="col-start-3 justify-self-end">
+              <Button variant="ghost" className="text-lg hover:bg-gray-200 ">
                 View All
-              </Badge>
+              </Button>
             </Link>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-6" key="OnSale">
           <Carousel
             opts={{
               align: "start",
@@ -135,20 +138,27 @@ export default async function Home() {
         className="w-full items-center flex flex-col"
       >
         <TabsList>
-          <TabsTrigger value="recommended">Recommended</TabsTrigger>
-          <TabsTrigger value="popular">Popular</TabsTrigger>
+          <TabsTrigger value="recommended" className="text-xl">
+            Recommended
+          </TabsTrigger>
+          <TabsTrigger value="popular" className="text-xl">
+            Popular
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="recommended" className="w-full">
           <Card className="w-full p-6">
-            <CardContent className="w-full grid grid-cols-4 gap-4 p-0">
+            <CardContent
+              className="w-full grid grid-cols-4 gap-4 p-0 "
+              key="Recommended"
+            >
               {recommendedBooks.map((book: BookEntity) => (
-                <div className="p-1">
+                <div className="p-1" key={"Recommended" + book.BookID}>
                   <Link
                     href={`/product/detail/${book.BookID}`}
                     className="group"
                   >
                     <Card>
-                      <CardContent className="p-0 flex aspect-square items-center justify-center">
+                      <CardContent className="p-0 flex aspect-square items-center justify-center ">
                         <Image
                           src={book.ImageURL}
                           alt={book.BookTitle}
@@ -156,9 +166,9 @@ export default async function Home() {
                           height={200}
                         />
                       </CardContent>
-                      <CardFooter className="group-hover:bg-gray-200">
+                      <CardFooter className="group-hover:bg-gray-200 text-dark-brown">
                         <div className="flex flex-col items-center w-full p-2 gap-2">
-                          <CardTitle className="text-2xl">
+                          <CardTitle className="text-2xl ">
                             {book.BookTitle}
                           </CardTitle>
                           <p>{book.AuthorName}</p>
@@ -213,13 +223,16 @@ export default async function Home() {
           <Card className="w-full p-6">
             <CardContent className="w-full grid grid-cols-4 gap-4 p-0">
               {popularBooks.map((book: BookEntity) => (
-                <div className="p-1">
+                <div className="p-1" key={"Popular" + book.BookID}>
                   <Link
                     href={`/product/detail/${book.BookID}`}
                     className="group"
                   >
                     <Card>
-                      <CardContent className="p-0 flex aspect-square items-center justify-center">
+                      <CardContent
+                        className="p-0 flex aspect-square items-center justify-center"
+                        key="Popular"
+                      >
                         <Image
                           src={book.ImageURL}
                           alt={book.BookTitle}

@@ -114,6 +114,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   await app.listen(configService.get<number>('port'));
 }
 bootstrap();

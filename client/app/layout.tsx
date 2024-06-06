@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "./AuthProvider";
 import { ApolloWrapper } from "./ApolloWrapper";
 import { CartContextWrapper } from "./CartContext";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, "text-dark-brown bg-gray-100")}>
         <AuthProvider>
           <ApolloWrapper>
             <CartContextWrapper>

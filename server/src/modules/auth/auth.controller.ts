@@ -48,6 +48,7 @@ export class AuthController {
   }
 
   private refreshTokenFromReq(req: Request): string {
+    console.log('req.signedCookies', req.signedCookies);
     const token: string | undefined = req.signedCookies[this.cookieName];
 
     if (isUndefined(token)) {
@@ -59,7 +60,7 @@ export class AuthController {
 
   private saveRefreshCookie(res: Response, refreshToken: string): Response {
     return res.cookie(this.cookieName, refreshToken, {
-      secure: !this.testing,
+      secure: false,
       httpOnly: true,
       signed: true,
       path: this.cookiePath,
@@ -95,7 +96,9 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
+    console.log('req.headers.origin', req.headers.origin);
     const token = this.refreshTokenFromReq(req);
+    console.log('token', token);
     const result = await this.authService.refreshTokenAccess(
       token,
       req.headers.origin,
@@ -131,6 +134,7 @@ export class AuthController {
       .json(AuthResponseMapper.map(result));
   }
 
+  @Public()
   @Post('/forgot-password')
   @HttpCode(HttpStatus.OK)
   public async forgotPassword(
