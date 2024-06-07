@@ -23,14 +23,15 @@ interface ProfileSectionProps {
 }
 
 export const ProfileSection = ({ user }: ProfileSectionProps) => {
-  const { data: session, status, update } = useSession();
   const [imageSource, setImageSource] = React.useState<AvatarProps["src"]>(
     user?.image ? user.image : fallBackImage
   );
-
+  console.log("user", user);
   const [isUpdatingAvatar, setIsUpdatingAvatar] =
     React.useState<boolean>(false);
-
+  React.useEffect(() => {
+    setImageSource(user?.image);
+  }, [user]);
   const handleChangeSource = (selectedFile: File) => {
     setImageSource(selectedFile);
     setIsUpdatingAvatar(true);
@@ -53,24 +54,10 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
             body: formData,
           }
         ).then((r) => r.json());
-        if (session?.user.id) {
-          console.log("session?.user.id", session?.user.accessToken);
-          await updateImage(
-            session?.user.id,
-            data.secure_url,
-            session.user.accessToken
-          );
-          await update({
-            user: {
-              ...session?.user,
-              image: data.secure_url,
-            },
-          });
+        if (user.id) {
+          await updateImage(user.id, data.secure_url, user.accessToken);
+          window.location.reload();
         }
-        // await userService.updateUserImage(props.userId, data.secure_url);
-        // props.setImageSrc(data.secure_url);
-        // props.setOpen(false);
-        // props.setIsLoading(false);
         setIsUpdatingAvatar(false);
       }
     } catch (err) {

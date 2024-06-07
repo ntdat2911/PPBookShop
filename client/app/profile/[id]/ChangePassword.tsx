@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -17,54 +17,56 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useToast } from "@/components/ui/use-toast";
-import { signUp } from "@/services/auth/service";
-import { SignUpRequestDto, UserDto } from "@/services/auth/dto";
-import { useSession } from "next-auth/react";
-import { getUser, updateProfile } from "@/services/users/service";
-import { useRouter } from "next/navigation";
-import { set } from "date-fns";
+import { changePassword } from "@/services/auth/service";
+import { UserDto } from "@/services/auth/dto";
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }).max(50),
-  email: z.string().email().optional(),
+  password: z.string().min(7).max(50),
+  confirmPassword: z.string().min(7).max(50),
 });
-interface ProfileEditProps {
+// .superRefine((data, ctx) => {
+//   if (data.password !== data.confirmPassword) {
+//     ctx.addIssue({
+//       code: z.ZodIssueCode.custom,
+//       message: "Passwords do not match.",
+//       path: ["confirmPassword"],
+//     });
+//   }
+// });
+interface ChangePasswordProps {
   user: UserDto;
 }
-const ProfileEdit = ({ user }: ProfileEditProps) => {
+const ChangePassword = ({ user }: ChangePasswordProps) => {
   const { toast } = useToast();
 
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: user.email,
-      name: user.username,
+      password: "",
+      confirmPassword: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const userChange = {
-        name: values.name,
-        email: values.email,
+      const newPassword = {
+        password1: values.password,
+        password2: values.confirmPassword,
       };
-      if (!user.id || !user.accessToken) throw new Error("User not found");
-      const response = await updateProfile(
-        user.id as string,
-        userChange.name,
+      const res = await changePassword(
+        values.password,
+        values.confirmPassword,
         user.accessToken
       );
-      window.location.reload();
       toast({
-        title: "Profile updated!",
+        title: "Change password success!",
         description: `Welcome!`,
         variant: "success",
       });
@@ -75,52 +77,45 @@ const ProfileEdit = ({ user }: ProfileEditProps) => {
       });
     }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card className="">
           <CardHeader className="items-center">
-            <CardTitle>Information</CardTitle>
+            <CardTitle>Change password</CardTitle>
           </CardHeader>
           <CardContent className="px-auto flex flex-col space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="email@example.com"
-                      {...field}
-                      disabled
-                    />
+                    <PasswordInput placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="name"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Confirm password</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <PasswordInput placeholder="Confirm password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </CardContent>
-          <CardFooter className="flex-col items-end">
-            <Button
-              type="submit"
-              className="bg-medium-brown hover:bg-dark-brown"
-            >
-              Save
-            </Button>
+          <CardFooter className="flex-col items-center">
+            <Button type="submit">Submit</Button>
           </CardFooter>
         </Card>
       </form>
@@ -128,4 +123,4 @@ const ProfileEdit = ({ user }: ProfileEditProps) => {
   );
 };
 
-export default ProfileEdit;
+export default ChangePassword;

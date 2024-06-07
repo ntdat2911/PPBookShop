@@ -1,5 +1,6 @@
 import { UserDto } from "@/services/auth/dto";
 import { refreshAccessToken, signIn } from "@/services/auth/service";
+import { getUser } from "@/services/users/service";
 import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -69,7 +70,10 @@ export const authOptions: AuthOptions = {
     },
 
     async session({ token, session }) {
-      session.user = token.user;
+      const user = await getUser(token.user.accessToken);
+      const result = { ...token.user, ...user.data };
+
+      session.user = result;
       return session;
     },
   },

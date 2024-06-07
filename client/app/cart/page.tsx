@@ -152,12 +152,12 @@ export default function Page() {
               <h1 className="text-3xl font-bold">Cart</h1>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-7 gap-2 justify-center items-center text-center">
+              <div className="grid grid-cols-8 gap-2 justify-center items-center text-center">
                 <div className="text-lg font-bold">Product</div>
                 <div className="text-lg font-bold">Title</div>
                 <div className="text-lg font-bold">Quantity</div>
                 <div className="text-lg font-bold">Unit price</div>
-                <div className="text-lg font-bold">Discount</div>
+                <div className="text-lg font-bold col-span-2">Discount</div>
 
                 <div className="text-lg font-bold">Total</div>
                 <div className="text-lg font-bold"></div>
@@ -168,7 +168,7 @@ export default function Page() {
                     <Separator />
                     <div
                       key={key}
-                      className="grid grid-cols-7 gap-2 h-[100px] justify-center items-center text-center"
+                      className="grid grid-cols-8 gap-2 h-[100px] justify-center items-center text-center"
                     >
                       <div>
                         <Image
@@ -176,7 +176,7 @@ export default function Page() {
                           alt={item.BookTitle}
                           width={100}
                           height={100}
-                          className="w-16 h-16 object-cover"
+                          className="object-cover"
                         />
                       </div>
                       <div>{item.BookTitle}</div>
@@ -200,7 +200,7 @@ export default function Page() {
                         </Button>
                       </div>
                       <div className="">{item.Price}</div>
-                      <div className="">
+                      <div className="col-span-2">
                         {isArray(item.Promotion) &&
                         item.Promotion.length > 0 ? (
                           <Select

@@ -11,7 +11,7 @@ import { RegisterRequestDto } from './dtos/users.dto';
 import { CommonService } from '../common/common.service';
 import { UserEntity } from './entities/user.entity';
 import { compare, hash } from 'bcrypt';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { isNull, isUndefined } from '../common/consts/validation.util';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { ChangeEmailDto } from './dtos/change-email.dto';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { BookEntity } from './entities/book.entity';
 import { OverviewDetailBook } from './interfaces/books-response.interface';
 import { Prisma } from '@prisma/client';
