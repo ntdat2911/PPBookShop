@@ -55,4 +55,11 @@ export class UsersController {
     const user = await this.usersService.updateImage(UserID, image);
     return ResponseUserMapper.map(user);
   }
+
+  @Put('/update-profile')
+  public async updateProfile(@CurrentUser() id1: string, @Body() body: any) {
+    const { id, email, name } = body;
+    const user = await this.usersService.updateProfile(id, name);
+    return ResponseUserMapper.map(user);
+  }
 }

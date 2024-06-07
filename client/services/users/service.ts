@@ -30,3 +30,39 @@ export const updateImage = async (id: string, image: string, token: string) => {
     throw error;
   }
 };
+
+export const updateProfile = async (
+  id: string,
+  name: string,
+  token: string
+) => {
+  try {
+    const data = await axios.put(
+      "http://localhost:4000/api/users/update-profile",
+      { id, name },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getUser = async (token: string) => {
+  try {
+    const data = await axios.get("http://localhost:4000/api/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

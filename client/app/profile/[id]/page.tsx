@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { ProfileEdit } from "./ProfileEdit";
 import { ProfileSection } from "./avatar";
+import ProfileEdit from "./ProfileEdit";
 
 export default function Page({ params }: { params: { id: string } }) {
   const { data: session } = useSession();

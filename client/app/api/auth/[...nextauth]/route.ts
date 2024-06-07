@@ -51,7 +51,7 @@ export const authOptions: AuthOptions = {
       }
       if (
         token.user.accessTokenExpiresIn &&
-        Date.now() / 1000 > token.user.accessTokenExpiresIn - 590
+        Date.now() / 1000 > token.user.accessTokenExpiresIn
       ) {
         const res = await refreshAccessToken();
         const data = await res.json();

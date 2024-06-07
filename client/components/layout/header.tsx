@@ -32,13 +32,14 @@ export function Header() {
   const { data: session } = useSession();
   const { cartCount, setCartCount } = useCartContext();
   const [updateCart, { data, loading, error }] = useMutation(UPDATE_CART);
+  const [user, setUser] = useState(session?.user);
   const router = useRouter();
   useEffect(() => {
     if (session?.user.id) {
       const count = getTotalUniqueItems(session?.user.id);
       setCartCount(count);
     }
-  }, [session?.user.id]);
+  }, [session?.user]);
 
   const handleLogout = () => {
     if (session?.user.id) {
@@ -122,7 +123,9 @@ export function Header() {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Hi, {session.user.name}</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    Hi, {session.user.username}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => router.push(`/profile/${session.user.id}`)}

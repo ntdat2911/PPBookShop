@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 
 interface UploadAddressProps {
   UserID: string;
+  handleRefresh: () => void;
 }
 
 const FormSchema = z.object({
@@ -42,7 +43,10 @@ const FormSchema = z.object({
   isDefault: z.boolean().default(false).optional(),
 });
 
-export const UploadAddress = ({ UserID }: UploadAddressProps) => {
+export const UploadAddress = ({
+  UserID,
+  handleRefresh,
+}: UploadAddressProps) => {
   const [createAddress, { data, loading, error }] = useMutation(CREATE_ADDRESS);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -67,7 +71,7 @@ export const UploadAddress = ({ UserID }: UploadAddressProps) => {
         IsDefault: data.isDefault || false,
       },
     });
-    window.location.reload();
+    handleRefresh();
     setOpen(false);
   }
   return (

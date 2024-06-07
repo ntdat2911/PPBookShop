@@ -15,7 +15,7 @@ import { GET_ADDRESSES_BY_USER_ID } from "@/services/addresses/queries";
 import { useQuery } from "@apollo/client";
 import { Edit } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { UploadAddress } from "./UploadAddress";
 import { Separator } from "@radix-ui/react-separator";
 
@@ -28,11 +28,12 @@ export const AddressChooseComponents = ({
   UserID,
   handleAddressChange,
 }: AddressProps) => {
-  const { data, loading, error } = useQuery(GET_ADDRESSES_BY_USER_ID, {
+  const { data, loading, error, refetch } = useQuery(GET_ADDRESSES_BY_USER_ID, {
     variables: { UserID },
     fetchPolicy: "network-only",
   });
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [isRefresh, setIsRefresh] = useState(false);
   useEffect(() => {
     if (data?.getAddressesByUserId && data.getAddressesByUserId.length > 0) {
       data.getAddressesByUserId.map((address) => {
@@ -44,8 +45,16 @@ export const AddressChooseComponents = ({
   }, [data]);
 
   useEffect(() => {
+    refetch();
+  }, [isRefresh]);
+
+  useEffect(() => {
     handleAddressChange(selectedAddress || "");
   }, [selectedAddress]);
+
+  function handleRefresh() {
+    setIsRefresh(!isRefresh);
+  }
   return (
     <Dialog>
       <DialogTrigger className="border-b-2 border-gray-200 min-h-12 p-4 flex justify-between items-center hover:bg-gray-200 hover:rounded-lg ">
@@ -130,7 +139,7 @@ export const AddressChooseComponents = ({
 
           <div className="flex justify-start">
             <div className="flex flex-col items-center">
-              <UploadAddress UserID={UserID} />
+              <UploadAddress UserID={UserID} handleRefresh={handleRefresh} />
             </div>
           </div>
         </RadioGroup>
