@@ -34,11 +34,13 @@ export class AuthGuard implements CanActivate {
     } else {
       req = GqlExecutionContext.create(context).getContext().req;
     }
-
     const activate = await this.setHttpHeader(req, isPublic);
 
     if (!activate) {
-      throw new UnauthorizedException();
+      const httpContext = context.switchToHttp();
+      const response = httpContext.getResponse();
+      response.redirect('/admin/login');
+      return false;
     }
 
     return activate;
@@ -54,7 +56,6 @@ export class AuthGuard implements CanActivate {
     isPublic: boolean,
   ): Promise<boolean> {
     const auth = req.headers?.authorization;
-
     if (isUndefined(auth) || isNull(auth) || auth.length === 0) {
       return isPublic;
     }
@@ -69,13 +70,20 @@ export class AuthGuard implements CanActivate {
     if (isUndefined(token) || isNull(token) || !isJWT(token)) {
       return isPublic;
     }
-
     try {
-      const { id } = await this.jwtService.verifyToken(
-        token,
-        TokenTypeEnum.ACCESS,
-      );
-      req.user = id;
+      if (req.headers.host === 'localhost:3000') {
+        const { id } = await this.jwtService.verifyToken(
+          token,
+          TokenTypeEnum.ACCESS,
+        );
+        req.user = id;
+      } else if (req.headers.host === 'localhost:4000') {
+        const { id } = await this.jwtService.verifyAdminToken(
+          token,
+          TokenTypeEnum.ACCESS,
+        );
+        req.user = id;
+      }
       return true;
     } catch (_) {
       return isPublic;

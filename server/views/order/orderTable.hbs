@@ -99,15 +99,15 @@
                   <option value='{{Status}}' selected>{{Status}}</option>
 
                   {{#if (equal Status 'PENDING')}}
-
-                    <option value='COMPLETED'>COMPLETED</option>
+                    <option value='PAID'>PAID</option>
+                    <option value='CANCELLED'>CANCELLED</option>
                   {{/if}}
-                  {{#if (equal Status 'COMPLETED')}}
-
+                  {{#if (equal Status 'PAID')}}
                     <option value='SHIPPING'>SHIPPING</option>
+                    <option value='CANCELLED'>CANCELLED</option>
                   {{/if}}
                   {{#if (equal Status 'SHIPPING')}}
-                    <option value='PAID'>PAID</option>
+                    <option value='COMPLETED'>COMPLETED</option>
                     <option value='CANCELLED'>CANCELLED</option>
                   {{/if}}
                 </select>

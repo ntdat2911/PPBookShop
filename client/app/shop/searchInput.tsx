@@ -15,11 +15,6 @@ export const SearchInput = () => {
       placeholder="Search"
       className="w-full rounded-full px-9 py-1 hover:border-slate-300"
       onChange={(e) => handleSearch(e.target.value)}
-      // onKeyDown={(e) => {
-      //   if (e.key === "Enter") {
-      //     setSearchParams({ ...searchParams, input: input, page: 1 });
-      //   }
-      // }}
     />
   );
 };

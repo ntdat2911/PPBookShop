@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html>
-  <head>
+ <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <link href='/main.css' rel='stylesheet' />
     <!-- from cdn -->
-    <title>PPBookShop Admim </title>
+<title>PPBookShop Admim </title>
     <!-- stylesheet -->
     <link
       rel='stylesheet'
@@ -17,21 +18,19 @@
     <script src='/tinymce/tinymce.min.js' referrerpolicy='origin'></script>
 
     <!-- Place the first <script> tag in your HTML's <head> -->
-    <script
-      src='https://cdn.tiny.cloud/1/7bt9ojcy78d2i6tb72myb4563786t97hcoy9p2e8i2cq29ff/tinymce/7/tinymce.min.js'
-      referrerpolicy='origin'
-    ></script>
+<script src="https://cdn.tiny.cloud/1/7bt9ojcy78d2i6tb72myb4563786t97hcoy9p2e8i2cq29ff/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
-    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-    <script>
-      tinymce.init({ selector: '#mytextarea', plugins: 'anchor autolink charmap
-      codesample emoticons image link lists media searchreplace table
-      visualblocks wordcount linkchecker', toolbar: 'undo redo | blocks
-      fontfamily fontsize | bold italic underline strikethrough | link image
-      media table | align lineheight | numlist bullist indent outdent |
-      emoticons charmap | removeformat', height: 600, min_height: 300,
-      max_height: 600 });
-    </script>
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+  tinymce.init({
+    selector: '#mytextarea',
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+  height: 600,
+  min_height: 300,
+  max_height: 600
+  });
+</script>
   </head>
   <body>
     <header
@@ -223,7 +222,7 @@
               </div>About Us
             </div>
           </a>
-          <a href='/admin/login'>
+          <a href='/admin/login' id="logout-link">
             <div
               role='button'
               tabindex='0'
@@ -259,5 +258,8 @@
     <script
       src='https://unpkg.com/@material-tailwind/html@latest/scripts/dialog.js'
     ></script>
+    <script src='/js/logout/logout.js'></script>
+    <script src='/js/main.js'></script>
+
   </body>
 </html>

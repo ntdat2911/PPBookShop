@@ -19,12 +19,17 @@ document.addEventListener('DOMContentLoaded', function () {
       const isActive = isActiveCheckbox === 'on';
       formData.set('IsAvailable', isActive);
 
-      const selectedItems = Array.from(
-        document.querySelectorAll('#selectedItems div[data-id]'),
-      ).map((item) => item.dataset.id);
-
-      formData.set('SelectedBooks', selectedItems.toString());
-
+      const checkedCheckboxes = Array.from(
+        document.querySelectorAll(
+          'input[type="checkbox"][name="book"]:checked',
+        ),
+      );
+      const selectedBooks = checkedCheckboxes.map((checkbox) => checkbox.value);
+      if (selectedBooks.length === 0 || selectedBooks === null) {
+        alert('Please select at least one book');
+        return;
+      }
+      formData.set('SelectedBooks', selectedBooks.toString());
       await fetch('http://localhost:4000/api/promotions/create', {
         method: 'POST',
         body: formData,
@@ -110,86 +115,4 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `${window.location.pathname}/edit/${promotionID}`;
       });
     });
-
-  const toggleDropdown = document.getElementById('toggleDropdown');
-  const dropdown = document.getElementById('dropdown');
-  const selectedItemsContainer = document.getElementById('selectedItems');
-  const dropdownItems = document.getElementById('dropdownItems');
-  const inputBox = document.getElementById('inputBox');
-
-  toggleDropdown.addEventListener('click', function () {
-    dropdown.classList.toggle('hidden');
-  });
-
-  dropdownItems.addEventListener('click', function (event) {
-    if (event.target.closest('.cursor-pointer')) {
-      const selectedValue =
-        event.target.closest('.cursor-pointer').dataset.value;
-      const selectedText = event.target
-        .closest('.cursor-pointer')
-        .textContent.trim();
-      addSelectedItem(selectedValue, selectedText);
-      event.target.closest('.cursor-pointer').remove();
-    }
-  });
-
-  function addSelectedItem(value, text) {
-    const item = document.createElement('div');
-    item.className =
-      'flex items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300';
-    item.dataset.id = value;
-    item.innerHTML = `
-        ${text}
-        <span class="cursor-pointer ml-2 text-teal-500">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </span>
-      `;
-    selectedItemsContainer.insertBefore(
-      item,
-      selectedItemsContainer.querySelector('.flex-1'),
-    );
-
-    item.querySelector('span').addEventListener('click', function () {
-      item.remove();
-      addDropdownItem(value, text);
-    });
-
-    updateInputBox();
-  }
-
-  function addDropdownItem(value, text) {
-    const item = document.createElement('div');
-    item.className =
-      'cursor-pointer w-full border-gray-100 border-b hover:bg-teal-100';
-    item.dataset.value = value;
-    item.innerHTML = `
-        <div class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100">
-          <div class="w-full items-center flex">
-            <div class="mx-2 leading-6">${text}</div>
-          </div>
-        </div>
-      `;
-    dropdownItems.appendChild(item);
-  }
-
-  function updateInputBox() {
-    const selectedValues = Array.from(
-      selectedItemsContainer.querySelectorAll('div[data-id]'),
-    )
-      .map((item) => item.textContent.trim())
-      .join(', ');
-    inputBox.value = selectedValues;
-  }
-
-  // Close the dropdown if the user clicks outside of it
-  document.addEventListener('click', function (event) {
-    if (
-      !dropdown.contains(event.target) &&
-      !toggleDropdown.contains(event.target)
-    ) {
-      dropdown.classList.add('hidden');
-    }
-  });
 });

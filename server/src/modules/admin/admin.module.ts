@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { BooksModule } from '../books/books.module';
@@ -12,6 +17,7 @@ import { OrderItemsModule } from '../order-items/order-items.module';
 import { AboutUsModule } from '../about-us/about-us.module';
 import { PrismaModule } from 'src/database/prisma.module';
 import { AdminRepository } from './admin.repository';
+import { AuthMiddleware } from '../auth/middleware/middleware';
 
 @Module({
   imports: [
@@ -30,4 +36,11 @@ import { AdminRepository } from './admin.repository';
   providers: [AdminService, AdminRepository],
   exports: [AdminService],
 })
-export class AdminModule {}
+export class AdminModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: 'admin/*',
+      method: RequestMethod.ALL,
+    });
+  }
+}

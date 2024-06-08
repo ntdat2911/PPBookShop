@@ -92,6 +92,12 @@ async function bootstrap() {
         const book = bookList.find((book: any) => book.BookID === bookID);
         return book.BookTitle;
       },
+      bookExists: (bookID: any, bookList: any) => {
+        console.log(bookID);
+        console.log(bookList);
+        const book = bookList.find((book: any) => book.BookID === bookID);
+        return book !== undefined;
+      },
       statusColor: (status: any) => {
         if (status === 'PENDING') return 'bg-blue-600';
         if (status === 'PAID') return 'bg-green-600';

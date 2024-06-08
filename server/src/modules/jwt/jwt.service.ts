@@ -164,6 +164,38 @@ export class JwtService {
     }
   }
 
+  public async verifyAdminToken<
+    T extends IAccessToken | IRefreshToken | IEmailToken,
+  >(token: string, tokenType: TokenTypeEnum): Promise<T> {
+    const jwtOptions: jwt.VerifyOptions = {
+      issuer: this.issuer,
+      audience: new RegExp('localhost:4000'),
+    };
+
+    switch (tokenType) {
+      case TokenTypeEnum.ACCESS:
+        const { publicKey, time: accessTime } = this.jwtConfig.access;
+        return JwtService.throwBadRequest(
+          JwtService.verifyTokenAsync(token, publicKey, {
+            ...jwtOptions,
+            maxAge: accessTime,
+            algorithms: ['RS256'],
+          }),
+        );
+      case TokenTypeEnum.REFRESH:
+      case TokenTypeEnum.CONFIRMATION:
+      case TokenTypeEnum.RESET_PASSWORD:
+        const { secret, time } = this.jwtConfig[tokenType];
+        return JwtService.throwBadRequest(
+          JwtService.verifyTokenAsync(token, secret, {
+            ...jwtOptions,
+            maxAge: time,
+            algorithms: ['HS256'],
+          }),
+        );
+    }
+  }
+
   public async getExpiresIn(tokenType: TokenTypeEnum) {
     const { time } = this.jwtConfig[tokenType];
     return time;

@@ -20,9 +20,8 @@ document.querySelector('form').addEventListener('submit', function (event) {
       if (data.error) {
         alert(data.error);
       } else {
-        console.log(data);
-        localStorage.setItem('access-token', data.accessToken);
-        window.location = '/admin';
+  
+        window.location = '/admin/book-management';
       }
     })
     .catch((error) => {

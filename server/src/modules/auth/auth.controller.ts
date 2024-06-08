@@ -62,7 +62,7 @@ export class AuthController {
       secure: false,
       httpOnly: true,
       signed: true,
-      path: this.cookiePath,
+      path: '/',
       expires: new Date(Date.now() + this.refreshTime * 1000),
     });
   }
@@ -115,8 +115,10 @@ export class AuthController {
     const token = this.refreshTokenFromReq(req);
     const message = await this.authService.logout(token);
     res
-      .clearCookie(this.cookieName, { path: this.cookiePath })
-      .status(HttpStatus.OK)
+      .clearCookie(this.cookieName, { path: "/" })
+      res
+      .clearCookie("access-token", { path: "/" })
+      res.status(HttpStatus.OK)
       .json(message);
   }
 
@@ -182,6 +184,9 @@ export class AuthController {
     @Body() singInDto: SignInDto,
   ): Promise<void> {
     const result = await this.authService.adminSignIn(singInDto, origin);
+    res.cookie('access-token', result.accessToken, {
+      httpOnly: true,
+    });
     this.saveRefreshCookie(res, result.refreshToken)
       .status(HttpStatus.OK)
       .json(result);

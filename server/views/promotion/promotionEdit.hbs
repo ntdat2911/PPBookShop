@@ -8,7 +8,9 @@
     class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
   >
     <form id='editForm'>
-      <!-- Other form fields -->
+    <div class="grid grid-cols-2 gap-4">
+<div>
+
       <div class='mb-5'>
         <label
           for='PromotionName'
@@ -77,100 +79,48 @@
           {{#if promotion.IsAvailable}}checked{{/if}}
         />
     </div>
-      <div class='mb-5' id='multiselect'>
-        <div class='w-full flex flex-col mx-auto mt-10'>
-          <div class='w-full'>
-            <div class='flex flex-col items-center relative'>
-              <div class='w-full svelte-1l8159u'>
-                <div
-                  class='my-2 p-1 flex border border-gray-200 bg-white rounded svelte-1l8159u'
-                >
-                  <div class='flex flex-auto flex-wrap' id='selectedItems'>
-                    {{#each bookPromotionList}}
-                      <div
-                        class='flex items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300'
-                        data-id='{{BookID}}'
-                      >
-                        {{getBookTitle BookID ../bookList}}
-                        <span class='cursor-pointer ml-2 text-teal-500'>
-                          <svg
-                            class='w-4 h-4'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                            xmlns='http://www.w3.org/2000/svg'
-                          >
-                            <path
-                              stroke-linecap='round'
-                              stroke-linejoin='round'
-                              stroke-width='2'
-                              d='M6 18L18 6M6 6l12 12'
-                            ></path>
-                          </svg>
-                        </span>
-                      </div>
-                    {{/each}}
-                    <div class='flex-1'>
-                      <input
-                        id='inputBox'
-                        placeholder=''
-                        class='bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800'
-                        readonly
-                      />
+</div>
+
+  
+ <div class="p-10">
+    <div class="overflow-hidden border border-gray-200 rounded-lg">
+        <div class="overflow-x-auto">
+            <div class="min-w-full bg-gray-50 divide-y divide-gray-200">
+                <div class="grid grid-cols-3 sticky top-0 bg-gray-50">
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        
                     </div>
-                  </div>
-                  <div
-                    class='text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u'
-                  >
-                    <button
-                      id='toggleDropdown'
-                      class='cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none'
-                      type='button'
-                    >
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='100%'
-                        height='100%'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
-                        stroke-width='2'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        class='feather feather-chevron-up w-4 h-4'
-                      >
-                        <polyline points='18 15 12 9 6 15'></polyline>
-                      </svg>
-                    </button>
-                  </div>
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Image
+                    </div>
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Book Title
+                    </div>
                 </div>
-              </div>
-              <div
-                id='dropdown'
-                class='absolute shadow top-100 bg-white z-40 w-full left-0 rounded max-h-72 overflow-y-auto svelte-5uyqqj hidden'
-              >
-                <div class='flex flex-col w-full' id='dropdownItems'>
-                  {{#each bookList}}
-                    <div
-                      class='cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100'
-                      data-value='{{BookID}}'
-                    >
-                      <div
-                        class='flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100'
-                      >
-                        <div class='w-full items-center flex'>
-                          <div class='mx-2 leading-6'>{{BookTitle}}</div>
+                <div class="h-96 overflow-y-auto">
+                    <div class="bg-white divide-y divide-gray-200">
+                      {{#each bookList}}
+                        <div class="grid grid-cols-3">
+                            <div class="px-6 py-4 text-sm font-medium text-gray-900">
+                              <input type="checkbox" name="book" value="{{BookID}}"
+                            {{#if (bookExists BookID ../bookPromotionList)}} checked {{/if}}
+                                />
+
+                            </div>
+                            <div class="px-6 py-4 text-sm text-gray-500"><img src={{ImageURL}} width="100" /></div>
+                            <div class="px-6 py-4 text-sm text-gray-500">{{BookTitle}}</div>
                         </div>
-                      </div>
+                       {{/each}}
                     </div>
-                  {{/each}}
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-      <!-- Other form fields -->
+    </div>
+</div>
+
+    </div>
+
+   
       <div
         class='flex shrink-0 flex-wrap items-center justify-end p-4 text-blue-gray-500'
       >

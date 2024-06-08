@@ -26,7 +26,7 @@ export class AdminController {
     private readonly AboutUsService: AboutUsService,
   ) {}
 
-  @Public()
+
   @Get()
   @Render('book/bookTable')
   async root(@Query() query, @Req() req) {
@@ -51,7 +51,7 @@ export class AdminController {
     return { layout: 'auth_layout' };
   }
 
-  @Public()
+
   @Get('/book-management')
   @Render('book/bookTable')
   public async BookManagement(@Query() query, @Req() req) {
@@ -70,7 +70,7 @@ export class AdminController {
     };
   }
 
-  @Public()
+
   @Get('/book-management/edit/:BookID')
   @Render('book/bookEdit')
   public async EditBook(@Param('BookID') BookID: string) {
@@ -83,7 +83,6 @@ export class AdminController {
     };
   }
 
-  @Public()
   @Get('/category-management')
   @Render('category/categoryTable')
   public async CategoryManagement(@Query() query, @Req() req) {
@@ -95,7 +94,7 @@ export class AdminController {
     return { categoryList, pagyInfo, req, path };
   }
 
-  @Public()
+
   @Get('/category-management/edit/:CategoryID')
   @Render('category/categoryEdit')
   public async EditCategory(@Param('CategoryID') CategoryID: string) {
@@ -110,7 +109,7 @@ export class AdminController {
     };
   }
 
-  @Public()
+
   @Get('/author-management')
   @Render('author/authorTable')
   public async AuthorManagement(@Query() query, @Req() req) {
@@ -121,7 +120,7 @@ export class AdminController {
     return { authorList, pagyInfo, req, path };
   }
 
-  @Public()
+
   @Get('/author-management/edit/:AuthorID')
   @Render('author/authorEdit')
   public async EditAuthor(@Param('AuthorID') AuthorID: string) {
@@ -131,7 +130,7 @@ export class AdminController {
     };
   }
 
-  @Public()
+
   @Get('/promotion-management')
   @Render('promotion/promotionTable')
   public async PromotionManagement(@Query() query, @Req() req) {
@@ -148,7 +147,7 @@ export class AdminController {
     };
   }
 
-  @Public()
+
   @Get('/promotion-management/edit/:PromotionID')
   @Render('promotion/promotionEdit')
   public async EditPromotion(@Param('PromotionID') PromotionID: string) {
@@ -161,7 +160,7 @@ export class AdminController {
     };
   }
 
-  @Public()
+
   @Get('/orders-management')
   @Render('order/orderTable')
   public async OrderManagement(@Query() query, @Req() req) {
@@ -172,7 +171,7 @@ export class AdminController {
     return { orderList, pagyInfo, req, path, OrderStatus };
   }
 
-  @Public()
+
   @Get('/orders-management/detail/:OrderID')
   @Render('order/orderDetail')
   public async OrderDetail(@Param('OrderID') OrderID: string) {
@@ -181,7 +180,7 @@ export class AdminController {
     return { order, orderItems };
   }
 
-  @Public()
+
   @Get('/review-management')
   @Render('review/reviewTable')
   public async ReviewManagement(@Query() query, @Req() req) {

@@ -225,7 +225,7 @@ export class AuthService {
   }
 
   public async logout(refreshToken: string): Promise<IMessage> {
-    const { id, tokenId } = await this.jwtService.verifyToken<IRefreshToken>(
+    const { id, tokenId } = await this.jwtService.verifyAdminToken<IRefreshToken>(
       refreshToken,
       TokenTypeEnum.REFRESH,
     );
