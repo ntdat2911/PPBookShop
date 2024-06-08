@@ -46,6 +46,7 @@ export class BooksService {
       count: total,
       records: data,
     };
+
     return result;
   }
 

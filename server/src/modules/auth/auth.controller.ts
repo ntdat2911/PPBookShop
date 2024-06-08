@@ -48,7 +48,6 @@ export class AuthController {
   }
 
   private refreshTokenFromReq(req: Request): string {
-    console.log('req.signedCookies', req.signedCookies);
     const token: string | undefined = req.signedCookies[this.cookieName];
 
     if (isUndefined(token)) {
@@ -96,9 +95,8 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
-    console.log('req.headers.origin', req.headers.origin);
     const token = this.refreshTokenFromReq(req);
-    console.log('token', token);
+
     const result = await this.authService.refreshTokenAccess(
       token,
       req.headers.origin,
@@ -174,5 +172,18 @@ export class AuthController {
   public async getMe(@CurrentUser() id: string): Promise<IAuthResponseUser> {
     const user = await this.usersService.findOneById(id);
     return AuthResponseUserMapper.map(user);
+  }
+
+  @Public()
+  @Post('/admin/sign-in')
+  public async adminSignIn(
+    @Res() res: Response,
+    @Origin() origin: string | undefined,
+    @Body() singInDto: SignInDto,
+  ): Promise<void> {
+    const result = await this.authService.adminSignIn(singInDto, origin);
+    this.saveRefreshCookie(res, result.refreshToken)
+      .status(HttpStatus.OK)
+      .json(result);
   }
 }

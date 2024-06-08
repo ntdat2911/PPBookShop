@@ -60,7 +60,6 @@ export const authOptions: AuthOptions = {
         if (res.ok) {
           token.user.accessToken = data.accessToken;
           token.user.accessTokenExpiresIn = data.accessTokenExpiresIn;
-          console.log("NEW", token.user.accessTokenExpiresIn);
         } else {
           // Handle the error
         }

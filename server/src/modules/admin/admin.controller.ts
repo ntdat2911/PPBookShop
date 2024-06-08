@@ -192,7 +192,6 @@ export class AdminController {
     return { reviewList, pagyInfo, req, path };
   }
 
-  @Public()
   @Get('/about-us')
   @Render('about-us/aboutUs')
   public async AboutUs() {

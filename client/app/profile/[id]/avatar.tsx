@@ -26,7 +26,6 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
   const [imageSource, setImageSource] = React.useState<AvatarProps["src"]>(
     user?.image ? user.image : fallBackImage
   );
-  console.log("user", user);
   const [isUpdatingAvatar, setIsUpdatingAvatar] =
     React.useState<boolean>(false);
   React.useEffect(() => {

@@ -7,6 +7,8 @@ import { PromotionsService } from '../promotions/promotions.service';
 import { OrdersService } from '../orders/orders.service';
 import { AddressesService } from '../addresses/addresses.service';
 import { OrderItemsService } from '../order-items/order-items.service';
+import { PrismaService } from 'src/database/prisma.service';
+import { AdminRepository } from './admin.repository';
 
 @Injectable()
 export class AdminService {
@@ -19,6 +21,7 @@ export class AdminService {
     private readonly ordersService: OrdersService,
     private readonly addressService: AddressesService,
     private readonly orderItemsService: OrderItemsService,
+    private readonly adminRepository: AdminRepository,
   ) {}
 
   public async getBookManagementData(
@@ -206,5 +209,18 @@ export class AdminService {
       order,
       orderItems,
     };
+  }
+  public async findOneByEmail(email: string) {
+    const user = await this.adminRepository.findOne({
+      where: { Email: email.toLowerCase() },
+    });
+    return user;
+  }
+  public async findOneByUsername(username: string) {
+    const user = await this.adminRepository.findOne({
+      where: { AdminName: username.toLowerCase() },
+    });
+
+    return user;
   }
 }
