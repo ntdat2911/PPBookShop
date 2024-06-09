@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BooksRepository } from './books.repository';
 import { CommonService } from '../common/common.service';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { GPaginationRequest } from './dtos/pagination.dto';
 import { BookEntity } from './entities/book.entity';
 import { GPaginatedBookResponse } from './interfaces/books-response.interface';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { RatingEnumRange } from './types/ratingEnumRange';
+import { PromotionsService } from '../promotions/promotions.service';
+import { OrderItemsService } from '../order-items/order-items.service';
 
 @Injectable()
 export class BooksService {
@@ -14,15 +16,18 @@ export class BooksService {
     private booksRepository: BooksRepository,
     private readonly prismaService: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly promotionService: PromotionsService,
+    private readonly orderItemsService: OrderItemsService,
   ) {}
 
   public async getBooks(
     params: GPaginationRequest,
   ): Promise<GPaginatedBookResponse> {
-    const { page, size, input, category, rating, author } = params;
+    const { page, size, input, category, rating, author, sort } = params;
     //split the rating string into an array
     const ratings = rating ? rating.split(',') : [];
     const categories = category ? category.split(',') : [];
+    const authors = author ? author.split(',') : [];
     const ratingRanges = ratings.map((r) => RatingEnumRange[parseInt(r)]);
 
     const { data, total } = await this.booksRepository.findByFilter({
@@ -31,7 +36,8 @@ export class BooksService {
       input,
       category: categories,
       ratingRanges: ratingRanges,
-      author,
+      author: authors,
+      sort,
     });
 
     const result: GPaginatedBookResponse = {
@@ -40,11 +46,16 @@ export class BooksService {
       count: total,
       records: data,
     };
+
     return result;
   }
 
-  public async getAllBooks(page: number, size: number): Promise<BookEntity[]> {
-    const res = await this.booksRepository.findAll(page, size);
+  public async getAllBooks(
+    page: number,
+    size: number,
+    search?: string,
+  ): Promise<BookEntity[]> {
+    const res = await this.booksRepository.findAll(page, size, search);
     return res;
   }
 
@@ -88,13 +99,37 @@ export class BooksService {
     formData.PublishDate = new Date(formData.PublishDate);
     formData.IsBookActive = formData.IsBookActive === 'true';
     formData.IsOutOfStock = formData.IsOutOfStock === 'true';
-    console.log(formData);
     const book = await this.booksRepository.updateBook(formData);
     return book;
   }
 
-  public async countAll() {
-    const result = await this.booksRepository.countAll();
+  public async countAll(search?: string) {
+    const result = await this.booksRepository.countAll(search);
     return result;
+  }
+
+  public async updateRating(BookID: string, rating: number) {
+    const book = await this.booksRepository.updateRating(BookID, rating);
+    return book;
+  }
+
+  public async getOnSaleBooks(size: number) {
+    const onSaleBookIds = await this.promotionService.getOnSaleBooks(size);
+    const booksId = onSaleBookIds.map((item) => item.BookID);
+    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    return books;
+  }
+
+  public async getRecommendedBooks(size: number) {
+    const recommendedBooks = this.booksRepository.getRecommendedBooks(size);
+    return recommendedBooks;
+  }
+
+  public async getPopularBooks(size: number) {
+    const popularBookIds = await this.orderItemsService.getPopularBooks(size);
+
+    const booksId = popularBookIds.map((item) => item.BookID);
+    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    return books;
   }
 }

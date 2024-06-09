@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export const OverviewReviewSection = ({ BookID }: { BookID: string }) => {
   const { reviewInfo, setReviewInfo } = useReviewContext();
-  const { data } = useQuery(GET_OVERVIEW_REVIEW_BY_ID, {
+  const { data, refetch } = useQuery(GET_OVERVIEW_REVIEW_BY_ID, {
     variables: { id: BookID },
     fetchPolicy: "no-cache",
   });
@@ -23,6 +23,7 @@ export const OverviewReviewSection = ({ BookID }: { BookID: string }) => {
       total: data.getReviewOverviewById?.total,
       countReviewList: data.getReviewOverviewById?.countReviewList,
     });
+    refetch();
   }, [data, reviewInfo.isFetching]);
   return (
     <div className="grid grid-cols-2">

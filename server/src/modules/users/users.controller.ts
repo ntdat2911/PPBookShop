@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Put } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from './users.service';
 import { Public } from '../auth/decorators/public.decorator';
@@ -46,6 +46,20 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
   ): Promise<IResponseUser> {
     const user = await this.usersService.update(id, dto);
+    return ResponseUserMapper.map(user);
+  }
+  @Public()
+  @Put('/update-image')
+  public async updateImage(@CurrentUser() id1: string, @Body() body: any) {
+    const { id: UserID, image } = body;
+    const user = await this.usersService.updateImage(UserID, image);
+    return ResponseUserMapper.map(user);
+  }
+  @Public()
+  @Put('/update-profile')
+  public async updateProfile(@CurrentUser() id1: string, @Body() body: any) {
+    const { id, email, name } = body;
+    const user = await this.usersService.updateProfile(id, name);
     return ResponseUserMapper.map(user);
   }
 }

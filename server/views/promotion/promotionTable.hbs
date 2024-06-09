@@ -1,78 +1,293 @@
-<div class='container px-8 mt-10'>
+<div class='container px-8 mt-4'>
   <div class='flex justify-between items-center mb-6'>
-    <h1 class='text-2xl font-bold'>Book Inventory</h1>
-    <button class='bg-blue-500 text-white px-4 py-2 rounded'>Create</button>
+    <h1 class='text-2xl font-bold'>Promotion</h1>
+    <button
+      data-ripple-light='true'
+      data-dialog-target='dialogCreate'
+      class='middle none center rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]'
+    >
+      Create
+    </button>
+
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>
+        
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Book Title</th>
+          >Promotion name</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Book Price</th>
+          >Discount percentage</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Author Name</th>
+          >Expired date</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Is Active</th>
+          >Is Available</th>
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Action</th>
         </tr>
       </thead>
       <tbody class='text-gray-700'>
-        <tr class='border-t text-center'>
-          <td class='py-3 px-4'>The Great Gatsby</td>
-          <td class='py-3 px-4'>$10.99</td>
-          <td class='py-3 px-4'>F. Scott Fitzgerald</td>
-          <td class='py-3 px-4'><span
-              class='text-green-500 font-semibold'
-            >Active</span></td>
-          <td class='py-3 px-4 flex justify-center'>
-            <button
-              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
-            >Edit</button>
-            <button
-              class='bg-red-500 text-white px-3 py-1 rounded'
-            >Delete</button>
-          </td>
-        </tr>
-        <tr class='border-t text-center'>
-          <td class='py-3 px-4'>1984</td>
-          <td class='py-3 px-4'>$8.99</td>
-          <td class='py-3 px-4'>George Orwell</td>
-          <td class='py-3 px-4'><span
-              class='text-red-500 font-semibold'
-            >Inactive</span></td>
-          <td class='py-3 px-4 flex justify-center'>
-            <button
-              class='bg-yellow-500 text-white px-3 py-1 rounded mr-2'
-            >Edit</button>
-            <button
-              class='bg-red-500 text-white px-3 py-1 rounded'
-            >Delete</button>
-          </td>
-        </tr>
-        <!-- Add more rows as needed -->
+        {{#each promotionList}}
+          <tr class='border-t text-center' data-promotion-id='{{PromotionID}}'>
+            <td class='py-3 px-4'>{{PromotionName}}</td>
+            <td class='py-3 px-4'>
+              {{DiscountPercent}}%
+            </td>
+ <td class='py-3 px-4'>
+              {{formatDate ExpiredDate}}
+            </td>
+
+            <td class='py-3 px-4'>
+              {{#if IsAvailable}}
+                <span class='text-green-500 font-semibold'>Active</span>
+              {{else}}
+                <span class='text-red-500 font-semibold'>Inactive</span>
+              {{/if}}
+            </td>
+          
+            <td class='py-3 px-4 flex justify-center gap-2'>
+              <button
+                data-ripple-light='true'
+                data-dialog-target='dialogEdit'
+                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+</svg>
+              </button>
+<button
+  type="button"
+  id="activateButton"
+  data-promotion-id='{{PromotionID}}'
+  class="bg-green-500 text-white px-3 py-3 rounded disabled:opacity-50"
+  {{#if IsAvailable}}
+  disabled
+  {{/if}}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
+</svg>
+</button>
+   <button
+  type="button"
+  id="deactivateButton"
+  data-promotion-id='{{PromotionID}}'
+  class="bg-red-500 text-white px-3 py-3 rounded disabled:opacity-50"
+  {{#unless IsAvailable}}
+  disabled
+  {{/unless}}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+</svg>
+</button>
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
   <div class='flex justify-between items-center py-3'>
+   {{#if (hasPagination pagyInfo.pageCount)}}
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
     <div>
-      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Previous</button>
-    </div>
-    <div class='flex space-x-2'>
-      <button class='bg-blue-500 text-white px-3 py-1 rounded'>1</button>
-      <button class='bg-white text-gray-800 px-3 py-1 rounded'>2</button>
-      <button class='bg-white text-gray-800 px-3 py-1 rounded'>3</button>
-      <!-- Add more page numbers as needed -->
-    </div>
-    <div>
-      <button class='bg-gray-500 text-white px-3 py-1 rounded'>Next</button>
+      <nav class="relative z-0 inline-flex shadow-sm">
+        {{#with (previous pagyInfo.page path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Previous">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+        {{#each (renderButtonPagy pagyInfo.page pagyInfo.pageCount path req.query)}}
+        {{#if dot}}
+        <span
+          class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700">
+          ...
+        </span>
+        {{/if}}
+        {{#if path}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+          {{page}}
+        </a>
+        {{/if}}
+        {{/each}}
+        {{#with (next pagyInfo.page pagyInfo.pageCount path req.query)}}
+        <a href="{{path}}"
+          class="{{class}} -ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+          aria-label="Next">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+        </a>
+        {{/with}}
+      </nav>
     </div>
   </div>
+  {{/if}}
+  </div>
 </div>
+
+
+{{! Create form }}
+<div
+  data-dialog='dialogCreate'
+  class='pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300'
+>
+  <div
+    class='relative m-4 w-2/5 min-w-[70%] max-w-[70%] min-h-[100%] max-h-[100%] rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl'
+  >
+    <div
+      class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+    >Add new promotion</div>
+    <div
+      class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+    >
+      <form>
+
+
+     <div class="grid grid-cols-2 gap-4">
+<div>
+      <div class='mb-5'>
+        <label
+          for='PromotionName'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Promotion Name
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='text'
+          name='PromotionName'
+          id='PromotionName'
+          placeholder='Promotion Name'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          value='{{promotion.PromotionName}}'
+        />
+      </div>
+      <div class='mb-5'>
+        <label
+          for='DiscountPercent'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Discount percentage
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='number'
+          max='100'
+          min='0'
+          name='DiscountPercent'
+          id='DiscountPercent'
+          placeholder='Discount Percent'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          value='{{promotion.DiscountPercent}}'
+        />
+      </div>
+      <div class='mb-5'>
+        <label
+          for='ExpiredDate'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >
+          Expired Date
+          <span class='text-red-400'>*</span>
+        </label>
+        <input
+          type='date'
+          name='ExpiredDate'
+          id='ExpiredDate'
+          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          required
+          min="{{currentDate}}"
+          value={{formatDate promotion.ExpiredDate}}
+        />
+      </div>
+        <div class='mb-5'>
+        <label
+          for='IsAvailable'
+          class='mb-3 block text-base font-medium text-[#07074D]'
+        >Is Available</label>
+        <input
+          type='checkbox'
+          name='IsAvailable'
+          id='IsAvailable'
+          class='rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
+          {{#if promotion.IsAvailable}}checked{{/if}}
+        />
+    </div>
+</div>
+
+  
+ <div class="p-10">
+    <div class="overflow-hidden border border-gray-200 rounded-lg">
+        <div class="overflow-x-auto">
+            <div class="min-w-full bg-gray-50 divide-y divide-gray-200">
+                <div class="grid grid-cols-3 sticky top-0 bg-gray-50">
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        
+                    </div>
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Image
+                    </div>
+                    <div class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Book Title
+                    </div>
+                </div>
+                <div class="h-96 overflow-y-auto">
+                    <div class="bg-white divide-y divide-gray-200">
+                      {{#each bookList}}
+                        <div class="grid grid-cols-3">
+                            <div class="px-6 py-4 text-sm font-medium text-gray-900">
+                              <input type="checkbox" name="book" value="{{BookID}}"/>
+
+                            </div>
+                            <div class="px-6 py-4 text-sm text-gray-500"><img src={{ImageURL}} width="100" /></div>
+                            <div class="px-6 py-4 text-sm text-gray-500">{{BookTitle}}</div>
+                        </div>
+                       {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+
+        <div
+          class='flex shrink-0 flex-wrap items-center justify-end p-4 text-blue-gray-500'
+        >
+          <button
+            data-ripple-dark='true'
+            data-dialog-close='true'
+            type="button"
+            class='middle none center mr-1 rounded-lg py-3 px-6 font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+          >Cancel</button>
+          <button
+            class='middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+            type='submit'
+          >Create</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+<script src='/js/promotion-management/promotionTable.js'></script>

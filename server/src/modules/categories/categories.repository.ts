@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class CategoriesRepository {
@@ -7,7 +7,6 @@ export class CategoriesRepository {
 
   async createCategory(data: {
     CategoryName: string;
-    ParentCategoryID: string;
     IsCategoryActive: boolean;
   }) {
     return this.prisma.category.create({
@@ -31,7 +30,6 @@ export class CategoriesRepository {
     id: string,
     data: {
       CategoryName: string;
-      ParentCategoryID: string;
       IsCategoryActive: boolean;
     },
   ) {
@@ -43,16 +41,7 @@ export class CategoriesRepository {
     });
   }
 
-  async getCategoriesByParentId(id: string) {
-    return this.prisma.category.findMany({
-      where: {
-        ParentCategoryID: id,
-      },
-    });
-  }
-
   async updateActiveStatus(CategoryID: string, IsCategoryActive: boolean) {
-    console.log(CategoryID, IsCategoryActive);
     return this.prisma.category.update({
       where: {
         CategoryID: CategoryID,

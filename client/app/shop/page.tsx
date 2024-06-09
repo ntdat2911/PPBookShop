@@ -15,7 +15,7 @@ import { OptionType } from "@/components/ui/multi-select";
 
 export default async function Page({ searchParams }: any) {
   const page = parseInt(searchParams.page) || 1;
-
+  const size = parseInt(searchParams.size) || 6;
   const [authorList, bookList, categoryList]: [
     authorList: AuthorEntity[],
     bookList: GPaginatedBookResponse,
@@ -24,24 +24,32 @@ export default async function Page({ searchParams }: any) {
     getAuthors(),
     getBooks(
       page,
-      8,
+      size,
       searchParams.input || "",
       searchParams.category || "",
       searchParams.rating || "",
-      searchParams.author || ""
+      searchParams.author || "",
+      searchParams.sort || ""
     ),
     getCategories(),
   ]);
-  const categoryLists: OptionType[] = categoryList.map((category) => {
+  const categoryLists: OptionType<string, string>[] = categoryList.map(
+    (category) => {
+      return {
+        id: category.CategoryID,
+        tag_name: category.CategoryName,
+      };
+    }
+  );
+  const authorLists: OptionType<string, string>[] = authorList.map((author) => {
     return {
-      id: category.CategoryID,
-      tag_name: category.CategoryName,
+      id: author.AuthorID,
+      tag_name: author.AuthorName,
     };
   });
-
   return (
     <SearchParamsContextWrapper>
-      <div className="container py-8">
+      <div className="container py-8 ">
         <header className="flex flex-col items-center gap-2">
           <div className="w-full basis-3/4 pb-4">
             <SearchInput />
@@ -51,7 +59,7 @@ export default async function Page({ searchParams }: any) {
           <div className="grid grid-cols-12 xs:flex xs:flex-row">
             <div className="col-span-2 sticky top-[60px] hidden h-[calc(100vh-200px)] md:flex md:shrink-0 md:flex-col md:justify-between px-1 xs:w-min">
               <ListFilter
-                authorList={authorList}
+                authorList={authorLists}
                 categoryList={categoryLists}
               />
             </div>

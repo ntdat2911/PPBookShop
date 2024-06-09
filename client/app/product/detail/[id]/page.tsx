@@ -23,6 +23,7 @@ import ReviewDisplay from "./reviewDisplay";
 import { useSession } from "next-auth/react";
 import { BreadcrumbComponents } from "./breadcrumb";
 import { CartSection } from "./cartSection";
+import { cn } from "@/lib/utils";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const book: BookEntity = await getBookById(params.id);
@@ -52,23 +53,48 @@ export default async function Page({ params }: { params: { id: string } }) {
               <div className="FEEDBACK">
                 <OverviewReviewSection BookID={book.BookID} />
               </div>
-              <div className="DESCRIPTION grid">
-                <Label className="font-bold">Description:</Label>
-                <div className="text-md">{book.BookDescription}</div>
-              </div>
-              <div className="DISCOUNT flex flex-col gap-2">
-                <Label className="font-bold">Discount:</Label>
-                <div className="flex gap-4">
-                  <Badge variant="outline">50% Sale</Badge>
-                </div>
+
+              <div className="DISCOUNT flex gap-2">
+                {book.Promotion &&
+                  book.Promotion?.map((promotion) => (
+                    <div key={promotion.PromotionID} className="flex gap-4">
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          book.Promotion &&
+                            book.Promotion[0] &&
+                            promotion.PromotionID ==
+                              book.Promotion[0].PromotionID
+                            ? "border-2 border-green-500"
+                            : "bg-gray-200"
+                        )}
+                      >
+                        {promotion.DiscountPercent}% - {promotion.PromotionName}
+                      </Badge>
+                    </div>
+                  ))}
               </div>
               <div className="PRICE ">
-                <div className="text-2xl font-semibold line-through">
-                  ${100}
-                </div>
-
-                <div className="text-4xl font-bold text-red-500">
-                  ${book.BookPrice}
+                <div className="">
+                  {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                    <>
+                      <div className="text-2xl font-semibold line-through">
+                        ${book.BookPrice.toFixed(2)}
+                      </div>
+                      <div className="text-4xl font-bold text-red-500">
+                        $
+                        {(
+                          book.BookPrice -
+                          (book.BookPrice * book.Promotion[0].DiscountPercent) /
+                            100
+                        ).toFixed(2)}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-4xl font-bold text-black">
+                      ${book.BookPrice.toFixed(2)}
+                    </p>
+                  )}
                 </div>
               </div>
               <CartSection book={book} />
@@ -76,11 +102,18 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
         </Card>
         <Card className="h-max" id="review-section">
-          <Tabs defaultValue="review" className="w-full">
+          <Tabs defaultValue="description" className="w-full">
             <TabsList>
+              <TabsTrigger value="description">Book Description</TabsTrigger>
               <TabsTrigger value="author">About author</TabsTrigger>
+
               <TabsTrigger value="review">Reviews</TabsTrigger>
             </TabsList>
+            <TabsContent value="description">
+              <CardContent>
+                <CardDescription>{book.BookDescription}</CardDescription>
+              </CardContent>
+            </TabsContent>
             <TabsContent value="author">
               <CardHeader>
                 <CardTitle>{author.AuthorName}</CardTitle>

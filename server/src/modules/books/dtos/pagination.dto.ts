@@ -19,4 +19,7 @@ export class GPaginationRequest {
 
   @Field(() => String, { nullable: true })
   rating?: string;
+
+  @Field(() => String, { nullable: true })
+  sort?: string;
 }

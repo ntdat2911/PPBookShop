@@ -44,11 +44,21 @@ interface ProductCardProps {
   books: BookEntity[];
 }
 
+const shows = ["6", "12", "18", "24"];
+const sorts = [
+  { value: "newest", label: "Newest" },
+  { value: "priceLowToHigh", label: "Price low to high" },
+  { value: "priceHighToLow", label: "Price high to low" },
+  // { value: "sale", label: "On sale" },
+  { value: "popularity", label: "Popularity" },
+];
+
 export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   const { searchParams, setSearchParams } = useSearchParamsContext();
   const router = useRouter();
   useEffect(() => {
     let params: { [key: string]: any } = searchParams;
+    console.log(params);
     Object.keys(params).forEach((key) => {
       if (params[key] == null || params[key].length == 0) delete params[key];
     });
@@ -57,7 +67,6 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
     Object.keys(params).forEach((key) => {
       updatedParams.set(key, params[key] as string); // Add type assertion
     });
-    console.log("updatedParams", updatedParams.toString());
     router.push(`/shop?${updatedParams.toString()}`);
   }, [
     searchParams.page,
@@ -65,6 +74,8 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
     searchParams.category,
     searchParams.rating,
     searchParams.author,
+    searchParams.size,
+    searchParams.sort,
   ]);
   const paginationCreate = () => {
     const totalPage = Math.ceil(pagyInfo.count / pagyInfo.size);
@@ -134,24 +145,48 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   };
   return (
     <>
-      <div className="flex justify-between px-6 mb-4">
+      <div className="flex justify-between px-6 mb-4 ">
         <div className="text-sm text-muted-foreground p-2">
           {books.length} of {pagyInfo.count} books found
         </div>
-        <div>
-          <Select>
+        <div className="flex gap-4">
+          <Select
+            defaultValue={shows[0]}
+            onValueChange={(value) =>
+              setSearchParams({ ...searchParams, size: parseInt(value) })
+            }
+          >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort" />
+              <SelectValue placeholder="Shows" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Sort by price</SelectItem>
-              <SelectItem value="dark">Sort by name</SelectItem>
-              <SelectItem value="system">Sort by on sale</SelectItem>
+              {shows.map((show) => (
+                <SelectItem key={show} value={show}>
+                  Show {show} books
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) =>
+              setSearchParams({ ...searchParams, sort: value })
+            }
+            defaultValue={sorts[0].value}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sorts" />
+            </SelectTrigger>
+            <SelectContent>
+              {sorts.map((sort) => (
+                <SelectItem key={sort.value} value={sort.value}>
+                  {sort.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4 grid-cols-1">
         {books ? (
           books.map((book) => (
             <div className="flex w-full justify-center" key={book.BookID}>
@@ -166,18 +201,33 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                       className="w-[300px] h-[300px] object-contain"
                     />
                   </CardContent>
-                  <CardFooter className="grid p-2 pt-0">
+                  <CardFooter className="grid p-2 pt-0 text-dark-brown">
                     <CardTitle className="text-center w-full text-xl">
                       {book.BookTitle}
                     </CardTitle>
 
                     <p className="text-center w-full">{book.AuthorName}</p>
-
-                    <CardDescription className="text-center w-full">
-                      {book.BookPrice}$
-                    </CardDescription>
-
-                    <div className="pb-4">
+                    <div className="flex justify-center items-center w-full p-2 gap-2">
+                      {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                        <>
+                          <div className=" text-red-500">
+                            $
+                            {(
+                              book.BookPrice -
+                              (book.BookPrice *
+                                book.Promotion[0].DiscountPercent) /
+                                100
+                            ).toFixed(2)}
+                          </div>
+                          <div className=" text-gray-400 text-sm line-through">
+                            ${book.BookPrice.toFixed(2)}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-black">${book.BookPrice}</p>
+                      )}
+                    </div>
+                    <div className="pb-4 flex justify-center gap-2">
                       <Rating
                         rating={book.Rating}
                         totalStars={5}
@@ -187,6 +237,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                         showText={false}
                         disabled={true}
                       />
+                      <p className="text-sm">Sold {book.SoldQuantity}</p>
                     </div>
                     <div className="flex justify-center pt-2">
                       <Badge variant="outline">{book.CategoryName}</Badge>

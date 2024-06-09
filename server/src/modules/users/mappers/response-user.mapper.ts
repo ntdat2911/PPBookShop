@@ -4,6 +4,7 @@ import { IUser } from '../interfaces/user.interface';
 export class ResponseUserMapper implements IResponseUser {
   public id: string;
   public name: string;
+  public image: string;
   public username: string;
   public createdAt: string;
   public updatedAt: string;
@@ -19,6 +20,7 @@ export class ResponseUserMapper implements IResponseUser {
       username: user.UserName,
       createdAt: user.CreatedAt.toISOString(),
       updatedAt: user.UpdatedAt.toISOString(),
+      image: user.ImageURL,
     });
   }
 }

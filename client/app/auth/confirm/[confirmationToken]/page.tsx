@@ -7,14 +7,6 @@ export default async function Page({
 }: {
   params: { confirmationToken: string };
 }) {
-  let user: UserDto = {
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-    createdAt: "",
-    updatedAt: "",
-  };
   try {
     const response = await confirmEmail(params.confirmationToken);
     if (response.user && response.accessToken) {

@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Req,
@@ -59,10 +60,10 @@ export class AuthController {
 
   private saveRefreshCookie(res: Response, refreshToken: string): Response {
     return res.cookie(this.cookieName, refreshToken, {
-      secure: !this.testing,
+      secure: false,
       httpOnly: true,
       signed: true,
-      path: this.cookiePath,
+      path: '/',
       expires: new Date(Date.now() + this.refreshTime * 1000),
     });
   }
@@ -96,6 +97,7 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     const token = this.refreshTokenFromReq(req);
+
     const result = await this.authService.refreshTokenAccess(
       token,
       req.headers.origin,
@@ -113,10 +115,9 @@ export class AuthController {
   ): Promise<void> {
     const token = this.refreshTokenFromReq(req);
     const message = await this.authService.logout(token);
-    res
-      .clearCookie(this.cookieName, { path: this.cookiePath })
-      .status(HttpStatus.OK)
-      .json(message);
+    res.clearCookie(this.cookieName, { path: '/' });
+    res.clearCookie('access-token', { path: '/' });
+    res.status(HttpStatus.OK).json(message);
   }
 
   @Public()
@@ -131,6 +132,7 @@ export class AuthController {
       .json(AuthResponseMapper.map(result));
   }
 
+  @Public()
   @Post('/forgot-password')
   @HttpCode(HttpStatus.OK)
   public async forgotPassword(
@@ -148,7 +150,7 @@ export class AuthController {
   ): Promise<IMessage> {
     return this.authService.resetPassword(resetPasswordDto);
   }
-
+  @Public()
   @Patch('/update-password')
   public async updatePassword(
     @CurrentUser() userId: string,
@@ -156,8 +158,9 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
     @Res() res: Response,
   ): Promise<void> {
+    const { id } = changePasswordDto;
     const result = await this.authService.updatePassword(
-      userId,
+      id,
       changePasswordDto,
       origin,
     );
@@ -165,10 +168,30 @@ export class AuthController {
       .status(HttpStatus.OK)
       .json(AuthResponseMapper.map(result));
   }
-
-  @Get('/me')
-  public async getMe(@CurrentUser() id: string): Promise<IAuthResponseUser> {
-    const user = await this.usersService.findOneById(id);
+  @Public()
+  @Get('/me/:UserID')
+  public async getMe(
+    @Param() Param: any,
+    @CurrentUser() id: string,
+  ): Promise<IAuthResponseUser> {
+    const { UserID } = Param;
+    const user = await this.usersService.findOneById(UserID);
     return AuthResponseUserMapper.map(user);
+  }
+
+  @Public()
+  @Post('/admin/sign-in')
+  public async adminSignIn(
+    @Res() res: Response,
+    @Origin() origin: string | undefined,
+    @Body() singInDto: SignInDto,
+  ): Promise<void> {
+    const result = await this.authService.adminSignIn(singInDto, origin);
+    res.cookie('access-token', result.accessToken, {
+      httpOnly: true,
+    });
+    this.saveRefreshCookie(res, result.refreshToken)
+      .status(HttpStatus.OK)
+      .json(result);
   }
 }

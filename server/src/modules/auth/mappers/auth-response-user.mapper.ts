@@ -8,6 +8,7 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
   public email: string;
   public createdAt: string;
   public updatedAt: string;
+  public image?: string;
 
   constructor(values: IAuthResponseUser) {
     Object.assign(this, values);
@@ -19,6 +20,7 @@ export class AuthResponseUserMapper implements IAuthResponseUser {
       name: user.Name,
       username: user.UserName,
       email: user.Email,
+      image: user.ImageURL,
       createdAt: user.CreatedAt.toISOString(),
       updatedAt: user.UpdatedAt.toISOString(),
     });

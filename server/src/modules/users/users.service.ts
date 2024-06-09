@@ -11,7 +11,7 @@ import { RegisterRequestDto } from './dtos/users.dto';
 import { CommonService } from '../common/common.service';
 import { UserEntity } from './entities/user.entity';
 import { compare, hash } from 'bcrypt';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { isNull, isUndefined } from '../common/consts/validation.util';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { ChangeEmailDto } from './dtos/change-email.dto';
@@ -182,7 +182,6 @@ export class UsersService {
     newPassword: string,
   ): Promise<UserEntity> {
     const user = await this.findOneById(userId);
-
     if (!(await compare(password, user.Password))) {
       throw new BadRequestException('Wrong password');
     }
@@ -271,5 +270,16 @@ export class UsersService {
     }
 
     return pointSlug;
+  }
+
+  public async updateImage(userId: string, image: string): Promise<UserEntity> {
+    return this.usersRepository.updateImage(userId, image);
+  }
+
+  public async updateProfile(
+    userId: string,
+    name: string,
+  ): Promise<UserEntity> {
+    return this.usersRepository.updateProfile(userId, name);
   }
 }

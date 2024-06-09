@@ -18,9 +18,7 @@
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Category name</th>
-          <th
-            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Parent category</th>
+
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Is Active</th>
@@ -33,18 +31,9 @@
         {{#each categoryList}}
           <tr class='border-t text-center' data-category-id='{{CategoryID}}'>
             <td class='py-3 px-4'>{{CategoryName}}</td>
-            <td class='py-3 px-4'>
-           {{!-- render parent category name if ParentCategoryID is not null and exists in categoryList --}}
-              {{#if (categoryExists ParentCategoryID @root.categoryList)}}
-               {{!-- get parent category name --}}
-                {{getCategoryName ParentCategoryID @root.categoryList}}
-              {{else}}
-                <span class='text-gray-500'>None</span>
-              {{/if}}
-            </td>
+    
 
-
-            <td class='py-3 px-4'>
+            <td class='py-3 px-4 '>
               {{#if IsCategoryActive}}
                 <span class='text-green-500 font-semibold'>Active</span>
               {{else}}
@@ -56,31 +45,38 @@
               <button
                 data-ripple-light='true'
                 data-dialog-target='dialogEdit'
-                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
               >
-                Edit
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+</svg>
               </button>
 <button
   type="button"
   id="activateButton"
   data-category-id='{{CategoryID}}'
-  class="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  class="bg-green-500 text-white p-3 rounded disabled:opacity-50"
   {{#if IsCategoryActive}}
   disabled
   {{/if}}
 >
-  Activate
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
+</svg>
 </button>
    <button
   type="button"
   id="deactivateButton"
   data-category-id='{{CategoryID}}'
-  class="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  class="bg-red-500 text-white p-3 rounded disabled:opacity-50"
   {{#unless IsCategoryActive}}
   disabled
   {{/unless}}
 >
-  Deactivate
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+</svg>
 </button>
             </td>
           </tr>
@@ -169,22 +165,7 @@
         required
         />
       </div>
-      <div class='mb-5'>
-        <label
-          for='ParentCategoryID'
-          class='mb-3 block text-base font-medium text-[#07074D]'
-        >Parent Category</label>
-        <select
-          name='ParentCategoryID'
-          id='ParentCategoryID'
-          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-        >
-          <option value=''>None</option>
-          {{#each categoryList}}
-            <option value="{{this.CategoryID}}">{{this.CategoryName}}</option>
-          {{/each}}
-        </select>
-      </div>
+     
       <div class='mb-5'>
         <label
           for='IsCategoryActive'

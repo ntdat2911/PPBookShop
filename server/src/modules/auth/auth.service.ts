@@ -23,6 +23,8 @@ import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { IEmailToken } from '../jwt/interfaces/email-token.interface';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { ConfirmEmailDto } from './dtos/confirm-email.dto';
+import { IAccessToken } from '../jwt/interfaces/access-token.interface';
+import { AdminService } from '../admin/admin.service';
 
 @Injectable()
 export class AuthService {
@@ -31,10 +33,31 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
+    private readonly adminService: AdminService,
   ) {}
 
   private async generateAuthTokens(
     user: UserEntity,
+    domain?: string,
+    tokenId?: string,
+  ): Promise<[string, string]> {
+    return Promise.all([
+      this.jwtService.generateToken(
+        user,
+        TokenTypeEnum.ACCESS,
+        domain,
+        tokenId,
+      ),
+      this.jwtService.generateToken(
+        user,
+        TokenTypeEnum.REFRESH,
+        domain,
+        tokenId,
+      ),
+    ]);
+  }
+  private async generateAdminAuthTokens(
+    user: any,
     domain?: string,
     tokenId?: string,
   ): Promise<[string, string]> {
@@ -72,7 +95,23 @@ export class AuthService {
     );
     return { user, accessToken, refreshToken };
   }
+  public async adminSignIn(dto: SignInDto, domain?: string) {
+    const { emailOrUsername, password } = dto;
+    const user = await this.adminByEmailOrUsername(emailOrUsername);
+    if (!(await compare(password, user.Password))) {
+      throw new UnauthorizedException('Invalid password');
+    }
+    const [accessToken, refreshToken] = await this.generateAdminAuthTokens(
+      user,
+      domain,
+    );
 
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
+  }
   public async signIn(dto: SignInDto, domain?: string): Promise<IAuthResult> {
     const { emailOrUsername, password } = dto;
     const user = await this.userByEmailOrUsername(emailOrUsername);
@@ -96,7 +135,24 @@ export class AuthService {
       user,
       domain,
     );
-    return { user, accessToken, refreshToken };
+    const { exp: accessTokenExpiresIn } =
+      await this.jwtService.verifyToken<IAccessToken>(
+        accessToken,
+        TokenTypeEnum.ACCESS,
+      );
+    const { exp: refreshTokenExpiresIn } =
+      await this.jwtService.verifyToken<IRefreshToken>(
+        refreshToken,
+        TokenTypeEnum.REFRESH,
+      );
+
+    return {
+      user,
+      accessToken,
+      refreshToken,
+      accessTokenExpiresIn,
+      refreshTokenExpiresIn,
+    };
   }
 
   private async userByEmailOrUsername(
@@ -120,7 +176,24 @@ export class AuthService {
 
     return this.usersService.findOneByUsername(emailOrUsername, true);
   }
+  private async adminByEmailOrUsername(emailOrUsername: string) {
+    if (emailOrUsername.includes('@')) {
+      if (!isEmail(emailOrUsername)) {
+        throw new BadRequestException('Invalid email');
+      }
+      return this.adminService.findOneByEmail(emailOrUsername);
+    }
 
+    if (
+      emailOrUsername.length < 3 ||
+      emailOrUsername.length > 106 ||
+      !SLUG_REGEX.test(emailOrUsername)
+    ) {
+      throw new BadRequestException('Invalid username');
+    }
+
+    return this.adminService.findOneByUsername(emailOrUsername);
+  }
   public async refreshTokenAccess(
     refreshToken: string,
     domain?: string,
@@ -152,7 +225,7 @@ export class AuthService {
   }
 
   public async logout(refreshToken: string): Promise<IMessage> {
-    const { id, tokenId } = await this.jwtService.verifyToken<IRefreshToken>(
+    const { id, tokenId } = await this.jwtService.verifyAdminToken<IRefreshToken>(
       refreshToken,
       TokenTypeEnum.REFRESH,
     );

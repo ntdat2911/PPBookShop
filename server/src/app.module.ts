@@ -21,6 +21,11 @@ import { AdminModule } from './modules/admin/admin.module';
 import { join } from 'path';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { CartsModule } from './modules/carts/carts.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { AddressesModule } from './modules/addresses/addresses.module';
+import { OrderItemsModule } from './modules/order-items/order-items.module';
+import { PromotionsModule } from './modules/promotions/promotions.module';
+import { AboutUsModule } from './modules/about-us/about-us.module';
 
 @Module({
   imports: [
@@ -47,6 +52,11 @@ import { CartsModule } from './modules/carts/carts.module';
     AdminModule,
     CloudinaryModule,
     CartsModule,
+    OrdersModule,
+    AddressesModule,
+    OrderItemsModule,
+    PromotionsModule,
+    AboutUsModule,
   ],
   controllers: [],
   providers: [

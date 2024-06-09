@@ -1,5 +1,6 @@
 import { UserDto } from "@/services/auth/dto";
-import { signIn } from "@/services/auth/service";
+import { refreshAccessToken, signIn } from "@/services/auth/service";
+import { getUser } from "@/services/users/service";
 import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -26,10 +27,12 @@ export const authOptions: AuthOptions = {
         const { emailOrUsername, password } = credentials as any;
 
         const res = await signIn({ emailOrUsername, password });
+
         const user = res.user;
         const accessToken = res.accessToken;
+        const accessTokenExpiresIn = res.accessTokenExpiresIn;
         if (accessToken && user) {
-          const result = { ...user, accessToken };
+          const result = { ...user, accessToken, accessTokenExpiresIn };
           return result;
         } else {
           return null;
@@ -47,11 +50,29 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.user = user as UserDto;
       }
+      if (
+        token.user.accessTokenExpiresIn &&
+        Date.now() / 1000 > token.user.accessTokenExpiresIn
+      ) {
+        const res = await refreshAccessToken();
+        const data = await res.json();
+
+        if (res.ok) {
+          token.user.accessToken = data.accessToken;
+          token.user.accessTokenExpiresIn = data.accessTokenExpiresIn;
+        } else {
+          // Handle the error
+        }
+      }
+
       return token;
     },
 
     async session({ token, session }) {
-      session.user = token.user;
+      const user = await getUser(token.user.accessToken, token.user.id);
+      const result = { ...token.user, ...user.data };
+
+      session.user = result;
       return session;
     },
   },

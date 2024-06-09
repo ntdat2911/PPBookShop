@@ -15,7 +15,9 @@ export interface UserDto {
   name: string;
   username: string;
   email: string;
+  image: string;
   createdAt: string;
   updatedAt: string;
   accessToken: string;
+  accessTokenExpiresIn: number;
 }

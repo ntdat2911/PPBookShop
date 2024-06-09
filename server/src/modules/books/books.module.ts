@@ -7,9 +7,18 @@ import { AuthorsModule } from '../authors/authors.module';
 import { BooksController } from './books.controller';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { CategoriesModule } from '../categories/categories.module';
+import { PromotionsModule } from '../promotions/promotions.module';
+import { OrderItemsModule } from '../order-items/order-items.module';
 
 @Module({
-  imports: [PrismaModule, AuthorsModule, CloudinaryModule, CategoriesModule],
+  imports: [
+    PrismaModule,
+    AuthorsModule,
+    CloudinaryModule,
+    CategoriesModule,
+    PromotionsModule,
+    OrderItemsModule,
+  ],
   providers: [BooksService, BooksResolver, BooksRepository],
   exports: [BooksService],
   controllers: [BooksController],
