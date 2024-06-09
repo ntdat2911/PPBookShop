@@ -88,7 +88,8 @@ export default async function Home() {
                               <div className="flex gap-2 text-xl">
                                 {book.BookPrice &&
                                 book.Promotion &&
-                                book.Promotion[0] ? (
+                                book.Promotion[0] &&
+                                book.Promotion[0].DiscountPercent ? (
                                   <>
                                     <div className="text-red-500 text-lg">
                                       $
@@ -187,7 +188,8 @@ export default async function Home() {
                           <div className="flex gap-2">
                             {book.BookPrice &&
                             book.Promotion &&
-                            book.Promotion[0] ? (
+                            book.Promotion[0] &&
+                            book.Promotion[0].DiscountPercent ? (
                               <>
                                 <div className="text-red-500 text-lg">
                                   $
@@ -263,7 +265,8 @@ export default async function Home() {
                           <div className="flex gap-2">
                             {book.BookPrice &&
                             book.Promotion &&
-                            book.Promotion[0] ? (
+                            book.Promotion[0] &&
+                            book.Promotion[0].DiscountPercent ? (
                               <>
                                 <div className="text-red-500 text-lg">
                                   $

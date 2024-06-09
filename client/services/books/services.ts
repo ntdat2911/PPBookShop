@@ -31,6 +31,7 @@ export async function getBooks(
       author: author,
       sort: sort,
     },
+    fetchPolicy: "no-cache",
   });
   revalidatePath("/shop");
   return data.getBooks;

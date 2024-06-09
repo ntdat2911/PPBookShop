@@ -9,7 +9,7 @@ import {
   CategoryEntity,
   GPaginatedBookResponse,
 } from "@/codegen/__generated__/graphql";
-import { count } from "console";
+
 import { getCategories } from "@/services/categories/services";
 import { OptionType } from "@/components/ui/multi-select";
 

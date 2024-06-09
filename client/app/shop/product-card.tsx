@@ -208,7 +208,10 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
 
                     <p className="text-center w-full">{book.AuthorName}</p>
                     <div className="flex justify-center items-center w-full p-2 gap-2">
-                      {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                      {book.BookPrice &&
+                      book.Promotion &&
+                      book.Promotion[0] &&
+                      book.Promotion[0].DiscountPercent ? (
                         <>
                           <div className=" text-red-500">
                             $
