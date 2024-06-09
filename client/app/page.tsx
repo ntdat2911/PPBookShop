@@ -72,8 +72,9 @@ export default async function Home() {
                             <Image
                               src={book.ImageURL}
                               alt={book.BookTitle}
-                              width={200}
-                              height={200}
+                              width={300}
+                              height={300}
+                              className="w-[300px] h-[300px] object-contain"
                             />
                           </CardContent>
                           <CardFooter className="group-hover:bg-gray-200">
@@ -172,8 +173,9 @@ export default async function Home() {
                         <Image
                           src={book.ImageURL}
                           alt={book.BookTitle}
-                          width={200}
-                          height={200}
+                          width={300}
+                          height={300}
+                          className="w-[300px] h-[300px] object-contain"
                         />
                       </CardContent>
                       <CardFooter className="group-hover:bg-gray-200 text-dark-brown">
@@ -249,8 +251,9 @@ export default async function Home() {
                         <Image
                           src={book.ImageURL}
                           alt={book.BookTitle}
-                          width={200}
-                          height={200}
+                          width={300}
+                          height={300}
+                          className="w-[300px] h-[300px] object-contain"
                         />
                       </CardContent>
                       <CardFooter className="group-hover:bg-gray-200">

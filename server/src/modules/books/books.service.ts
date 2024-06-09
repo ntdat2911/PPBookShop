@@ -118,7 +118,6 @@ export class BooksService {
     const booksId = onSaleBookIds.map((item) => item.BookID);
     let books = await this.booksRepository.getOnSaleBooks(booksId);
     books = books.filter((book) => book !== null && book !== undefined);
-    console.log(books);
     return books;
   }
 
