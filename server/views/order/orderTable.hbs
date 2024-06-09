@@ -99,7 +99,11 @@
                   <option value='{{Status}}' selected>{{Status}}</option>
 
                   {{#if (equal Status 'PENDING')}}
-                    <option value='PAID'>PAID</option>
+                    {{#if (equal PaymentMethod 'PAYPAL')}}
+                      <option value='PAID'>PAID</option>
+                    {{/if}}
+                    <option value='SHIPPING'>SHIPPING</option>
+
                     <option value='CANCELLED'>CANCELLED</option>
                   {{/if}}
                   {{#if (equal Status 'PAID')}}

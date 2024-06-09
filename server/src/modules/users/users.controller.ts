@@ -48,14 +48,14 @@ export class UsersController {
     const user = await this.usersService.update(id, dto);
     return ResponseUserMapper.map(user);
   }
-
+  @Public()
   @Put('/update-image')
   public async updateImage(@CurrentUser() id1: string, @Body() body: any) {
     const { id: UserID, image } = body;
     const user = await this.usersService.updateImage(UserID, image);
     return ResponseUserMapper.map(user);
   }
-
+  @Public()
   @Put('/update-profile')
   public async updateProfile(@CurrentUser() id1: string, @Body() body: any) {
     const { id, email, name } = body;

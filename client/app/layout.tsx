@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "text-dark-brown bg-gray-100")}>
+      <body className={cn(inter.className, "text-dark-brown")}>
         <AuthProvider>
           <ApolloWrapper>
             <CartContextWrapper>

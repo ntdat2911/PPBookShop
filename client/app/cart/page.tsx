@@ -61,12 +61,21 @@ export default function Page() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
+  const { toast } = useToast();
   const [addressID, setAddressID] = useState<string>("");
   const [createOrder, { data, loading, error }] = useMutation(CREATE_ORDER);
   const router = useRouter();
   const { cartCount, setCartCount } = useCartContext();
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (session?.user.id) {
+      if (addressID === "") {
+        toast({
+          title: "Address is required",
+          description: "Please choose an address to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
       const order = await createOrder({
         variables: {
           UserID: session.user.id,
@@ -84,10 +93,10 @@ export default function Page() {
           OrderItems: JSON.stringify(items),
         },
       });
-      writeToLocalStorage(session.user.id, {});
-      setItems([]);
       if (order?.data)
         router.push(`/thank-you/${order?.data.createOrder.OrderID}`);
+      writeToLocalStorage(session.user.id, {});
+      setItems([]);
     }
   }
   useEffect(() => {
@@ -143,7 +152,10 @@ export default function Page() {
   };
   return (
     <div
-      className={cn("container py-4 space-y-8", loading ? "bg-gray-200" : "")}
+      className={cn(
+        "container py-4 space-y-8",
+        loading ? "bg-gray-200 opacity-75 z-10" : ""
+      )}
     >
       <div className="grid grid-cols-3 gap-2">
         <div className="col-span-2 h-full">
@@ -168,7 +180,7 @@ export default function Page() {
                     <Separator />
                     <div
                       key={key}
-                      className="grid grid-cols-8 gap-2 h-[100px] justify-center items-center text-center"
+                      className="grid grid-cols-8 gap-2 h-max my-4 justify-center items-center text-center"
                     >
                       <div>
                         <Image

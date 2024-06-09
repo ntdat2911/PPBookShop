@@ -1,5 +1,5 @@
 "use client";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 
 import { Avatar, AvatarProps } from "@files-ui/react";
 import * as React from "react";
@@ -35,7 +35,7 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
     setImageSource(selectedFile);
     setIsUpdatingAvatar(true);
   };
-
+  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const { toast } = useToast();
 
   const onUpdateAvatar = async () => {
@@ -46,6 +46,7 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
         formData.append("file", imageSource as File);
 
         formData.append("upload_preset", "fxwqzera");
+        setIsLoaded(true);
         const data = await fetch(
           "https://api.cloudinary.com/v1_1/dmbwhnml9/image/upload",
           {
@@ -58,6 +59,7 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
           window.location.reload();
         }
         setIsUpdatingAvatar(false);
+        setIsLoaded(false);
       }
     } catch (err) {
       toast({
@@ -83,6 +85,7 @@ export const ProfileSection = ({ user }: ProfileSectionProps) => {
         onChange={(imageSrc) => handleChangeSource(imageSrc)}
         changeLabel={"Change this image..."}
         alt="Avatar"
+        isLoading={isLoaded}
       />
       {isUpdatingAvatar && (
         <div>

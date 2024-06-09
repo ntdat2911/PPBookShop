@@ -211,13 +211,15 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
                         <>
                           <div className=" text-red-500">
                             $
-                            {book.BookPrice -
+                            {(
+                              book.BookPrice -
                               (book.BookPrice *
                                 book.Promotion[0].DiscountPercent) /
-                                100}
+                                100
+                            ).toFixed(2)}
                           </div>
                           <div className=" text-gray-400 text-sm line-through">
-                            ${book.BookPrice}
+                            ${book.BookPrice.toFixed(2)}
                           </div>
                         </>
                       ) : (

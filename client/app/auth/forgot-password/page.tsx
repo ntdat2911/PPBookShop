@@ -14,6 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { forgotPassword } from "@/services/auth/service";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import Link from "next/link";
 const formSchema = z.object({
   emailOrUsername: z
     .string()
@@ -30,15 +33,22 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+  const [isSent, setIsSent] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       emailOrUsername: "",
     },
   });
+  const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await forgotPassword(values.emailOrUsername);
+    toast({
+      title: "Password reset email sent",
+      variant: "success",
+    });
+    setIsSent(true);
   };
   return (
     <div className="container flex flex-col justify-center w-1/2 mt-8">
@@ -46,31 +56,46 @@ export default function Page() {
         <div className="grid gap-2 text-center">
           <h1 className="text-3xl font-bold">Reset password</h1>
         </div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="emailOrUsername"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+        {!isSent ? (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="emailOrUsername"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Your email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-              <Button type="submit" className="w-full bg-black">
-                Login
-              </Button>
-            </div>
-          </form>
-        </Form>
+                <Button type="submit" className="w-full bg-black">
+                  Reset password
+                </Button>
+              </div>
+            </form>
+          </Form>
+        ) : (
+          <div className="text-center">
+            <p className="text-balance text-muted-foreground">
+              If an account with that email exists, we sent you an email with
+              instructions to reset your password.
+            </p>
+            <p className="text-balance text-muted-foreground">
+              If you don't receive an email, please check your spam folder.
+            </p>
+            <Link href="/auth/sign-in" className="underline">
+              Back to sign in
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

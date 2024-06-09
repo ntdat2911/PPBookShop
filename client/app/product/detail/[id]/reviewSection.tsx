@@ -106,7 +106,7 @@ export default function ReviewSection({ bookID }: ReviewSectionProps) {
     });
 
     reviewInfo.countReviewList[parseInt(data.rating) - 1] += 1;
-    window.location.reload();
+    // window.location.reload();
   }
   useEffect(() => {
     if (loading === false && data) {

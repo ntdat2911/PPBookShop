@@ -27,19 +27,21 @@ import { useToast } from "@/components/ui/use-toast";
 import { changePassword } from "@/services/auth/service";
 import { UserDto } from "@/services/auth/dto";
 
-const formSchema = z.object({
-  password: z.string().min(7).max(50),
-  confirmPassword: z.string().min(7).max(50),
-});
-// .superRefine((data, ctx) => {
-//   if (data.password !== data.confirmPassword) {
-//     ctx.addIssue({
-//       code: z.ZodIssueCode.custom,
-//       message: "Passwords do not match.",
-//       path: ["confirmPassword"],
-//     });
-//   }
-// });
+const formSchema = z
+  .object({
+    oldPassword: z.string().min(7).max(50),
+    password: z.string().min(7).max(50),
+    confirmPassword: z.string().min(7).max(50),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match.",
+        path: ["confirmPassword"],
+      });
+    }
+  });
 interface ChangePasswordProps {
   user: UserDto;
 }
@@ -50,30 +52,29 @@ const ChangePassword = ({ user }: ChangePasswordProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
+      oldPassword: "",
       confirmPassword: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const newPassword = {
-        password1: values.password,
-        password2: values.confirmPassword,
-      };
       const res = await changePassword(
+        values.oldPassword,
         values.password,
-        values.confirmPassword,
-        user.accessToken
+        user.accessToken,
+        user.id
       );
       toast({
         title: "Change password success!",
-        description: `Welcome!`,
         variant: "success",
       });
+      form.reset();
     } catch (error) {
       toast({
         title: "Sign up failed!",
         description: error?.toString(),
+        variant: "destructive",
       });
     }
   }
@@ -88,10 +89,23 @@ const ChangePassword = ({ user }: ChangePasswordProps) => {
           <CardContent className="px-auto flex flex-col space-y-4">
             <FormField
               control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="Password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>New Password</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="Password" {...field} />
                   </FormControl>
@@ -105,7 +119,7 @@ const ChangePassword = ({ user }: ChangePasswordProps) => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm password</FormLabel>
+                  <FormLabel>Confirm new password</FormLabel>
                   <FormControl>
                     <PasswordInput placeholder="Confirm password" {...field} />
                   </FormControl>

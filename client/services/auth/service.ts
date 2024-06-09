@@ -94,13 +94,14 @@ export async function refreshAccessToken() {
 export async function changePassword(
   password: string,
   newPassword: string,
-  token: string
+  token: string,
+  id: string
 ) {
   try {
     const response = await axios.patch(
       `${SERVER_BASE_URL}/api/auth/update-password`,
 
-      { password, password1: newPassword, password2: newPassword },
+      { password, password1: newPassword, password2: newPassword, id },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,6 +110,7 @@ export async function changePassword(
     );
     return response.data;
   } catch (error) {
+    console.log("error", error);
     throw error;
   }
 }

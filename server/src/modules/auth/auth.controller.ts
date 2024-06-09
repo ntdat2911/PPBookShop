@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Req,
@@ -114,12 +115,9 @@ export class AuthController {
   ): Promise<void> {
     const token = this.refreshTokenFromReq(req);
     const message = await this.authService.logout(token);
-    res
-      .clearCookie(this.cookieName, { path: "/" })
-      res
-      .clearCookie("access-token", { path: "/" })
-      res.status(HttpStatus.OK)
-      .json(message);
+    res.clearCookie(this.cookieName, { path: '/' });
+    res.clearCookie('access-token', { path: '/' });
+    res.status(HttpStatus.OK).json(message);
   }
 
   @Public()
@@ -152,7 +150,7 @@ export class AuthController {
   ): Promise<IMessage> {
     return this.authService.resetPassword(resetPasswordDto);
   }
-
+  @Public()
   @Patch('/update-password')
   public async updatePassword(
     @CurrentUser() userId: string,
@@ -160,8 +158,9 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
     @Res() res: Response,
   ): Promise<void> {
+    const { id } = changePasswordDto;
     const result = await this.authService.updatePassword(
-      userId,
+      id,
       changePasswordDto,
       origin,
     );
@@ -169,10 +168,14 @@ export class AuthController {
       .status(HttpStatus.OK)
       .json(AuthResponseMapper.map(result));
   }
-
-  @Get('/me')
-  public async getMe(@CurrentUser() id: string): Promise<IAuthResponseUser> {
-    const user = await this.usersService.findOneById(id);
+  @Public()
+  @Get('/me/:UserID')
+  public async getMe(
+    @Param() Param: any,
+    @CurrentUser() id: string,
+  ): Promise<IAuthResponseUser> {
+    const { UserID } = Param;
+    const user = await this.usersService.findOneById(UserID);
     return AuthResponseUserMapper.map(user);
   }
 

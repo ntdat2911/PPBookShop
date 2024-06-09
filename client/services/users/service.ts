@@ -53,9 +53,9 @@ export const updateProfile = async (
   }
 };
 
-export const getUser = async (token: string) => {
+export const getUser = async (token: string, id: string) => {
   try {
-    const data = await axios.get("http://localhost:4000/api/auth/me", {
+    const data = await axios.get("http://localhost:4000/api/auth/me/" + id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

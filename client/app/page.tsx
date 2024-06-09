@@ -88,20 +88,22 @@ export default async function Home() {
                               book.Promotion &&
                               book.Promotion[0] ? (
                                 <>
-                                  <div className="text-red-500">
+                                  <div className="text-red-500 text-lg">
                                     $
-                                    {book.BookPrice -
+                                    {(
+                                      book.BookPrice -
                                       (book.BookPrice *
                                         book.Promotion[0].DiscountPercent) /
-                                        100}
+                                        100
+                                    ).toFixed(2)}
                                   </div>
-                                  <div className=" line-through text-gray-500 text-lg">
-                                    ${book.BookPrice}
+                                  <div className=" line-through text-gray-500">
+                                    ${book.BookPrice.toFixed(2)}
                                   </div>
                                 </>
                               ) : (
-                                <p className=" font-bold text-black">
-                                  ${book.BookPrice}
+                                <p className="text-black">
+                                  ${book.BookPrice.toFixed(2)}
                                 </p>
                               )}
                             </div>
@@ -178,21 +180,21 @@ export default async function Home() {
                             book.Promotion &&
                             book.Promotion[0] ? (
                               <>
-                                <div className="text-red-500">
+                                <div className="text-red-500 text-lg">
                                   $
-                                  {book.BookPrice -
+                                  {(
+                                    book.BookPrice -
                                     (book.BookPrice *
                                       book.Promotion[0].DiscountPercent) /
-                                      100}
+                                      100
+                                  ).toFixed(2)}
                                 </div>
-                                <div className=" line-through text-gray-500 text-lg">
-                                  ${book.BookPrice}
+                                <div className=" line-through text-gray-500">
+                                  ${book.BookPrice.toFixed(2)}
                                 </div>
                               </>
                             ) : (
-                              <p className=" font-bold text-black">
-                                ${book.BookPrice}
-                              </p>
+                              <p className=" text-black">${book.BookPrice}</p>
                             )}
                           </div>
                           <div className="flex gap-2">
@@ -252,21 +254,21 @@ export default async function Home() {
                             book.Promotion &&
                             book.Promotion[0] ? (
                               <>
-                                <div className="text-red-500">
+                                <div className="text-red-500 text-lg">
                                   $
-                                  {book.BookPrice -
+                                  {(
+                                    book.BookPrice -
                                     (book.BookPrice *
                                       book.Promotion[0].DiscountPercent) /
-                                      100}
+                                      100
+                                  ).toFixed(2)}
                                 </div>
-                                <div className=" line-through text-gray-500 text-lg">
-                                  ${book.BookPrice}
+                                <div className=" line-through text-gray-500 ">
+                                  ${book.BookPrice.toFixed(2)}
                                 </div>
                               </>
                             ) : (
-                              <p className=" font-bold text-black">
-                                ${book.BookPrice}
-                              </p>
+                              <p className="text-black">${book.BookPrice}</p>
                             )}
                           </div>
                           <div className="flex gap-2">

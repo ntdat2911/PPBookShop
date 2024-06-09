@@ -77,6 +77,11 @@ export function Header() {
           <>
             <nav className="flex items-center gap-6">
               <Button asChild variant="link" className="text-dark-brown">
+                <Link href="/" replace className={underlineAnimation()}>
+                  Home page
+                </Link>
+              </Button>
+              <Button asChild variant="link" className="text-dark-brown">
                 <Link href="/shop" replace className={underlineAnimation()}>
                   Shop
                 </Link>

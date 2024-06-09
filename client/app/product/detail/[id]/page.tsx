@@ -79,18 +79,20 @@ export default async function Page({ params }: { params: { id: string } }) {
                   {book.BookPrice && book.Promotion && book.Promotion[0] ? (
                     <>
                       <div className="text-2xl font-semibold line-through">
-                        ${book.BookPrice}
+                        ${book.BookPrice.toFixed(2)}
                       </div>
                       <div className="text-4xl font-bold text-red-500">
                         $
-                        {book.BookPrice -
+                        {(
+                          book.BookPrice -
                           (book.BookPrice * book.Promotion[0].DiscountPercent) /
-                            100}
+                            100
+                        ).toFixed(2)}
                       </div>
                     </>
                   ) : (
                     <p className="text-4xl font-bold text-black">
-                      ${book.BookPrice}
+                      ${book.BookPrice.toFixed(2)}
                     </p>
                   )}
                 </div>

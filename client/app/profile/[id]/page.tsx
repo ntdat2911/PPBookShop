@@ -13,7 +13,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [page, setPage] = useState("profile");
   return (
     <div className=" pt-8 grid grid-cols-7">
-      <div className="w-full h-full border-r flex flex-col ">
+      <div className="w-full h-full flex flex-col ">
         <Button
           variant="ghost"
           className={cn(

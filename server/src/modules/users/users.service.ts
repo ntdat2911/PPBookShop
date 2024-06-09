@@ -182,7 +182,7 @@ export class UsersService {
     newPassword: string,
   ): Promise<UserEntity> {
     const user = await this.findOneById(userId);
-
+    console.log('user', user);
     if (!(await compare(password, user.Password))) {
       throw new BadRequestException('Wrong password');
     }

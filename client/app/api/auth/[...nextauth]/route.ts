@@ -69,7 +69,7 @@ export const authOptions: AuthOptions = {
     },
 
     async session({ token, session }) {
-      const user = await getUser(token.user.accessToken);
+      const user = await getUser(token.user.accessToken, token.user.id);
       const result = { ...token.user, ...user.data };
 
       session.user = result;
