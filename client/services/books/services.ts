@@ -42,6 +42,7 @@ export async function getBookById(id: string) {
     variables: {
       id: id,
     },
+    fetchPolicy: "no-cache",
   });
   revalidatePath(`/product/detail/${id}`);
   return data.getBookById;
@@ -53,6 +54,7 @@ export async function getOnSaleBooks(size: number) {
     variables: {
       size: size,
     },
+    fetchPolicy: "no-cache",
   });
   revalidatePath("/");
   return data.getOnSaleBooks;
@@ -64,6 +66,7 @@ export async function getRecommendedBooks(size: number) {
     variables: {
       size: size,
     },
+    fetchPolicy: "no-cache",
   });
   revalidatePath("/");
   return data.getRecommendedBooks;
@@ -75,6 +78,7 @@ export async function getPopularBooks(size: number) {
     variables: {
       size: size,
     },
+    fetchPolicy: "no-cache",
   });
   revalidatePath("/");
   return data.getPopularBooks;

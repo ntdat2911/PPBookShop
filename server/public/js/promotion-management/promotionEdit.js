@@ -33,4 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .catch((error) => console.error('Error:', error));
   });
+  document
+    .getElementById('ExpiredDate')
+    .addEventListener('keydown', function (event) {
+      event.preventDefault();
+    });
 });

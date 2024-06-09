@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
   document
+    .getElementById('ExpiredDate')
+    .addEventListener('keydown', function (event) {
+      event.preventDefault();
+    });
+  document
     .querySelector('button[data-dialog-target="dialogCreate"]')
     .addEventListener('click', () => {
       document

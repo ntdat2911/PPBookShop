@@ -18,9 +18,7 @@
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Category name</th>
-          <th
-            class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
-          >Parent category</th>
+
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
           >Is Active</th>
@@ -33,16 +31,7 @@
         {{#each categoryList}}
           <tr class='border-t text-center' data-category-id='{{CategoryID}}'>
             <td class='py-3 px-4'>{{CategoryName}}</td>
-            <td class='py-3 px-4'>
-           {{!-- render parent category name if ParentCategoryID is not null and exists in categoryList --}}
-              {{#if (categoryExists ParentCategoryID @root.categoryList)}}
-               {{!-- get parent category name --}}
-                {{getCategoryName ParentCategoryID @root.categoryList}}
-              {{else}}
-                <span class='text-gray-500'>None</span>
-              {{/if}}
-            </td>
-
+    
 
             <td class='py-3 px-4 '>
               {{#if IsCategoryActive}}
@@ -176,22 +165,7 @@
         required
         />
       </div>
-      <div class='mb-5'>
-        <label
-          for='ParentCategoryID'
-          class='mb-3 block text-base font-medium text-[#07074D]'
-        >Parent Category</label>
-        <select
-          name='ParentCategoryID'
-          id='ParentCategoryID'
-          class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-        >
-          <option value=''>None</option>
-          {{#each categoryList}}
-            <option value="{{this.CategoryID}}">{{this.CategoryName}}</option>
-          {{/each}}
-        </select>
-      </div>
+     
       <div class='mb-5'>
         <label
           for='IsCategoryActive'

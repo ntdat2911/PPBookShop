@@ -70,7 +70,6 @@ export type CategoryEntity = {
   CategoryName: Scalars['String']['output'];
   CreatedAt: Scalars['DateTime']['output'];
   IsCategoryActive: Scalars['Boolean']['output'];
-  ParentCategoryID: Scalars['String']['output'];
   UpdatedAt: Scalars['DateTime']['output'];
 };
 

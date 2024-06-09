@@ -28,11 +28,10 @@ import { Button } from "@/components/ui/button";
 
 export default async function Home() {
   const [onSalebooks, recommendedBooks, popularBooks] = await Promise.all([
-    await getOnSaleBooks(8),
-    await getRecommendedBooks(8),
-    await getPopularBooks(8),
+    await getOnSaleBooks(15),
+    await getRecommendedBooks(15),
+    await getPopularBooks(15),
   ]);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 pt-12 space-y-16">
       <Card className="w-full text-dark-brown ">
@@ -57,78 +56,86 @@ export default async function Home() {
             className="w-full"
           >
             <CarouselContent>
-              {onSalebooks.map((book: BookEntity) => (
-                <CarouselItem
-                  key={"SALE" + book.BookID}
-                  className="md:basis-1/2 lg:basis-1/4"
-                >
-                  <div className="p-1">
-                    <Link
-                      href={`/product/detail/${book.BookID}`}
-                      className="group"
-                    >
-                      <Card>
-                        <CardContent className="p-0 flex aspect-square items-center justify-center">
-                          <Image
-                            src={book.ImageURL}
-                            alt={book.BookTitle}
-                            width={200}
-                            height={200}
-                          />
-                        </CardContent>
-                        <CardFooter className="group-hover:bg-gray-200">
-                          <div className="flex flex-col items-center w-full p-2 gap-2">
-                            <CardTitle className="text-2xl">
-                              {book.BookTitle}
-                            </CardTitle>
-                            <p>{book.AuthorName}</p>
+              {onSalebooks && onSalebooks.length > 0 ? (
+                onSalebooks.map((book: BookEntity) => (
+                  <CarouselItem
+                    key={"SALE" + book.BookID}
+                    className="md:basis-1/2 lg:basis-1/5"
+                  >
+                    <div className="p-1 h-full">
+                      <Link
+                        href={`/product/detail/${book.BookID}`}
+                        className="group h-full"
+                      >
+                        <Card>
+                          <CardContent className="p-0 flex aspect-square items-center justify-center">
+                            <Image
+                              src={book.ImageURL}
+                              alt={book.BookTitle}
+                              width={200}
+                              height={200}
+                            />
+                          </CardContent>
+                          <CardFooter className="group-hover:bg-gray-200">
+                            <div className="flex flex-col items-center w-full p-2 gap-2">
+                              <div className="overflow-hidden overflow-ellipsis w-full h-16 text-center">
+                                <CardTitle className="text-2xl">
+                                  {book.BookTitle}
+                                </CardTitle>
+                              </div>
+                              <p>{book.AuthorName}</p>
 
-                            <div className="flex gap-2 text-xl">
-                              {book.BookPrice &&
-                              book.Promotion &&
-                              book.Promotion[0] ? (
-                                <>
-                                  <div className="text-red-500 text-lg">
-                                    $
-                                    {(
-                                      book.BookPrice -
-                                      (book.BookPrice *
-                                        book.Promotion[0].DiscountPercent) /
-                                        100
-                                    ).toFixed(2)}
-                                  </div>
-                                  <div className=" line-through text-gray-500">
+                              <div className="flex gap-2 text-xl">
+                                {book.BookPrice &&
+                                book.Promotion &&
+                                book.Promotion[0] ? (
+                                  <>
+                                    <div className="text-red-500 text-lg">
+                                      $
+                                      {(
+                                        book.BookPrice -
+                                        (book.BookPrice *
+                                          book.Promotion[0].DiscountPercent) /
+                                          100
+                                      ).toFixed(2)}
+                                    </div>
+                                    <div className=" line-through text-gray-500">
+                                      ${book.BookPrice.toFixed(2)}
+                                    </div>
+                                  </>
+                                ) : (
+                                  <p className="text-black">
                                     ${book.BookPrice.toFixed(2)}
-                                  </div>
-                                </>
-                              ) : (
-                                <p className="text-black">
-                                  ${book.BookPrice.toFixed(2)}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex gap-2">
-                              <Rating
-                                rating={book.Rating}
-                                totalStars={5}
-                                size={24}
-                                variant="yellow"
-                                className="h-1"
-                                showText={false}
-                                disabled={true}
-                              />
+                                  </p>
+                                )}
+                              </div>
+                              <div className="flex gap-2">
+                                <Rating
+                                  rating={book.Rating}
+                                  totalStars={5}
+                                  size={24}
+                                  variant="yellow"
+                                  className="h-1"
+                                  showText={false}
+                                  disabled={true}
+                                />
 
-                              <p className="text-sm text-end">
-                                Sold {book.SoldQuantity}
-                              </p>
+                                <p className="text-sm text-end">
+                                  Sold {book.SoldQuantity}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </Link>
-                  </div>
-                </CarouselItem>
-              ))}
+                          </CardFooter>
+                        </Card>
+                      </Link>
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                <div className="flex justify-center items-center w-full h-96">
+                  <p className="text-2xl">No books on sale</p>
+                </div>
+              )}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
@@ -150,7 +157,7 @@ export default async function Home() {
         <TabsContent value="recommended" className="w-full">
           <Card className="w-full p-6">
             <CardContent
-              className="w-full grid grid-cols-4 gap-4 p-0 "
+              className="w-full grid grid-cols-5 gap-4 p-0 "
               key="Recommended"
             >
               {recommendedBooks.map((book: BookEntity) => (
@@ -170,9 +177,11 @@ export default async function Home() {
                       </CardContent>
                       <CardFooter className="group-hover:bg-gray-200 text-dark-brown">
                         <div className="flex flex-col items-center w-full p-2 gap-2">
-                          <CardTitle className="text-2xl ">
-                            {book.BookTitle}
-                          </CardTitle>
+                          <div className="overflow-hidden overflow-ellipsis w-full h-16 text-center">
+                            <CardTitle className="text-2xl">
+                              {book.BookTitle}
+                            </CardTitle>
+                          </div>
                           <p>{book.AuthorName}</p>
 
                           <div className="flex gap-2">
@@ -223,7 +232,7 @@ export default async function Home() {
         </TabsContent>
         <TabsContent value="popular" className="w-full">
           <Card className="w-full p-6">
-            <CardContent className="w-full grid grid-cols-4 gap-4 p-0">
+            <CardContent className="w-full grid grid-cols-5 gap-4 p-0">
               {popularBooks.map((book: BookEntity) => (
                 <div className="p-1" key={"Popular" + book.BookID}>
                   <Link
@@ -244,9 +253,11 @@ export default async function Home() {
                       </CardContent>
                       <CardFooter className="group-hover:bg-gray-200">
                         <div className="flex flex-col items-center w-full p-2 gap-2">
-                          <CardTitle className="text-2xl">
-                            {book.BookTitle}
-                          </CardTitle>
+                          <div className="overflow-hidden overflow-ellipsis w-full h-16 text-center">
+                            <CardTitle className="text-2xl">
+                              {book.BookTitle}
+                            </CardTitle>
+                          </div>
                           <p>{book.AuthorName}</p>
 
                           <div className="flex gap-2">

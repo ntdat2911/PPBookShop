@@ -39,7 +39,7 @@ export function Header() {
       const count = getTotalUniqueItems(session?.user.id);
       setCartCount(count);
     }
-  }, [session?.user]);
+  }, [session?.user, cartCount]);
 
   const handleLogout = () => {
     if (session?.user.id) {
@@ -98,7 +98,7 @@ export function Header() {
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end text-sm ">
           {session?.user ? (
             <div className="grid grid-cols-2 gap-4 items-center">
-              <div className="relative">
+              <div className="relative justify-self-end">
                 <Link
                   href="/cart"
                   className={cn(
@@ -118,7 +118,7 @@ export function Header() {
                 </span>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger className="flex items-center gap-2">
                   <Avatar>
                     <AvatarImage
                       src={session.user.image}
@@ -126,6 +126,9 @@ export function Header() {
                     />
                     <AvatarFallback>{session.user.username}</AvatarFallback>
                   </Avatar>
+                  <span className="text-sm text-dark-brown">
+                    {session.user.username}
+                  </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>

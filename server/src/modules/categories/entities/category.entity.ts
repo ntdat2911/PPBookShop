@@ -15,9 +15,6 @@ export class CategoryEntity implements ICategory {
   @Field(() => String)
   public CategoryName: string;
 
-  @Field(() => String)
-  public ParentCategoryID: string;
-
   @Field(() => Boolean)
   public IsCategoryActive: boolean;
 

@@ -26,6 +26,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useToast } from "@/components/ui/use-toast";
 import { signUp } from "@/services/auth/service";
 import { SignUpRequestDto } from "@/services/auth/dto";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -46,7 +47,7 @@ const formSchema = z
 
 const SignUpPage = () => {
   const { toast } = useToast();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,6 +73,7 @@ const SignUpPage = () => {
         description: `Welcome!`,
         variant: "success",
       });
+      router.push("/auth/sign-in");
     } catch (error) {
       toast({
         title: "Sign up failed!",

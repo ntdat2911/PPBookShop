@@ -100,10 +100,9 @@ export class PromotionsService {
       const promotionDetail = await this.promotionsRepository.findOne(
         promotion.PromotionID,
       );
-      promotionList.push(promotionDetail);
+      if (promotionDetail) promotionList.push(promotionDetail);
     }
     promotionList.sort((a, b) => b.DiscountPercent - a.DiscountPercent);
-
     return promotionList;
   }
 

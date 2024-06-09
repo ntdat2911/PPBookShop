@@ -51,7 +51,7 @@ function MultiSelect({
           <Badge
             variant="outline"
             key={item}
-            className="mr-1 mb-1 mt-2 border border-dark-brown rounded-full transition-colors text-xs font-medium cursor-pointer"
+            className="h-8 mr-1 mb-1 mt-2 border border-dark-brown rounded-full transition-colors text-xs font-medium cursor-pointer"
             onClick={() => handleUnselect(item)}
           >
             {options.find((option) => option.id === item)?.tag_name}

@@ -13,6 +13,7 @@ export class PromotionsRepository {
     return this.prisma.promotion.findUnique({
       where: {
         PromotionID: PromotionID,
+        IsAvailable: true,
         ExpiredDate: {
           gt: new Date(),
         },
@@ -120,6 +121,14 @@ export class PromotionsRepository {
     return this.prisma.bookPromotion.findMany({
       take: size,
       distinct: ['BookID'],
+      where: {
+        Promotion: {
+          IsAvailable: true,
+          ExpiredDate: {
+            gt: new Date(),
+          },
+        },
+      },
     });
   }
 }

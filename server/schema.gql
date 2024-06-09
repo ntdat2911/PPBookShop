@@ -49,7 +49,6 @@ type CategoryEntity {
   CategoryName: String!
   CreatedAt: DateTime!
   IsCategoryActive: Boolean!
-  ParentCategoryID: String!
   UpdatedAt: DateTime!
 }
 
@@ -143,7 +142,7 @@ type OverviewReviewResponse {
 
 type PromotionEntity {
   CreatedAt: DateTime!
-  DiscountPercent: Float!
+  DiscountPercent: Float
   ExpiredDate: DateTime!
   IsAvailable: Boolean!
   PromotionID: String!

@@ -8,8 +8,8 @@ export class PromotionEntity {
   @Field(() => String)
   public PromotionName: string;
 
-  @Field(() => Number)
-  public DiscountPercent: number;
+  @Field(() => Number, { nullable: true })
+  public DiscountPercent?: number;
 
   @Field(() => GraphQLISODateTime)
   public ExpiredDate: Date;

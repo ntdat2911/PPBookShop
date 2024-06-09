@@ -93,8 +93,6 @@ async function bootstrap() {
         return book.BookTitle;
       },
       bookExists: (bookID: any, bookList: any) => {
-        console.log(bookID);
-        console.log(bookList);
         const book = bookList.find((book: any) => book.BookID === bookID);
         return book !== undefined;
       },

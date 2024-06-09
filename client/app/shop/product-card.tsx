@@ -58,6 +58,7 @@ export const ProductCard = ({ pagyInfo, books }: ProductCardProps) => {
   const router = useRouter();
   useEffect(() => {
     let params: { [key: string]: any } = searchParams;
+    console.log(params);
     Object.keys(params).forEach((key) => {
       if (params[key] == null || params[key].length == 0) delete params[key];
     });

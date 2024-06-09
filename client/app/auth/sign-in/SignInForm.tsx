@@ -67,6 +67,8 @@ const SignInForm = ({ callbackUrl }: Props) => {
           },
         });
         if (
+          cart &&
+          cart.data &&
           cart.data.getCart &&
           cart.data.getCart.CartDetail &&
           cart.data.getCart.CartDetail.length > 0 &&
@@ -150,7 +152,7 @@ const SignInForm = ({ callbackUrl }: Props) => {
                 )}
               />
             </div>
-            <Button type="submit" className="w-full bg-black">
+            <Button type="submit" className="w-full">
               Login
             </Button>
           </div>

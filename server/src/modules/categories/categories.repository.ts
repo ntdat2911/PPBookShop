@@ -7,7 +7,6 @@ export class CategoriesRepository {
 
   async createCategory(data: {
     CategoryName: string;
-    ParentCategoryID: string;
     IsCategoryActive: boolean;
   }) {
     return this.prisma.category.create({
@@ -31,7 +30,6 @@ export class CategoriesRepository {
     id: string,
     data: {
       CategoryName: string;
-      ParentCategoryID: string;
       IsCategoryActive: boolean;
     },
   ) {
@@ -40,14 +38,6 @@ export class CategoriesRepository {
         CategoryID: id,
       },
       data,
-    });
-  }
-
-  async getCategoriesByParentId(id: string) {
-    return this.prisma.category.findMany({
-      where: {
-        ParentCategoryID: id,
-      },
     });
   }
 

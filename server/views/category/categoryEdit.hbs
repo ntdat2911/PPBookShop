@@ -23,22 +23,7 @@
             value="{{~category.CategoryName~}}"
           />
         </div>
-        <div class='mb-5'>
-          <label
-            for='ParentCategoryID'
-            class='mb-3 block text-base font-medium text-[#07074D]'
-          >Parent Category</label>
-          <select
-            name='ParentCategoryID'
-            id='ParentCategoryID'
-            class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-          >
-            <option value=''>None</option>
-            {{#each categoryList}}
-              <option value='{{this.CategoryID}}' {{#if (equal CategoryID ../category.ParentCategoryID)}}selected{{/if}}>{{this.CategoryName}}</option>
-            {{/each}}
-          </select>
-        </div>
+      
         <div class='mb-5'>
           <label
             for='IsCategoryActive'

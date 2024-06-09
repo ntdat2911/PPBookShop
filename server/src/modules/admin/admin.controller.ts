@@ -26,7 +26,6 @@ export class AdminController {
     private readonly AboutUsService: AboutUsService,
   ) {}
 
-
   @Get()
   @Render('book/bookTable')
   async root(@Query() query, @Req() req) {
@@ -51,7 +50,6 @@ export class AdminController {
     return { layout: 'auth_layout' };
   }
 
-
   @Get('/book-management')
   @Render('book/bookTable')
   public async BookManagement(@Query() query, @Req() req) {
@@ -69,7 +67,6 @@ export class AdminController {
       path,
     };
   }
-
 
   @Get('/book-management/edit/:BookID')
   @Render('book/bookEdit')
@@ -94,7 +91,6 @@ export class AdminController {
     return { categoryList, pagyInfo, req, path };
   }
 
-
   @Get('/category-management/edit/:CategoryID')
   @Render('category/categoryEdit')
   public async EditCategory(@Param('CategoryID') CategoryID: string) {
@@ -109,7 +105,6 @@ export class AdminController {
     };
   }
 
-
   @Get('/author-management')
   @Render('author/authorTable')
   public async AuthorManagement(@Query() query, @Req() req) {
@@ -120,7 +115,6 @@ export class AdminController {
     return { authorList, pagyInfo, req, path };
   }
 
-
   @Get('/author-management/edit/:AuthorID')
   @Render('author/authorEdit')
   public async EditAuthor(@Param('AuthorID') AuthorID: string) {
@@ -130,7 +124,6 @@ export class AdminController {
     };
   }
 
-
   @Get('/promotion-management')
   @Render('promotion/promotionTable')
   public async PromotionManagement(@Query() query, @Req() req) {
@@ -138,28 +131,31 @@ export class AdminController {
     const { promotionList, pagyInfo, bookList } =
       await this.adminService.getPromotionManagementData(page, size);
     const path = '/admin/promotion-management';
+    let currentDate = new Date().toISOString().split('T')[0];
     return {
       promotionList,
       bookList,
       pagyInfo,
       req,
       path,
+      currentDate,
     };
   }
-
 
   @Get('/promotion-management/edit/:PromotionID')
   @Render('promotion/promotionEdit')
   public async EditPromotion(@Param('PromotionID') PromotionID: string) {
     const { promotion, bookPromotionList, bookList } =
       await this.adminService.getPromotionEditData(PromotionID);
+    let currentDate = new Date().toISOString().split('T')[0];
+
     return {
       promotion,
       bookPromotionList,
       bookList,
+      currentDate,
     };
   }
-
 
   @Get('/orders-management')
   @Render('order/orderTable')
@@ -171,7 +167,6 @@ export class AdminController {
     return { orderList, pagyInfo, req, path, OrderStatus };
   }
 
-
   @Get('/orders-management/detail/:OrderID')
   @Render('order/orderDetail')
   public async OrderDetail(@Param('OrderID') OrderID: string) {
@@ -179,7 +174,6 @@ export class AdminController {
       await this.adminService.getOrderDetailData(OrderID);
     return { order, orderItems };
   }
-
 
   @Get('/review-management')
   @Render('review/reviewTable')

@@ -93,6 +93,7 @@ export default function Page() {
           OrderItems: JSON.stringify(items),
         },
       });
+      setCartCount(0);
       if (order?.data)
         router.push(`/thank-you/${order?.data.createOrder.OrderID}`);
       writeToLocalStorage(session.user.id, {});

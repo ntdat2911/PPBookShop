@@ -62,7 +62,7 @@ export class BooksRepository {
         orderClause = { Rating: 'desc' };
         break;
       default:
-        orderClause = { CreatedAt: 'asc' };
+        orderClause = { CreatedAt: 'desc' };
     }
 
     const total = await this.prisma.book.count({

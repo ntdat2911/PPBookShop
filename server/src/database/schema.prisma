@@ -21,7 +21,6 @@ model Promotion {
 model Category {
   CategoryID       String   @id @default(uuid())
   CategoryName     String
-  ParentCategoryID String?
   IsCategoryActive Boolean
   CreatedAt        DateTime @default(now())
   UpdatedAt        DateTime @updatedAt
