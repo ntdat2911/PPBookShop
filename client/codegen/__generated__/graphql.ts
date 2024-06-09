@@ -204,7 +204,7 @@ export type OverviewReviewResponse = {
 export type PromotionEntity = {
   __typename?: 'PromotionEntity';
   CreatedAt: Scalars['DateTime']['output'];
-  DiscountPercent: Scalars['Float']['output'];
+  DiscountPercent?: Maybe<Scalars['Float']['output']>;
   ExpiredDate: Scalars['DateTime']['output'];
   IsAvailable: Scalars['Boolean']['output'];
   PromotionID: Scalars['String']['output'];
@@ -369,35 +369,35 @@ export type GetBooksQueryVariables = Exact<{
 }>;
 
 
-export type GetBooksQuery = { __typename?: 'Query', getBooks: { __typename?: 'GPaginatedBookResponse', page: number, size: number, count: number, records: Array<{ __typename?: 'BookEntity', BookID: string, BookTitle: string, ImageURL: string, BookPrice: number, AuthorName: string, Rating: number, CategoryName: string, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', PromotionID: string, PromotionName: string, DiscountPercent: number }> | null }> } };
+export type GetBooksQuery = { __typename?: 'Query', getBooks: { __typename?: 'GPaginatedBookResponse', page: number, size: number, count: number, records: Array<{ __typename?: 'BookEntity', BookID: string, BookTitle: string, ImageURL: string, BookPrice: number, AuthorName: string, Rating: number, CategoryName: string, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', PromotionID: string, PromotionName: string, DiscountPercent?: number | null }> | null }> } };
 
 export type GetBookByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type GetBookByIdQuery = { __typename?: 'Query', getBookById: { __typename?: 'BookEntity', BookID: string, CategoryID: string, CategoryName: string, BookTitle: string, BookPrice: number, BookDescription: string, AuthorBy: string, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', PromotionID: string, PromotionName: string, DiscountPercent: number }> | null } };
+export type GetBookByIdQuery = { __typename?: 'Query', getBookById: { __typename?: 'BookEntity', BookID: string, CategoryID: string, CategoryName: string, BookTitle: string, BookPrice: number, BookDescription: string, AuthorBy: string, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', PromotionID: string, PromotionName: string, DiscountPercent?: number | null }> | null } };
 
 export type GetOnSaleBooksQueryVariables = Exact<{
   size: Scalars['Float']['input'];
 }>;
 
 
-export type GetOnSaleBooksQuery = { __typename?: 'Query', getOnSaleBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent: number }> | null }> };
+export type GetOnSaleBooksQuery = { __typename?: 'Query', getOnSaleBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent?: number | null }> | null }> };
 
 export type GetRecommendedBooksQueryVariables = Exact<{
   size: Scalars['Float']['input'];
 }>;
 
 
-export type GetRecommendedBooksQuery = { __typename?: 'Query', getRecommendedBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent: number }> | null }> };
+export type GetRecommendedBooksQuery = { __typename?: 'Query', getRecommendedBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent?: number | null }> | null }> };
 
 export type GetPopularBooksQueryVariables = Exact<{
   size: Scalars['Float']['input'];
 }>;
 
 
-export type GetPopularBooksQuery = { __typename?: 'Query', getPopularBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent: number }> | null }> };
+export type GetPopularBooksQuery = { __typename?: 'Query', getPopularBooks: Array<{ __typename?: 'BookEntity', BookID: string, CategoryName: string, BookTitle: string, BookPrice: number, AuthorName: string, ImageURL: string, Rating: number, SoldQuantity?: number | null, Promotion?: Array<{ __typename?: 'PromotionEntity', DiscountPercent?: number | null }> | null }> };
 
 export type GetCartQueryVariables = Exact<{
   UserID: Scalars['String']['input'];
