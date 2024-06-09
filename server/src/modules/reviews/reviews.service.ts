@@ -23,7 +23,10 @@ export class ReviewsService {
     Comment: string;
     Rating: number;
   }) {
-    return this.reviewRepository.createReview(data);
+    const result = await this.reviewRepository.createReview(data);
+    const overview = await this.getReviewOverviewById(data.BookID);
+    await this.booksService.updateRating(data.BookID, overview.averageRating);
+    return result;
   }
 
   async getReviews(page: number, size: number) {

@@ -15,21 +15,23 @@ async function bootstrap() {
   app.use(cookieParser(configService.get<string>('COOKIE_SECRET')));
   app.use(
     helmet({
-      crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
+          defaultSrc: ["'self'"],
+          connectSrc: ["'self'", 'https://cdn.tiny.cloud'],
           imgSrc: [
-            `'self'`,
+            "'self'",
             'data:',
             'apollo-server-landing-page.cdn.apollographql.com',
             '*',
           ],
-          scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+          scriptSrc: ["'self'", "https: 'unsafe-inline'", '*'],
           manifestSrc: [
-            `'self'`,
+            "'self'",
             'apollo-server-landing-page.cdn.apollographql.com',
+            '*',
           ],
-          frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+          frameSrc: ["'self'", 'sandbox.embed.apollographql.com', '*'],
         },
       },
     }),
@@ -86,6 +88,22 @@ async function bootstrap() {
         );
         return category.CategoryName;
       },
+      getBookTitle: (bookID: any, bookList: any) => {
+        const book = bookList.find((book: any) => book.BookID === bookID);
+        return book.BookTitle;
+      },
+      bookExists: (bookID: any, bookList: any) => {
+        const book = bookList.find((book: any) => book.BookID === bookID);
+        return book !== undefined;
+      },
+      statusColor: (status: any) => {
+        if (status === 'PENDING') return 'bg-blue-600';
+        if (status === 'PAID') return 'bg-green-600';
+        if (status === 'CANCELLED') return 'bg-red-600';
+        if (status === 'SHIPPING') return 'bg-yellow-600';
+        if (status === 'COMPLETED') return 'bg-purple-600';
+        return 'bg-gray-600';
+      },
       renderButtonPagy: pagy,
       hasPagination: hasPagination,
       previous: previous,
@@ -100,6 +118,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   await app.listen(configService.get<number>('port'));
 }
 bootstrap();

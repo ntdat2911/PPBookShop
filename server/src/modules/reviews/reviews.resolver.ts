@@ -32,7 +32,6 @@ export class ReviewsResolver {
   @Public()
   @Query(() => OverviewReviewResponse)
   async getReviewOverviewById(@Args('id') id: string) {
-    console.log('id', id);
     return this.reviewsService.getReviewOverviewById(id);
   }
 

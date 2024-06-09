@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { RegisterRequestDto } from './dtos/users.dto';
 
 @Injectable()
@@ -66,5 +66,19 @@ export class UsersRepository {
   }): Promise<User> {
     const { where } = params;
     return await this.prisma.user.delete({ where });
+  }
+
+  async updateImage(userId: string, image: string) {
+    return await this.prisma.user.update({
+      where: { UserID: userId },
+      data: { ImageURL: image },
+    });
+  }
+
+  async updateProfile(userId: string, name: string) {
+    return await this.prisma.user.update({
+      where: { UserID: userId },
+      data: { UserName: name },
+    });
   }
 }

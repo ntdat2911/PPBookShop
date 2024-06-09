@@ -12,6 +12,8 @@ import { BooksService } from '../books/books.service';
 import { AuthorsService } from '../authors/authors.service';
 import { CategoriesService } from '../categories/categories.service';
 import { AdminService } from './admin.service';
+import { OrdersService } from '../orders/orders.service';
+import { AboutUsService } from '../about-us/about-us.service';
 
 @Controller('admin')
 export class AdminController {
@@ -20,15 +22,16 @@ export class AdminController {
     private readonly bookService: BooksService,
     private readonly authorService: AuthorsService,
     private readonly CategoryService: CategoriesService,
+    private readonly OrdersService: OrdersService,
+    private readonly AboutUsService: AboutUsService,
   ) {}
 
-  @Public()
   @Get()
   @Render('book/bookTable')
   async root(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { bookList, authorList, categoryList, pagyInfo } =
-      await this.adminService.getBookManagementData(page, size);
+      await this.adminService.getBookManagementData(page, size, search);
     const path = '/admin/book-management';
     return {
       pagyInfo,
@@ -47,13 +50,12 @@ export class AdminController {
     return { layout: 'auth_layout' };
   }
 
-  @Public()
   @Get('/book-management')
   @Render('book/bookTable')
   public async BookManagement(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { bookList, authorList, categoryList, pagyInfo } =
-      await this.adminService.getBookManagementData(page, size);
+      await this.adminService.getBookManagementData(page, size, search);
     const path = '/admin/book-management';
 
     return {
@@ -66,7 +68,6 @@ export class AdminController {
     };
   }
 
-  @Public()
   @Get('/book-management/edit/:BookID')
   @Render('book/bookEdit')
   public async EditBook(@Param('BookID') BookID: string) {
@@ -79,7 +80,6 @@ export class AdminController {
     };
   }
 
-  @Public()
   @Get('/category-management')
   @Render('category/categoryTable')
   public async CategoryManagement(@Query() query, @Req() req) {
@@ -91,7 +91,6 @@ export class AdminController {
     return { categoryList, pagyInfo, req, path };
   }
 
-  @Public()
   @Get('/category-management/edit/:CategoryID')
   @Render('category/categoryEdit')
   public async EditCategory(@Param('CategoryID') CategoryID: string) {
@@ -106,7 +105,6 @@ export class AdminController {
     };
   }
 
-  @Public()
   @Get('/author-management')
   @Render('author/authorTable')
   public async AuthorManagement(@Query() query, @Req() req) {
@@ -117,7 +115,6 @@ export class AdminController {
     return { authorList, pagyInfo, req, path };
   }
 
-  @Public()
   @Get('/author-management/edit/:AuthorID')
   @Render('author/authorEdit')
   public async EditAuthor(@Param('AuthorID') AuthorID: string) {
@@ -127,21 +124,57 @@ export class AdminController {
     };
   }
 
-  @Public()
   @Get('/promotion-management')
   @Render('promotion/promotionTable')
-  public PromotionManagement() {
-    return {};
+  public async PromotionManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { promotionList, pagyInfo, bookList } =
+      await this.adminService.getPromotionManagementData(page, size);
+    const path = '/admin/promotion-management';
+    let currentDate = new Date().toISOString().split('T')[0];
+    return {
+      promotionList,
+      bookList,
+      pagyInfo,
+      req,
+      path,
+      currentDate,
+    };
   }
 
-  @Public()
-  @Get('/process-orders-management')
-  @Render('process-order/processOrderTable')
-  public ProcessOrderManagement() {
-    return {};
+  @Get('/promotion-management/edit/:PromotionID')
+  @Render('promotion/promotionEdit')
+  public async EditPromotion(@Param('PromotionID') PromotionID: string) {
+    const { promotion, bookPromotionList, bookList } =
+      await this.adminService.getPromotionEditData(PromotionID);
+    let currentDate = new Date().toISOString().split('T')[0];
+
+    return {
+      promotion,
+      bookPromotionList,
+      bookList,
+      currentDate,
+    };
   }
 
-  @Public()
+  @Get('/orders-management')
+  @Render('order/orderTable')
+  public async OrderManagement(@Query() query, @Req() req) {
+    const { page, size } = query;
+    const { orderList, pagyInfo, OrderStatus } =
+      await this.adminService.getOrderManagementData(page, size);
+    const path = '/admin/orders-management';
+    return { orderList, pagyInfo, req, path, OrderStatus };
+  }
+
+  @Get('/orders-management/detail/:OrderID')
+  @Render('order/orderDetail')
+  public async OrderDetail(@Param('OrderID') OrderID: string) {
+    const { order, orderItems } =
+      await this.adminService.getOrderDetailData(OrderID);
+    return { order, orderItems };
+  }
+
   @Get('/review-management')
   @Render('review/reviewTable')
   public async ReviewManagement(@Query() query, @Req() req) {
@@ -150,5 +183,14 @@ export class AdminController {
       await this.adminService.getReviewManagementData(page, size);
     const path = '/admin/review-management';
     return { reviewList, pagyInfo, req, path };
+  }
+
+  @Get('/about-us')
+  @Render('about-us/aboutUs')
+  public async AboutUs() {
+    const aboutUs = await this.AboutUsService.getAboutUs();
+    return {
+      aboutUs,
+    };
   }
 }

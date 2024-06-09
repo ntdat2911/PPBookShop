@@ -5,4 +5,6 @@ export abstract class ChangePasswordDto extends PasswordsDto {
   @IsString()
   @MinLength(1)
   public password!: string;
+
+  id?: string;
 }

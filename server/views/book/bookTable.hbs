@@ -11,6 +11,10 @@
 
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+     <div class="flex justify-start max-w-md bg-white rounded-lg h-12" x-data="{ search: '' }">
+            <input type="search" id="searchInput" class="w-full px-4 py-1 text-gray-800 focus:outline-none"
+                placeholder="search" x-model="search" value="{{~req.query.search~}}">
+    </div>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>
@@ -75,31 +79,38 @@
               <button
                 data-ripple-light='true'
                 data-dialog-target='dialogEdit'
-                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
+                class='middle none center rounded-lg bg-gradient-to-tr from-yellow-600 to-yellow-400 py-3 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all hover:shadow-lg hover:shadow-yellow-500/40 active:opacity-[0.85]'
               >
-                Edit
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+</svg>
               </button>
 <button
   type="button"
   id="activateButton"
   data-book-id='{{BookID}}'
-  class="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  class="bg-green-500 text-white px-3 py-3 rounded disabled:opacity-50"
   {{#if IsBookActive}}
   disabled
   {{/if}}
 >
-  Activate
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
+</svg>
 </button>
    <button
   type="button"
   id="deactivateButton"
   data-book-id='{{BookID}}'
-  class="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+  class="bg-red-500 text-white px-3 py-3 rounded disabled:opacity-50"
   {{#unless IsBookActive}}
   disabled
   {{/unless}}
 >
-  Deactivate
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+</svg>
 </button>
             </td>
           </tr>
@@ -109,7 +120,7 @@
   </div>
   <div class='flex justify-between items-center py-3'>
    {{#if (hasPagination pagyInfo.pageCount)}}
-  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center" id="pagination">
     <div>
       <nav class="relative z-0 inline-flex shadow-sm">
         {{#with (previous pagyInfo.page path req.query)}}

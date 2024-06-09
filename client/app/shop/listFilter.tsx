@@ -47,12 +47,12 @@ const formSchema = z.object({
   page: z.number().optional(),
   rating: z.array(z.string()).optional(),
   category: z.array(z.string()).optional(),
-  author: z.string().optional(),
+  author: z.array(z.string()).optional(),
 });
 
 interface ListFilterProps {
-  authorList: FilterAuthor[];
-  categoryList: OptionType[];
+  authorList: OptionType<string, string>[];
+  categoryList: OptionType<string, string>[];
 }
 
 export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
@@ -66,7 +66,7 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
       page: 1,
       rating: searchParams.rating || [],
       category: searchParams.category || [],
-      author: searchParams.author || "",
+      author: searchParams.author || [],
     },
   });
 
@@ -110,6 +110,7 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
               render={({ field }) => (
                 <FormItem>
                   <MultiSelect
+                    filterName="category"
                     selected={field.value || []}
                     options={categoryList}
                     {...field}
@@ -193,57 +194,21 @@ export const ListFilter = ({ authorList, categoryList }: ListFilterProps) => {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Author</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value
-                            ? authorList.find(
-                                (author) => author.AuthorID === field.value
-                              )?.AuthorName
-                            : "Select author"}
-                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search author..."
-                          className="h-9"
+                  <FormField
+                    control={form.control}
+                    name="author"
+                    render={({ field }) => (
+                      <FormItem>
+                        <MultiSelect
+                          filterName="authors"
+                          selected={field.value || []}
+                          options={authorList}
+                          {...field}
                         />
-                        <CommandEmpty>No author found.</CommandEmpty>
-                        <CommandGroup>
-                          {authorList.map((author) => (
-                            <CommandItem
-                              value={author.AuthorName}
-                              key={author.AuthorID}
-                              onSelect={() => {
-                                form.setValue("author", author.AuthorID);
-                              }}
-                            >
-                              {author.AuthorName}
-                              <CheckIcon
-                                className={cn(
-                                  "ml-auto h-4 w-4",
-                                  author.AuthorID === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

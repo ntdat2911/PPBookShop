@@ -45,7 +45,7 @@ const formSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters" }),
 });
 
-const SignInForm = (props: Props) => {
+const SignInForm = ({ callbackUrl }: Props) => {
   const { data: session } = useSession();
   const { toast } = useToast();
   const router = useRouter();
@@ -67,6 +67,9 @@ const SignInForm = (props: Props) => {
           },
         });
         if (
+          cart &&
+          cart.data &&
+          cart.data.getCart &&
           cart.data.getCart.CartDetail &&
           cart.data.getCart.CartDetail.length > 0 &&
           session?.user.id
@@ -103,7 +106,7 @@ const SignInForm = (props: Props) => {
       variant: "success",
     });
 
-    router.push(props.callbackUrl ? props.callbackUrl : "/");
+    router.push(callbackUrl ? callbackUrl : "/");
   };
 
   return (
@@ -135,7 +138,7 @@ const SignInForm = (props: Props) => {
                     <div className="flex items-center">
                       <FormLabel>Password</FormLabel>
                       <Link
-                        href="/auth/send-reset-password"
+                        href="/auth/forgot-password"
                         className="ml-auto inline-block text-sm underline"
                       >
                         Forgot your password?
@@ -149,7 +152,7 @@ const SignInForm = (props: Props) => {
                 )}
               />
             </div>
-            <Button type="submit" className="w-full bg-black">
+            <Button type="submit" className="w-full">
               Login
             </Button>
           </div>

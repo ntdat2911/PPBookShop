@@ -1,0 +1,161 @@
+<div class='p-10 pt-4'>
+  <div
+    class='flex shrink-0 items-center p-4 font-sans text-2xl font-semibold leading-snug text-blue-gray-900 antialiased'
+  >Add new Author</div>
+  <div
+    class='relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-4 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased'
+  >
+    <form>
+
+      <div>
+        <div class='grid grid-cols-2 gap-4'>
+
+          <div class='mb-5'>
+            <label
+              for='OrderID'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >Order ID</label>
+            <input
+              type='text'
+              name='OrderID'
+              id='OrderID'
+              placeholder='Order ID'
+              class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md bg-gray-200'
+              value='{{~order.OrderID~}}'
+              disabled
+            />
+          </div>
+          <div class='mb-5'>
+            <label
+              for='AuthorName'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >User ID</label>
+            <input
+              type='text'
+              name='UserID'
+              id='UserID'
+              placeholder='User ID'
+              class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md bg-gray-200'
+              disabled
+              value='{{~order.UserID~}}'
+            />
+          </div>
+        </div>
+        <div class='grid grid-cols-3 gap-4'>
+
+          <div class='mb-5'>
+            <label
+              for='TotalPrice'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >Total</label>
+            <input
+              type='text'
+              name='TotalPrice'
+              id='TotalPrice'
+              placeholder='Total Price'
+              class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md bg-gray-200'
+              value='{{~order.TotalPrice~}}'
+              disabled
+            />
+          </div>
+          <div class='mb-5'>
+            <label
+              for='Status'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >Status</label>
+            <button
+              type='button'
+              id='Status'
+              class='rounded-full px-4 mr-2 text-white p-2 rounded leading-none flex items-center
+                {{statusColor order.Status}}'
+              disabled
+            >
+              {{order.Status}}
+            </button>
+          </div>
+          <div class='mb-5'>
+            <label
+              for='PaymentMethod'
+              class='mb-3 block text-base font-medium text-[#07074D]'
+            >Payment Method</label>
+            <input
+              type='text'
+              name='PaymentMethod'
+              id='PaymentMethod'
+              placeholder='Payment Method'
+              class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md bg-gray-200'
+              value='{{~order.PaymentMethod~}}'
+              disabled
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+        <table class='min-w-full bg-white'>
+          <thead class='bg-gray-100'>
+            <tr>
+
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center w-20'
+              >Book ID</th>
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center w-20'
+              >Book</th>
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center w-20'
+              >Quantity</th>
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+              >Unit item price</th>
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+              >Discount</th>
+              <th
+                class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center'
+              >Total Price</th>
+
+            </tr>
+          </thead>
+          <tbody class='text-gray-700'>
+            {{#each orderItems}}
+              <tr class='border-t text-center' data-order-id='{{BookID}}'>
+                <td class='py-3 px-4'>{{BookID}}</td>
+                <td class='py-3 px-4'>
+                  <img
+                    src='{{BookImage}}'
+                    alt='{{BookImage}}'
+                    class='w-16 h-16 mx-auto object-contain rounded-lg'
+                  />
+                </td>
+                <td class='py-3 px-4'>
+                  {{ItemQuantity}}
+                </td>
+
+                <td class='py-3 px-4'>
+                  {{UnitItemPrice}}
+                </td>
+
+                <td class='py-3 px-4'>
+                  {{#if Discount}}
+                    {{Discount}}
+                  {{else}}
+                    0
+                  {{/if}}
+                </td>
+                <td class='py-3 px-4'>
+                  {{TotalItemPrice}}
+                </td>
+
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<script src='/js/author-management/authorEdit.js'></script>
