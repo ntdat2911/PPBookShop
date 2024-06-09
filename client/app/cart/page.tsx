@@ -151,6 +151,7 @@ export default function Page() {
   const handleAddressChange = (addressID: string) => {
     setAddressID(addressID);
   };
+  console.log(items);
   return (
     <div
       className={cn(
@@ -348,7 +349,9 @@ export default function Page() {
                         )
                         .toFixed(2)}
                   </div>
-                  <Button type="submit">Checkout</Button>
+                  <Button type="submit" disabled={cartCount === 0}>
+                    Checkout
+                  </Button>
                 </form>
               </Form>
             </CardContent>

@@ -56,4 +56,12 @@ export class OrdersRepository {
       },
     });
   }
+
+  async getOrdersByUserID(UserID: string) {
+    return this.prismaService.order.findMany({
+      where: {
+        UserID: UserID,
+      },
+    });
+  }
 }

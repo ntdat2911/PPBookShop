@@ -105,6 +105,18 @@ type GReviewPaginationResponse {
   size: Int!
 }
 
+type IOrderItemResponse {
+  BookID: String!
+  BookTitle: String!
+  Discount: Float
+  ImageURL: String!
+  ItemQuantity: Float!
+  OrderID: String!
+  OrderItemID: String!
+  TotalItemPrice: Float!
+  UnitItemPrice: Float!
+}
+
 type Mutation {
   createAddress(address: String!, isDefault: Boolean!, phone: String!, receiverName: String!, userId: String!): AddressEntity!
   createOrUpdateCart(CartDetail: String!, UserID: String!): CartEntity!
@@ -118,6 +130,7 @@ type OrderEntity {
   AddressID: String!
   CreatedAt: DateTime!
   OrderID: String!
+  OrderItems: [IOrderItemResponse!]!
   PaymentMethod: String!
   Status: String!
   TotalPrice: Float!
@@ -126,7 +139,7 @@ type OrderEntity {
 
 type OrderItemEntity {
   BookID: String!
-  Discount: Float!
+  Discount: Float
   ItemQuantity: Float!
   OrderID: String!
   OrderItemID: String!
@@ -161,6 +174,7 @@ type Query {
   getCategories: [CategoryEntity!]!
   getOnSaleBooks(size: Float!): [BookEntity!]!
   getOrderItemsByOrderId(orderId: String!): [OrderItemEntity!]!
+  getOrdersByUserID(userID: String!): [OrderEntity!]!
   getPopularBooks(size: Float!): [BookEntity!]!
   getRecommendedBooks(size: Float!): [BookEntity!]!
   getReviewOverviewById(id: String!): OverviewReviewResponse!

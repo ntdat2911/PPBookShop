@@ -136,9 +136,18 @@ export function Header() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() => router.push(`/profile/${session.user.id}`)}
+                    onClick={() =>
+                      router.push(`/profile/${session.user.id}?tab=profile`)
+                    }
                   >
                     Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/profile/${session.user.id}?tab=order`)
+                    }
+                  >
+                    Orders history
                   </DropdownMenuItem>
 
                   <DropdownMenuItem onClick={() => handleLogout()}>

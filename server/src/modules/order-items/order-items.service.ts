@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { OrderItemsRepository } from './order-items.repository';
+import { BooksService } from '../books/books.service';
 
 @Injectable()
 export class OrderItemsService {
   constructor(private readonly orderItemsRepository: OrderItemsRepository) {}
 
   async getOrderItemsByOrderId(orderId: string): Promise<any> {
-    return this.orderItemsRepository.getOrderItemsByOrderId(orderId);
+    const res = await this.orderItemsRepository.getOrderItemsByOrderId(orderId);
+    return res;
   }
 
   async createOrderItemByString(orderId: string, orderItems: string) {
