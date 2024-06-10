@@ -19,6 +19,7 @@ import { GET_ORDERS_BY_USER_ID } from "@/services/orders/queries";
 import { useQuery } from "@apollo/client";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import Image from "next/image";
+import Link from "next/link";
 interface OrderDetailProps {
   user: UserDto;
 }
@@ -128,16 +129,28 @@ export const OrderDetail = ({ user }: OrderDetailProps) => {
                                 key={orderDetail.BookID}
                               >
                                 <td className="py-3 px-4">
-                                  <Image
-                                    src={orderDetail.ImageURL}
-                                    alt={orderDetail.BookID}
-                                    width={300}
-                                    height={300}
-                                    className="w-28 object-contain rounded-lg"
-                                  />
+                                  <Link
+                                    href={
+                                      "/product/detail/" + orderDetail.BookID
+                                    }
+                                  >
+                                    <Image
+                                      src={orderDetail.ImageURL}
+                                      alt={orderDetail.BookID}
+                                      width={300}
+                                      height={300}
+                                      className="w-28 object-contain rounded-lg"
+                                    />
+                                  </Link>
                                 </td>
                                 <td className="py-3 px-4">
-                                  {orderDetail.BookTitle}
+                                  <Link
+                                    href={
+                                      "/product/detail/" + orderDetail.BookID
+                                    }
+                                  >
+                                    {orderDetail.BookTitle}
+                                  </Link>
                                 </td>
                                 <td className="py-3 px-4">
                                   {orderDetail.ItemQuantity}
