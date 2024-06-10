@@ -53,4 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then(() => location.reload());
     }
   });
+
+  const statusFilter = document.getElementById('statusFilter');
+
+  statusFilter.addEventListener('change', () => {
+    const selectedStatus = statusFilter.value;
+    const url = new URL(window.location.href);
+    url.searchParams.set('status', selectedStatus);
+    window.location.href = url.toString();
+  });
+
+  // To keep the filter selected value after page reload based on the query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentStatus = urlParams.get('status');
+  if (currentStatus) {
+    statusFilter.value = currentStatus;
+  }
 });

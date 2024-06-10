@@ -153,12 +153,15 @@ export default function Page() {
   };
   console.log(items);
   return (
-    <div
-      className={cn(
-        "container py-4 space-y-8",
-        loading ? "bg-gray-200 opacity-75 z-10" : ""
+    <div className={cn("container py-4 space-y-8")}>
+      {loading && (
+        <div className="flex space-x-2 justify-center items-center bg-white h-screen dark:invert">
+          <span className="sr-only">Loading...</span>
+          <div className="h-8 w-8 bg-medium-brown rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+          <div className="h-8 w-8 bg-medium-brown rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+          <div className="h-8 w-8 bg-medium-brown rounded-full animate-bounce"></div>
+        </div>
       )}
-    >
       <div className="grid grid-cols-3 gap-2">
         <div className="col-span-2 h-full">
           <Card>

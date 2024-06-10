@@ -28,12 +28,15 @@ export class OrdersService {
     return order;
   }
 
-  async getAllOrders(page: number, size: number) {
+  async getAllOrders(page: number, size: number, status?: string) {
+    if (status) {
+      return this.ordersRepository.getAllOrdersByStatus(page, size, status);
+    }
     return this.ordersRepository.getAllOrders(page, size);
   }
 
-  async countAll() {
-    return this.ordersRepository.countAll();
+  async countAll(status?: string) {
+    return this.ordersRepository.countAll(status);
   }
 
   async getOrderStatus() {

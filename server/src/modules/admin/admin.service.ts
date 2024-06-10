@@ -165,10 +165,14 @@ export class AdminService {
     };
   }
 
-  public async getOrderManagementData(page: number, size: number) {
+  public async getOrderManagementData(
+    page: number,
+    size: number,
+    status?: string,
+  ) {
     page = page || 1;
     size = size || 5;
-    const orderList = await this.ordersService.getAllOrders(page, size);
+    const orderList = await this.ordersService.getAllOrders(page, size, status);
     const newOrderList = await Promise.all(
       orderList.map(async (order) => {
         const address = await this.addressService.getAddressByAddressID(
@@ -180,7 +184,7 @@ export class AdminService {
         };
       }),
     );
-    const count = await this.ordersService.countAll();
+    const count = await this.ordersService.countAll(status);
     const pageCount = Math.ceil(count / size);
     const OrderStatus = await this.ordersService.getOrderStatus();
     return {

@@ -1,13 +1,26 @@
 <div class='container px-8 mt-4'>
   <div class='flex justify-between items-center mb-6'>
     <h1 class='text-2xl font-bold'>Order</h1>
-
+    <div>
+      <label for='statusFilter' class='mr-2 font-semibold text-gray-700'>Filter
+        by Status:</label>
+      <select
+        id='statusFilter'
+        class='w-48 rounded-md border border-gray-300 bg-white py-2 px-3 text-base text-gray-700 outline-none focus:border-indigo-500 focus:shadow-md'
+      >
+        <option value=''>All</option>
+        <option value='PENDING'>PENDING</option>
+        <option value='PAID'>PAID</option>
+        <option value='SHIPPING'>SHIPPING</option>
+        <option value='COMPLETED'>COMPLETED</option>
+        <option value='CANCELLED'>CANCELLED</option>
+      </select>
+    </div>
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>
-
           <th
             class='py-3 px-4 uppercase font-semibold text-sm text-gray-700 text-center w-20'
           >Order ID</th>
@@ -59,7 +72,12 @@
               {{Address}}
             </td>
             <td class='py-3 px-4'>
-              {{PaymentMethod}}
+              <div
+                class='inline-flex items-center rounded-md border px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent text-primary-foreground shadow
+                  {{paymentMethodColor PaymentMethod}}'
+              >
+                {{PaymentMethod}}
+              </div>
             </td>
             <td class='py-3 px-4'>
               {{formatDate CreatedAt}}

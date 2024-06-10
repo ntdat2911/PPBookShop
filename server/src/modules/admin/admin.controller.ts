@@ -160,9 +160,10 @@ export class AdminController {
   @Get('/orders-management')
   @Render('order/orderTable')
   public async OrderManagement(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, status } = query;
+
     const { orderList, pagyInfo, OrderStatus } =
-      await this.adminService.getOrderManagementData(page, size);
+      await this.adminService.getOrderManagementData(page, size, status);
     const path = '/admin/orders-management';
     return { orderList, pagyInfo, req, path, OrderStatus };
   }
