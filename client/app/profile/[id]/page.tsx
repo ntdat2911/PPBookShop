@@ -8,6 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import ChangePassword from "./ChangePassword";
 import { OrderDetail } from "./OrderDetail";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Page({
   params,
@@ -20,37 +21,43 @@ export default function Page({
   const [page, setPage] = useState(searchParams.tab || "profile");
   return (
     <div className=" pt-8 grid grid-cols-7">
-      <div className="w-full h-full flex flex-col ">
-        <Button
-          variant="ghost"
-          className={cn(
-            "bg-light-brown hover:bg-medium-brown border ",
-            page === "profile" && "bg-medium-brown text-white"
-          )}
-          onClick={() => setPage("profile")}
-        >
-          Profile
-        </Button>
-        <Button
-          variant="ghost"
-          className={cn(
-            "bg-light-brown hover:bg-medium-brown border ",
-            page === "password" && "bg-medium-brown text-white"
-          )}
-          onClick={() => setPage("password")}
-        >
-          Change password
-        </Button>
-        <Button
-          variant="ghost"
-          className={cn(
-            "bg-light-brown hover:bg-medium-brown border ",
-            page === "order" && "bg-medium-brown text-white"
-          )}
-          onClick={() => setPage("order")}
-        >
-          Order
-        </Button>
+      <div className="w-full h-full flex flex-col gap-4">
+        <Card className="w-full h-full flex flex-col gap-4 bg-light-brown">
+          <CardContent className="p-0 px-3 w-full h-full flex flex-col gap-4 justify-start pt-3">
+            <Button
+              variant="ghost"
+              className={cn(
+                "bg-light-brown w-full hover:bg-medium-brown hover:text-white",
+                page === "profile" && "bg-medium-brown text-white"
+              )}
+              onClick={() => setPage("profile")}
+            >
+              Profile
+            </Button>
+            <Button
+              variant="ghost"
+              className={cn(
+                "bg-light-brown w-full hover:bg-medium-brown hover:text-white",
+
+                page === "password" && "bg-medium-brown text-white"
+              )}
+              onClick={() => setPage("password")}
+            >
+              Change password
+            </Button>
+            <Button
+              variant="ghost"
+              className={cn(
+                "bg-light-brown w-full hover:bg-medium-brown hover:text-white",
+
+                page === "order" && "bg-medium-brown text-white"
+              )}
+              onClick={() => setPage("order")}
+            >
+              Order
+            </Button>
+          </CardContent>
+        </Card>
       </div>
       <div className="col-span-6 grid grid-cols-4 mx-4">
         {page === "profile" && (
