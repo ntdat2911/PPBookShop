@@ -28,11 +28,15 @@ export class AuthorsService {
     return this.authorsRepository.updateAuthor(id, data);
   }
 
-  public async getPaginationAuthors(page: number, size: number) {
-    return this.authorsRepository.getPaginationAuthors(page, size);
+  public async getPaginationAuthors(
+    page: number,
+    size: number,
+    search?: string,
+  ) {
+    return this.authorsRepository.getPaginationAuthors(page, size, search);
   }
 
-  public async countAll() {
-    return this.authorsRepository.countAll();
+  public async countAll(search?: string) {
+    return this.authorsRepository.countAll(search);
   }
 }

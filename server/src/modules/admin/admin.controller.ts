@@ -83,9 +83,9 @@ export class AdminController {
   @Get('/category-management')
   @Render('category/categoryTable')
   public async CategoryManagement(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { categoryList, pagyInfo } =
-      await this.adminService.getCategoryManagementData(page, size);
+      await this.adminService.getCategoryManagementData(page, size, search);
     const path = '/admin/category-management';
 
     return { categoryList, pagyInfo, req, path };
@@ -108,9 +108,9 @@ export class AdminController {
   @Get('/author-management')
   @Render('author/authorTable')
   public async AuthorManagement(@Query() query, @Req() req) {
-    const { page, size } = query;
+    const { page, size, search } = query;
     const { authorList, pagyInfo } =
-      await this.adminService.getAuthorManagementData(page, size);
+      await this.adminService.getAuthorManagementData(page, size, search);
     const path = '/admin/author-management';
     return { authorList, pagyInfo, req, path };
   }

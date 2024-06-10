@@ -34,11 +34,15 @@ export class CategoriesService {
     return book;
   }
 
-  async getPaginationCategories(page: number, size: number) {
-    return this.categoriesRepository.getPaginationCategories(page, size);
+  async getPaginationCategories(page: number, size: number, search?: string) {
+    return this.categoriesRepository.getPaginationCategories(
+      page,
+      size,
+      search,
+    );
   }
 
-  async countAll() {
-    return this.categoriesRepository.countAll();
+  async countAll(search?: string) {
+    return this.categoriesRepository.countAll(search);
   }
 }

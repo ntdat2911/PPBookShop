@@ -77,15 +77,20 @@ export class AdminService {
     };
   }
 
-  public async getCategoryManagementData(page: number, size: number) {
+  public async getCategoryManagementData(
+    page: number,
+    size: number,
+    search: string,
+  ) {
     page = page || 1;
     size = size || 5;
     const categoryList = await this.categoriesService.getPaginationCategories(
       page,
       size,
+      search,
     );
 
-    const count = await this.categoriesService.countAll();
+    const count = await this.categoriesService.countAll(search);
     const pageCount = Math.ceil(count / size);
     return {
       pagyInfo: {
@@ -97,14 +102,19 @@ export class AdminService {
     };
   }
 
-  public async getAuthorManagementData(page: number, size: number) {
+  public async getAuthorManagementData(
+    page: number,
+    size: number,
+    search: string,
+  ) {
     page = page || 1;
     size = size || 5;
     const authorList = await this.authorsService.getPaginationAuthors(
       page,
       size,
+      search,
     );
-    const count = await this.authorsService.countAll();
+    const count = await this.authorsService.countAll(search);
     const pageCount = Math.ceil(count / size);
     return {
       pagyInfo: {

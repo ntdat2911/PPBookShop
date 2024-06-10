@@ -32,14 +32,34 @@ export class AuthorsRepository {
     });
   }
 
-  async getPaginationAuthors(page: number, size: number) {
+  async getPaginationAuthors(page: number, size: number, search?: string) {
     return this.prisma.author.findMany({
       skip: (page - 1) * size,
       take: size,
+      where: {
+        AuthorName: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+      orderBy: {
+        AuthorID: 'desc',
+      },
     });
   }
 
-  async countAll() {
-    return this.prisma.author.count();
+  async countAll(search?: string) {
+    return this.prisma.author.count(
+      search
+        ? {
+            where: {
+              AuthorName: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+          }
+        : undefined,
+    );
   }
 }

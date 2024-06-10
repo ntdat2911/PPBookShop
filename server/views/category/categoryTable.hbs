@@ -11,6 +11,10 @@
 
   </div>
   <div class='bg-white shadow-md rounded my-6 overflow-x-auto'>
+     <div class="flex justify-center max-w-md bg-white rounded-lg h-12 min-w-full" x-data="{ search: '' }">
+            <input type="search" id="searchInput" class=" px-4 py-1 text-gray-800 focus:outline-none w-1/2 rounded-lg"
+                placeholder="search" x-model="search" value="{{~req.query.search~}}">
+    </div>
     <table class='min-w-full bg-white'>
       <thead class='bg-gray-100'>
         <tr>

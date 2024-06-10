@@ -76,7 +76,7 @@ export default function Page() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-black">
+                <Button type="submit" className="w-full">
                   Reset password
                 </Button>
               </div>

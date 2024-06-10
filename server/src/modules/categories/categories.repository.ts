@@ -52,15 +52,32 @@ export class CategoriesRepository {
     });
   }
 
-  async getPaginationCategories(page: number, size: number) {
+  async getPaginationCategories(page: number, size: number, search?: string) {
     return this.prisma.category.findMany({
       skip: (page - 1) * size,
       take: size,
+      where: {
+        CategoryName: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
       orderBy: { CreatedAt: 'desc' },
     });
   }
 
-  async countAll() {
-    return this.prisma.category.count();
+  async countAll(search?: string) {
+    return this.prisma.category.count(
+      search
+        ? {
+            where: {
+              CategoryName: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+          }
+        : undefined,
+    );
   }
 }
