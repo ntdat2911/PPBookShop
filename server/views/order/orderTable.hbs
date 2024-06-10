@@ -114,6 +114,17 @@
                     <option value='COMPLETED'>COMPLETED</option>
                     <option value='CANCELLED'>CANCELLED</option>
                   {{/if}}
+                  {{#if (equal Status 'COMPLETED')}}
+                    <option value='PENDING'>PENDING</option>
+                    <option value='SHIPPING'>SHIPPING</option>
+                    <option value='CANCELLED'>CANCELLED</option>
+                  {{/if}}
+                  {{#if (equal Status 'CANCELLED')}}
+                    <option value='PENDING'>PENDING</option>
+                    <option value='SHIPPING'>SHIPPING</option>
+                    <option value='COMPLETED'>COMPLETED</option>
+
+                  {{/if}}
                 </select>
               </div>
 
@@ -184,6 +195,40 @@
         </div>
       </div>
     {{/if}}
+  </div>
+</div>
+
+<div
+  id='confirmationDialog'
+  class='fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden'
+>
+  <div
+    class='bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full'
+  >
+    <div class='bg-white p-6'>
+      <h3 class='text-lg leading-6 font-medium text-gray-900' id='modal-title'>
+        Confirm Status Change
+      </h3>
+      <div class='mt-2'>
+        <p class='text-sm text-gray-500' id='confirmationMessage'></p>
+      </div>
+      <div class='mt-4 flex justify-end'>
+        <button
+          id='cancelButton'
+          type='button'
+          class='mr-2 py-2 px-4 bg-red-600 text-white rounded-md'
+        >
+          Cancel
+        </button>
+        <button
+          id='confirmButton'
+          type='button'
+          class='py-2 px-4 bg-green-600 text-white rounded-md'
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 

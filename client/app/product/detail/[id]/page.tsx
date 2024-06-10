@@ -76,7 +76,10 @@ export default async function Page({ params }: { params: { id: string } }) {
               </div>
               <div className="PRICE ">
                 <div className="">
-                  {book.BookPrice && book.Promotion && book.Promotion[0] ? (
+                  {book.BookPrice &&
+                  book.Promotion &&
+                  book.Promotion[0] &&
+                  book.Promotion[0].DiscountPercent ? (
                     <>
                       <div className="text-2xl font-semibold line-through">
                         ${book.BookPrice.toFixed(2)}
@@ -128,7 +131,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <div className="col-span-2">
                     <ReviewDisplay bookID={book.BookID} />
                   </div>
-
                   <ReviewSection bookID={book.BookID} />
                 </div>
               </CardContent>
