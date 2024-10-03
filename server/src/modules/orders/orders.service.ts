@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { OrdersRepository } from './orders.repository';
 import { OrderStatus, PaymentMethod } from '@prisma/client';
 import { OrderItemsService } from '../order-items/order-items.service';
+import { BooksService } from '../books/books.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
     private readonly orderItemsService: OrderItemsService,
+    private readonly booksService: BooksService,
   ) {}
 
   async createOrder(data: {
@@ -26,12 +28,15 @@ export class OrdersService {
     return order;
   }
 
-  async getAllOrders(page: number, size: number) {
+  async getAllOrders(page: number, size: number, status?: string) {
+    if (status) {
+      return this.ordersRepository.getAllOrdersByStatus(page, size, status);
+    }
     return this.ordersRepository.getAllOrders(page, size);
   }
 
-  async countAll() {
-    return this.ordersRepository.countAll();
+  async countAll(status?: string) {
+    return this.ordersRepository.countAll(status);
   }
 
   async getOrderStatus() {
@@ -44,5 +49,21 @@ export class OrdersService {
 
   async getOrderByID(OrderID: string) {
     return this.ordersRepository.getOrderByID(OrderID);
+  }
+
+  async getOrdersByUserID(UserID: string) {
+    return this.ordersRepository.getOrdersByUserID(UserID);
+  }
+
+  async getOrderItemsByOrderId(OrderID: string) {
+    const res = await this.orderItemsService.getOrderItemsByOrderId(OrderID);
+    await Promise.all(
+      res.map(async (item) => {
+        const book = await this.booksService.getBookById(item.BookID);
+        item.ImageURL = book.ImageURL;
+        item.BookTitle = book.BookTitle;
+      }),
+    );
+    return res;
   }
 }

@@ -104,6 +104,11 @@ async function bootstrap() {
         if (status === 'COMPLETED') return 'bg-purple-600';
         return 'bg-gray-600';
       },
+      paymentMethodColor: (paymentMethod: any) => {
+        if (paymentMethod === 'COD')
+          return 'bg-green-300 hover:bg-green-400 rounded-full';
+        return 'bg-blue-300 hover:bg-blue-400 rounded-full';
+      },
       renderButtonPagy: pagy,
       hasPagination: hasPagination,
       previous: previous,

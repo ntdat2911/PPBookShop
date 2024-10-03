@@ -21,6 +21,6 @@ export class OrderItemEntity {
   @Field(() => Number)
   TotalItemPrice: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   Discount: number;
 }

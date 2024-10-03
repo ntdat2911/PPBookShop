@@ -28,3 +28,24 @@ mutation CreateOrder(
     }
 }
 `);
+
+export const GET_ORDERS_BY_USER_ID = gql(`
+query GetOrdersByUserID($userID:String!){
+  getOrdersByUserID(userID:$userID){
+    OrderID
+    UserID
+    Status
+    TotalPrice
+    PaymentMethod
+    OrderItems{
+      BookID
+      ItemQuantity
+      UnitItemPrice
+      Discount
+      TotalItemPrice
+      ImageURL
+      BookTitle
+    }
+  },
+}
+`);

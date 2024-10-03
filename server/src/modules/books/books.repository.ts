@@ -228,6 +228,8 @@ export class BooksRepository {
         BookID: {
           in: onSaleBookIds,
         },
+        IsBookActive: true,
+        IsOutOfStock: false,
       },
     });
 
@@ -237,6 +239,10 @@ export class BooksRepository {
   async getRecommendedBooks(size: number) {
     return this.prisma.book.findMany({
       take: size,
+      where: {
+        IsBookActive: true,
+        IsOutOfStock: false,
+      },
       orderBy: {
         Rating: 'desc',
       },

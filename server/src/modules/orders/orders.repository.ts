@@ -34,7 +34,15 @@ export class OrdersRepository {
     });
   }
 
-  async countAll() {
+  async countAll(status?: string) {
+    if (status) {
+      const enumStatus = OrderStatus[status as keyof typeof OrderStatus];
+      return this.prismaService.order.count({
+        where: {
+          Status: enumStatus,
+        },
+      });
+    }
     return this.prismaService.order.count();
   }
 
@@ -53,6 +61,29 @@ export class OrdersRepository {
     return this.prismaService.order.findUnique({
       where: {
         OrderID,
+      },
+    });
+  }
+
+  async getOrdersByUserID(UserID: string) {
+    return this.prismaService.order.findMany({
+      where: {
+        UserID: UserID,
+      },
+    });
+  }
+
+  async getAllOrdersByStatus(page: number, size: number, status: string) {
+    const enumStatus = OrderStatus[status as keyof typeof OrderStatus];
+
+    return this.prismaService.order.findMany({
+      take: size,
+      skip: (page - 1) * size,
+      where: {
+        Status: enumStatus,
+      },
+      orderBy: {
+        CreatedAt: 'desc',
       },
     });
   }

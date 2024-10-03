@@ -123,6 +123,19 @@ export type GReviewPaginationResponse = {
   size: Scalars['Int']['output'];
 };
 
+export type IOrderItemResponse = {
+  __typename?: 'IOrderItemResponse';
+  BookID: Scalars['String']['output'];
+  BookTitle: Scalars['String']['output'];
+  Discount?: Maybe<Scalars['Float']['output']>;
+  ImageURL: Scalars['String']['output'];
+  ItemQuantity: Scalars['Float']['output'];
+  OrderID: Scalars['String']['output'];
+  OrderItemID: Scalars['String']['output'];
+  TotalItemPrice: Scalars['Float']['output'];
+  UnitItemPrice: Scalars['Float']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAddress: AddressEntity;
@@ -177,6 +190,7 @@ export type OrderEntity = {
   AddressID: Scalars['String']['output'];
   CreatedAt: Scalars['DateTime']['output'];
   OrderID: Scalars['String']['output'];
+  OrderItems: Array<IOrderItemResponse>;
   PaymentMethod: Scalars['String']['output'];
   Status: Scalars['String']['output'];
   TotalPrice: Scalars['Float']['output'];
@@ -186,7 +200,7 @@ export type OrderEntity = {
 export type OrderItemEntity = {
   __typename?: 'OrderItemEntity';
   BookID: Scalars['String']['output'];
-  Discount: Scalars['Float']['output'];
+  Discount?: Maybe<Scalars['Float']['output']>;
   ItemQuantity: Scalars['Float']['output'];
   OrderID: Scalars['String']['output'];
   OrderItemID: Scalars['String']['output'];
@@ -224,6 +238,7 @@ export type Query = {
   getCategories: Array<CategoryEntity>;
   getOnSaleBooks: Array<BookEntity>;
   getOrderItemsByOrderId: Array<OrderItemEntity>;
+  getOrdersByUserID: Array<OrderEntity>;
   getPopularBooks: Array<BookEntity>;
   getRecommendedBooks: Array<BookEntity>;
   getReviewOverviewById: OverviewReviewResponse;
@@ -264,6 +279,11 @@ export type QueryGetOnSaleBooksArgs = {
 
 export type QueryGetOrderItemsByOrderIdArgs = {
   orderId: Scalars['String']['input'];
+};
+
+
+export type QueryGetOrdersByUserIdArgs = {
+  userID: Scalars['String']['input'];
 };
 
 
@@ -431,6 +451,13 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'OrderEntity', OrderID: string, UserID: string, Status: string, TotalPrice: number, PaymentMethod: string } };
 
+export type GetOrdersByUserIdQueryVariables = Exact<{
+  userID: Scalars['String']['input'];
+}>;
+
+
+export type GetOrdersByUserIdQuery = { __typename?: 'Query', getOrdersByUserID: Array<{ __typename?: 'OrderEntity', OrderID: string, UserID: string, Status: string, TotalPrice: number, PaymentMethod: string, OrderItems: Array<{ __typename?: 'IOrderItemResponse', BookID: string, ItemQuantity: number, UnitItemPrice: number, Discount?: number | null, TotalItemPrice: number, ImageURL: string, BookTitle: string }> }> };
+
 export type GetReviewOverViewByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -480,6 +507,7 @@ export const GetCartDocument = {"kind":"Document","definitions":[{"kind":"Operat
 export const UpdateCartDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCart"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"UserID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"CartDetail"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOrUpdateCart"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"UserID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"UserID"}}},{"kind":"Argument","name":{"kind":"Name","value":"CartDetail"},"value":{"kind":"Variable","name":{"kind":"Name","value":"CartDetail"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"UserID"}},{"kind":"Field","name":{"kind":"Name","value":"CartDetail"}}]}}]}}]} as unknown as DocumentNode<UpdateCartMutation, UpdateCartMutationVariables>;
 export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CategoryID"}},{"kind":"Field","name":{"kind":"Name","value":"CategoryName"}}]}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const CreateOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"UserID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"TotalPrice"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"Status"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"AddressID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"PaymentMethod"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"OrderItems"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOrder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"UserID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"UserID"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"TotalPrice"},"value":{"kind":"Variable","name":{"kind":"Name","value":"TotalPrice"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"Status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"Status"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"AddressID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"AddressID"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"PaymentMethod"},"value":{"kind":"Variable","name":{"kind":"Name","value":"PaymentMethod"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"OrderItems"},"value":{"kind":"Variable","name":{"kind":"Name","value":"OrderItems"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"OrderID"}},{"kind":"Field","name":{"kind":"Name","value":"UserID"}},{"kind":"Field","name":{"kind":"Name","value":"Status"}},{"kind":"Field","name":{"kind":"Name","value":"TotalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"PaymentMethod"}}]}}]}}]} as unknown as DocumentNode<CreateOrderMutation, CreateOrderMutationVariables>;
+export const GetOrdersByUserIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOrdersByUserID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getOrdersByUserID"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"OrderID"}},{"kind":"Field","name":{"kind":"Name","value":"UserID"}},{"kind":"Field","name":{"kind":"Name","value":"Status"}},{"kind":"Field","name":{"kind":"Name","value":"TotalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"PaymentMethod"}},{"kind":"Field","name":{"kind":"Name","value":"OrderItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"BookID"}},{"kind":"Field","name":{"kind":"Name","value":"ItemQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"UnitItemPrice"}},{"kind":"Field","name":{"kind":"Name","value":"Discount"}},{"kind":"Field","name":{"kind":"Name","value":"TotalItemPrice"}},{"kind":"Field","name":{"kind":"Name","value":"ImageURL"}},{"kind":"Field","name":{"kind":"Name","value":"BookTitle"}}]}}]}}]}}]} as unknown as DocumentNode<GetOrdersByUserIdQuery, GetOrdersByUserIdQueryVariables>;
 export const GetReviewOverViewByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getReviewOverViewById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getReviewOverviewById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"averageRating"}},{"kind":"Field","name":{"kind":"Name","value":"countReviewList"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]} as unknown as DocumentNode<GetReviewOverViewByIdQuery, GetReviewOverViewByIdQueryVariables>;
 export const GetReviewsByBookIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getReviewsByBookId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rating"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"size"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getReviewsByBookId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"bookID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookID"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"rating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rating"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"size"},"value":{"kind":"Variable","name":{"kind":"Name","value":"size"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"UserID"}},{"kind":"Field","name":{"kind":"Name","value":"Username"}},{"kind":"Field","name":{"kind":"Name","value":"Comment"}},{"kind":"Field","name":{"kind":"Name","value":"ReviewTitle"}},{"kind":"Field","name":{"kind":"Name","value":"Rating"}},{"kind":"Field","name":{"kind":"Name","value":"CreatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"ReviewID"}}]}}]}}]}}]} as unknown as DocumentNode<GetReviewsByBookIdQuery, GetReviewsByBookIdQueryVariables>;
 export const CreateReviewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateReview"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"title"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"comment"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rating"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createReview"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"BookID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookID"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"UserID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userID"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"ReviewTitle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"title"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"Comment"},"value":{"kind":"Variable","name":{"kind":"Name","value":"comment"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"Rating"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rating"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ReviewID"}},{"kind":"Field","name":{"kind":"Name","value":"Rating"}}]}}]}}]} as unknown as DocumentNode<CreateReviewMutation, CreateReviewMutationVariables>;

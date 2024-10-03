@@ -116,7 +116,8 @@ export class BooksService {
   public async getOnSaleBooks(size: number) {
     const onSaleBookIds = await this.promotionService.getOnSaleBooks(size);
     const booksId = onSaleBookIds.map((item) => item.BookID);
-    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    let books = await this.booksRepository.getOnSaleBooks(booksId);
+    books = books.filter((book) => book !== null && book !== undefined);
     return books;
   }
 
@@ -129,7 +130,9 @@ export class BooksService {
     const popularBookIds = await this.orderItemsService.getPopularBooks(size);
 
     const booksId = popularBookIds.map((item) => item.BookID);
-    const books = await this.booksRepository.getOnSaleBooks(booksId);
+    let books = await this.booksRepository.getOnSaleBooks(booksId);
+    books = books.filter((book) => book !== null && book !== undefined);
+
     return books;
   }
 }
