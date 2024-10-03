@@ -57,7 +57,7 @@ const FormSchema = z.object({
 });
 export default function Page() {
   const { data: session } = useSession();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<{ [key: string]: ItemType }>({});
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -97,7 +97,7 @@ export default function Page() {
       if (order?.data)
         router.push(`/thank-you/${order?.data.createOrder.OrderID}`);
       writeToLocalStorage(session.user.id, {});
-      setItems([]);
+      setItems({});
     }
   }
   useEffect(() => {

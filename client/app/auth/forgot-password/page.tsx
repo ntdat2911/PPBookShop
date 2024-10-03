@@ -89,7 +89,7 @@ export default function Page() {
               instructions to reset your password.
             </p>
             <p className="text-balance text-muted-foreground">
-              If you don't receive an email, please check your spam folder.
+              If you dont receive an email, please check your spam folder.
             </p>
             <Link href="/auth/sign-in" className="underline">
               Back to sign in
